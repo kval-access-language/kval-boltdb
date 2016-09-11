@@ -38,8 +38,44 @@ func Query(kb kvalbolt, query string) (kvalresult, error) {
    return kr, nil
 }
 
+/*type KQUERY struct { 
+   function Token
+   buckets []string  
+   key string
+   value string
+   newname string
+   regex bool
+}*/
+
 func queryhandler(kb kvalbolt) (kvalresult, error) {
    var kr kvalresult
-   fmt.Println("handle query.")
+   switch kb.query.Function {
+   case kvalparse.INS:
+      kr, err := insertHandler(kb.query)
+      return kr, err
+   case kvalparse.GET:
+   case kvalparse.LIS:
+   case kvalparse.DEL:
+   case kvalparse.REN:
+   default:
+      fmt.Errorf("Function not implemented yet: %v", kb.query.Function)
+   }
    return kr, nil
 }
+
+//INS
+//More validation needed in the Parser
+func insertHandler(kq kvalparse.KQUERY) (kvalresult, error) {
+   var kr kvalresult
+   if kq.Key == "" && kq.Value == "" {
+      //we'll make new buckets
+      kr, err := createboltbuckets(kq)
+      return kr, err
+   } else if kq.Key != "" && kq.Value != "" {
+      //we'll create a key value
+   } else if kq.Key != "" && kq.Value == "" {
+      //create a nil key
+   }
+   return kr, nil
+}
+
