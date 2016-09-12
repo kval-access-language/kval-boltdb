@@ -24,12 +24,11 @@ func createboltentries(kb kvalbolt) error {
             }
          }
       }
-      //func (b *Bucket) Put(key []byte, value []byte) error
       //create key::values
       if kq.Key != "" {         
          if kq.Value != "" {
             //write value...
-           err = bucket.Put([]byte(kq.Key), []byte(kq.Value))
+            err = bucket.Put([]byte(kq.Key), []byte(kq.Value))
          } else {
             //write blank value if allowed... (UC: User may want to know unknown)
             err = bucket.Put([]byte(kq.Key), []byte(""))
@@ -38,7 +37,6 @@ func createboltentries(kb kvalbolt) error {
             return err
          }
       }
-
       //commit transaction
       return nil
    })
@@ -69,7 +67,8 @@ func viewboltentries(kb kvalbolt) (kvalresult, error) {
       if bucket != nil {
          val := bucket.Get([]byte(kq.Key))
          kr.Res = string(val)
-      } 
+      }
+      //commit transaction 
       return nil
    })
    if err != nil {
