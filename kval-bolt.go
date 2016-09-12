@@ -65,9 +65,7 @@ func queryhandler(kb kvalbolt) (kvalresult, error) {
 }
 
 //INS
-//More validation needed in the Parser
 func insHandler(kb kvalbolt) error {
-   
    //as long as there are buckets, we can create
    //anything we need. it all happens in a single
    //transaction, based on kval query...
@@ -75,12 +73,15 @@ func insHandler(kb kvalbolt) error {
    if err != nil {
       return err
    }      
-
    return nil
 }
 
+//GET
 func getHandler(kb kvalbolt) (kvalresult, error) {
-   fmt.Println("Handle GET.")
    var kr kvalresult
+   kr, err := viewboltentries(kb)
+   if err != nil {
+      return kr, err
+   }
    return kr, nil
 }

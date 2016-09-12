@@ -21,12 +21,12 @@ func main() {
       fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
    }
 
-   _, err = Query(kb, "GET triage bucket >> document bucket >> testbucket >>>> test")
+   res, err = Query(kb, "GET triage bucket >> document bucket >> testbucket >>>> test")
    if err != nil {
       fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
    }   
    
    if res != nilresult {
-      fmt.Println(res)
+      fmt.Println(res.Res)
    }
 }
