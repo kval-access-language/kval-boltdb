@@ -5,18 +5,16 @@ import (
    "fmt"
 ) 
 
-var nilresult kvalresult
-
 func main() {
 
    kb, err := Connect("newdb.bolt")
    if err != nil {
-      fmt.Fprintf(os.Stderr, "Error creating new bolt database: %v", err)
+      fmt.Fprintf(os.Stderr, "Error opening bolt database: %v", err)
       os.Exit(1)
    }
    defer Disconnect(kb)
 
-   res, err := Query(kb, "INS triage bucket >> document bucket")
+   res, err := Query(kb, "INS triage bucket >> document bucket >> testbucket")
    if err != nil {
       fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
    }
@@ -24,8 +22,4 @@ func main() {
    if res != nilresult {
       fmt.Println(res)
    }
-
-   //if err != nil {
-   //   fmt.Fprintf(os.Stderr, "Error disconnecting database: %v", err)
-   //}
 }

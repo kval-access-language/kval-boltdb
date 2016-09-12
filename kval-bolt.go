@@ -50,7 +50,7 @@ func queryhandler(kb kvalbolt) (kvalresult, error) {
    var kr kvalresult
    switch kb.query.Function {
    case kvalparse.INS:
-      kr, err := insertHandler(kb.query)
+      kr, err := insHandler(kb)
       return kr, err
    case kvalparse.GET:
    case kvalparse.LIS:
@@ -64,11 +64,14 @@ func queryhandler(kb kvalbolt) (kvalresult, error) {
 
 //INS
 //More validation needed in the Parser
-func insertHandler(kq kvalparse.KQUERY) (kvalresult, error) {
+func insHandler(kb kvalbolt) (kvalresult, error) {
+   
    var kr kvalresult
+   var kq = kb.query
+
    if kq.Key == "" && kq.Value == "" {
-      //we'll make new buckets
-      kr, err := createboltbuckets(kq)
+      //we'll just make new buckets
+      kr, err := createboltbuckets(kb)
       return kr, err
    } else if kq.Key != "" && kq.Value != "" {
       //we'll create a key value

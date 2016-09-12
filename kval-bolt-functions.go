@@ -2,13 +2,39 @@ package main
 
 import (
    "fmt"
-   "github.com/kval-access-language/KVAL-Parse"
+   "github.com/boltdb/bolt"   
 )
 
-func createboltbuckets(kq kvalparse.KQUERY) (kvalresult, error) {
+func createboltbuckets(kb kvalbolt) (kvalresult, error) {
 
    var kr kvalresult
-   fmt.Println("creating buckets")
-   return kr, nil
+   var kq = kb.query
 
+   fmt.Println("creating buckets")
+
+   err := kb.db.Update(func(tx *bolt.Tx) error {
+      var bucket *bolt.Bucket 
+      var err error
+      for index, bucketname := range(kq.Buckets) {
+         if index == 0 {
+            bucket, err = tx.CreateBucketIfNotExists([]byte(bucketname))   
+            if err != nil {
+               return err
+            }    
+         } else{
+            bucket, err = bucket.CreateBucketIfNotExists([]byte(bucketname))
+            if err != nil {
+               return err
+            }        
+         }
+
+      }
+      return nil
+   })
+
+   if err != nil {
+      return kr, err
+   }
+
+   return kr, nil
 }
