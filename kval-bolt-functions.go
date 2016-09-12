@@ -4,9 +4,10 @@ import (
    "github.com/boltdb/bolt"
 )
 
-func createboltentries(kb kvalbolt) (kvalresult, error) {
-   var kr kvalresult
+func createboltentries(kb kvalbolt) error {
+
    var kq = kb.query
+
    err := kb.db.Update(func(tx *bolt.Tx) error {
 
       var bucket *bolt.Bucket    //we only ever need the 'last' bucket in memory
@@ -34,7 +35,7 @@ func createboltentries(kb kvalbolt) (kvalresult, error) {
             //write value...
            err = bucket.Put([]byte(kq.Key), []byte(kq.Value))
          } else {
-            //write blank value if allowed...
+            //write blank value if allowed... (UC: User may want to know unknown)
             err = bucket.Put([]byte(kq.Key), []byte(""))
          }
          if err != nil {
@@ -42,12 +43,11 @@ func createboltentries(kb kvalbolt) (kvalresult, error) {
          }
       }
 
-
-
+      //commit transaction
       return nil
    })
    if err != nil {
-      return kr, err
+      return err
    }
-   return kr, nil
+   return nil
 }

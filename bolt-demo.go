@@ -14,10 +14,17 @@ func main() {
    }
    defer Disconnect(kb)
 
-   res, err := Query(kb, "INS triage bucket >> document bucket >> testbucket >>>> test :: value")
+   var res kvalresult
+
+   _, err = Query(kb, "INS triage bucket >> document bucket >> testbucket >>>> test :: value")
    if err != nil {
       fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
    }
+
+   _, err = Query(kb, "GET triage bucket >> document bucket >> testbucket >>>> test")
+   if err != nil {
+      fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
+   }   
    
    if res != nilresult {
       fmt.Println(res)

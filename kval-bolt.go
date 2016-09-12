@@ -50,9 +50,11 @@ func queryhandler(kb kvalbolt) (kvalresult, error) {
    var kr kvalresult
    switch kb.query.Function {
    case kvalparse.INS:
-      kr, err := insHandler(kb)
+      err := insHandler(kb)
       return kr, err
    case kvalparse.GET:
+      kr, err := getHandler(kb)
+      return kr, err
    case kvalparse.LIS:
    case kvalparse.DEL:
    case kvalparse.REN:
@@ -64,18 +66,21 @@ func queryhandler(kb kvalbolt) (kvalresult, error) {
 
 //INS
 //More validation needed in the Parser
-func insHandler(kb kvalbolt) (kvalresult, error) {
+func insHandler(kb kvalbolt) error {
    
-   var kr kvalresult
-
    //as long as there are buckets, we can create
    //anything we need. it all happens in a single
    //transaction, based on kval query...
-   kr, err := createboltentries(kb)
+   err := createboltentries(kb)
    if err != nil {
-      return kr, err
+      return err
    }      
 
-   return kr, nil
+   return nil
 }
 
+func getHandler(kb kvalbolt) (kvalresult, error) {
+   fmt.Println("Handle GET.")
+   var kr kvalresult
+   return kr, nil
+}

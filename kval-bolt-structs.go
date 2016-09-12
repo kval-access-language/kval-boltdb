@@ -15,5 +15,5 @@ type kvalbolt struct {
 }
 
 type kvalresult struct {
-   res      string
+   Res      string
 }
