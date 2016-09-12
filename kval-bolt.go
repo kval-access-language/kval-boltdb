@@ -67,17 +67,15 @@ func queryhandler(kb kvalbolt) (kvalresult, error) {
 func insHandler(kb kvalbolt) (kvalresult, error) {
    
    var kr kvalresult
-   var kq = kb.query
 
-   if kq.Key == "" && kq.Value == "" {
-      //we'll just make new buckets
-      kr, err := createboltbuckets(kb)
+   //as long as there are buckets, we can create
+   //anything we need. it all happens in a single
+   //transaction, based on kval query...
+   kr, err := createboltentries(kb)
+   if err != nil {
       return kr, err
-   } else if kq.Key != "" && kq.Value != "" {
-      //we'll create a key value
-   } else if kq.Key != "" && kq.Value == "" {
-      //create a nil key
-   }
+   }      
+
    return kr, nil
 }
 

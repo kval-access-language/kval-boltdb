@@ -1,29 +1,49 @@
 package main
 
 import (
-   "github.com/boltdb/bolt"   
+   "github.com/boltdb/bolt"
 )
 
-func createboltbuckets(kb kvalbolt) (kvalresult, error) {
+func createboltentries(kb kvalbolt) (kvalresult, error) {
    var kr kvalresult
    var kq = kb.query
    err := kb.db.Update(func(tx *bolt.Tx) error {
-      var bucket *bolt.Bucket 
+
+      var bucket *bolt.Bucket    //we only ever need the 'last' bucket in memory
       var err error
-      for index, bucketname := range(kq.Buckets) {
+
+      //create buckets
+      for index, bucketname := range kq.Buckets {
          if index == 0 {
-            bucket, err = tx.CreateBucketIfNotExists([]byte(bucketname))   
+            bucket, err = tx.CreateBucketIfNotExists([]byte(bucketname))
             if err != nil {
                return err
-            }    
-         } else{
+            }
+         } else {
             bucket, err = bucket.CreateBucketIfNotExists([]byte(bucketname))
             if err != nil {
                return err
-            }        
+            }
          }
-
       }
+
+      //func (b *Bucket) Put(key []byte, value []byte) error
+      //create key::values
+      if kq.Key != "" {         
+         if kq.Value != "" {
+            //write value...
+           err = bucket.Put([]byte(kq.Key), []byte(kq.Value))
+         } else {
+            //write blank value if allowed...
+            err = bucket.Put([]byte(kq.Key), []byte(""))
+         }
+         if err != nil {
+            return err
+         }
+      }
+
+
+
       return nil
    })
    if err != nil {
