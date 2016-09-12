@@ -14,6 +14,8 @@ func main() {
       fmt.Fprintf(os.Stderr, "Error creating new bolt database: %v", err)
       os.Exit(1)
    }
+   defer Disconnect(kb)
+
    res, err := Query(kb, "INS triage bucket >> document bucket")
    if err != nil {
       fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
@@ -22,8 +24,8 @@ func main() {
    if res != nilresult {
       fmt.Println(res)
    }
-   err = Disconnect(kb)
-   if err != nil {
-      fmt.Fprintf(os.Stderr, "Error disconnecting database: %v", err)
-   }
+
+   //if err != nil {
+   //   fmt.Fprintf(os.Stderr, "Error disconnecting database: %v", err)
+   //}
 }

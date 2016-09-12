@@ -18,9 +18,8 @@ func Connect(dbname string) (kvalbolt, error) {
    return kb, err
 }
 
-func Disconnect(kb kvalbolt) error {
-   err := kb.db.Close()
-   return err
+func Disconnect(kb kvalbolt) {
+   kb.db.Close()
 }
 
 func Query(kb kvalbolt, query string) (kvalresult, error) {
