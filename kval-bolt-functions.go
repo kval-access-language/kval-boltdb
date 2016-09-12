@@ -1,17 +1,12 @@
 package main
 
 import (
-   "fmt"
    "github.com/boltdb/bolt"   
 )
 
 func createboltbuckets(kb kvalbolt) (kvalresult, error) {
-
    var kr kvalresult
    var kq = kb.query
-
-   fmt.Println("creating buckets")
-
    err := kb.db.Update(func(tx *bolt.Tx) error {
       var bucket *bolt.Bucket 
       var err error
@@ -31,10 +26,8 @@ func createboltbuckets(kb kvalbolt) (kvalresult, error) {
       }
       return nil
    })
-
    if err != nil {
       return kr, err
    }
-
    return kr, nil
 }
