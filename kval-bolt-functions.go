@@ -88,20 +88,16 @@ func getallfrombucket(kb kvalbolt) (kvalresult, error) {
             cursor := bucket.Cursor()
             k,v := cursor.First()
             for k != nil {
-               kr.Result[string(k)] = string(v)
+               if v == nil {
+                  kr.Result[string(k)] = "Is a nested Bucket."
+               } else {
+                  kr.Result[string(k)] = string(v)
+               }
+
                k, v = cursor.Next()
             }
          } else {
             return fmt.Errorf("No Keys: There are no key :: value pairs in this bucket.")
-         }
-         //validate a little
-         if bs.InlineBucketN == 1 && len(kr.Result) == 1 {
-            //we're returning the string for a bucket
-            for x, _ := range(kr.Result) {
-               kr = initkvalresult()
-               return fmt.Errorf("Bucket Only: %v is a Bucket and the only value here.", x)
-            }
-
          }
       }
       //commit transaction
