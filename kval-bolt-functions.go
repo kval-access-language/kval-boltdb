@@ -98,6 +98,7 @@ func getallfrombucket(kb kvalbolt) (kvalresult, error) {
          if bs.InlineBucketN == 1 && len(kr.Result) == 1 {
             //we're returning the string for a bucket
             for x, _ := range(kr.Result) {
+               kr = initkvalresult()
                return fmt.Errorf("Bucket Only: %v is a Bucket and the only value here.", x)
             }
 
