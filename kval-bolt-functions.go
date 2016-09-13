@@ -5,6 +5,13 @@ import (
    "github.com/boltdb/bolt"
 )
 
+func initkvalresult() (kvalresult) {
+   kr := kvalresult{
+      Result: map[string]string{},
+   }
+   return kr
+}
+
 func createboltentries(kb kvalbolt) error {
    var kq = kb.query
    err := kb.db.Update(func(tx *bolt.Tx) error {
@@ -47,7 +54,7 @@ func createboltentries(kb kvalbolt) error {
 }
 
 func viewboltentries(kb kvalbolt) (kvalresult, error) {
-   var kr kvalresult
+   var kr = initkvalresult()
    var kq = kb.query
    err := kb.db.View(func(tx *bolt.Tx) error {
       bucket, err := gotobucket(tx, kq.Buckets)
@@ -56,7 +63,7 @@ func viewboltentries(kb kvalbolt) (kvalresult, error) {
       }
       if bucket != nil {
          val := bucket.Get([]byte(kq.Key))
-         kr.String = string(val)
+         kr.Result[kq.Key] = string(val)
       }
       //commit transaction 
       return nil
@@ -67,16 +74,34 @@ func viewboltentries(kb kvalbolt) (kvalresult, error) {
    return kr, nil
 } 
 
-func getallfrombucket(kb kvalbolt) {
-   fmt.Println("trying something")
-   /*var kq = kb.query
+func getallfrombucket(kb kvalbolt) (kvalresult, error) {
+   var kq = kb.query
+   var kr = initkvalresult()
    err := kb.db.View(func(tx *bolt.Tx) error {
-      for index, bucketname := range kq.Buckets {
-         if index == 0 {
-            bucket = tx.Bucket([]byte(bucketname)) 
+      bucket, err := gotobucket(tx, kq.Buckets)
+      if err != nil {
+         return err
+      }
+      if bucket != nil {
+         bs := bucket.Stats()
+         if bs.KeyN > 0 {
+            cursor := bucket.Cursor()
+            k,v := cursor.First()
+            for k != nil {
+               kr.Result[string(k)] = string(v)
+               k, v = cursor.Next()
+            }
+         } else {
+            return fmt.Errorf("No Keys: There are no key :: value pairs in this bucket.")
          }
       }
-   }*/
+      //commit transaction
+      return nil
+   })
+   if err != nil {
+      return kr, err
+   }
+   return kr, nil
 }
 
 func gotobucket(tx *bolt.Tx, bucketslice []string) (*bolt.Bucket, error) {

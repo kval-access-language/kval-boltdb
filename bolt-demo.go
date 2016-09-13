@@ -40,8 +40,8 @@ func main() {
       fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
    }   
    
-   if res != nilresult {
-      fmt.Println("Result one:", res.String)
+   if res.Result != nil {
+      fmt.Println("Result one:", res.Result)
    }
 
    var testget = []string{
@@ -55,12 +55,16 @@ func main() {
       if err != nil {
          fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
       } else {
-         fmt.Println("GET loop:", res.String)
+         fmt.Println("GET loop:", res.Result)
       }
    }
 
-   _, err = Query(kb, "GET triage bucket >> document bucket >> testbucket")
+   res, err = Query(kb, "GET triage bucket >> document bucket >> testbucket")
    if err != nil {
       fmt.Fprintf(os.Stderr, "Error trying to get all.")
+   }
+
+   if res.Result != nil{
+      fmt.Println("get all result:", res.Result)
    }
 }
