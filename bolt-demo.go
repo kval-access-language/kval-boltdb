@@ -20,6 +20,8 @@ func main() {
       "INS triage bucket >> document bucket >> testbucket >>>> test1 :: value1",
       "INS triage bucket >> document bucket >> testbucket >>>> test2 :: value2",
       "INS triage bucket >> document bucket >> testbucket >>>> test3 :: value3",
+      "INS triage bucket >> document bucket >> testbucket >>>> test4",   
+      "INS triage bucket >> document bucket >> testbucket >> inline bucket",      
    }
 
    for _, value := range(testins) {
@@ -48,6 +50,7 @@ func main() {
       "GET triage bucket >> document bucket >> testbucket >>>> test1",
       "GET triage bucket >> document bucket >> testbucket >>>> test2",
       "GET triage bucket >> document bucket >> testbucket >>>> test3",
+      "GET triage bucket >> document bucket >> testbucket >>>> test4",      
    }
 
    for _, value := range(testget) {
