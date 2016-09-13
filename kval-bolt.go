@@ -63,6 +63,16 @@ func queryhandler(kb kvalbolt) (kvalresult, error) {
       }
    case kvalparse.LIS:
    case kvalparse.DEL:
+      if kb.query.Key == "" {
+         err := delbucketHandler(kb)
+         return kr, err      
+      } else if kb.query.Key == "_" {
+         err := delallfrombucketHandler(kb)
+         return kr, err
+      } else {
+         err := delvalHandler(kb)
+         return kr, err
+      }
    case kvalparse.REN:
    default:
       fmt.Errorf("Function not implemented yet: %v", kb.query.Function)
@@ -98,4 +108,19 @@ func getallHandler(kb kvalbolt) (kvalresult, error) {
       return kr, err
    }
    return kr, nil
+}
+
+func delbucketHandler(kb kvalbolt) error {
+   //err := del
+   return nil
+}
+
+func delallfrombucketHandler(kb kvalbolt) error {
+
+   return nil
+}
+
+func delvalHandler(kb kvalbolt) error {
+
+   return nil
 }

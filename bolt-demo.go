@@ -21,7 +21,11 @@ func main() {
       "INS triage bucket >> document bucket >> testbucket >>>> test2 :: value2",
       "INS triage bucket >> document bucket >> testbucket >>>> test3 :: value3",
       "INS triage bucket >> document bucket >> testbucket >>>> test4",   
-      "INS triage bucket >> document bucket >> testbucket >> inline bucket",      
+      "INS triage bucket >> document bucket >> testbucket >> inline bucket",
+      "INS triage bucket >> document bucket >> delbucket >>>> a1 :: b1",
+      "INS triage bucket >> document bucket >> delbucket >>>> a2 :: b2",
+      "INS triage bucket >> document bucket >> delbucket >>>> a3 :: b3",
+      "INS triage bucket >> document bucket >> delbucket >>>> a4 :: b4",
    }
 
    for _, value := range(testins) {
@@ -78,4 +82,30 @@ func main() {
    if res.Result != nil{
       fmt.Println("get all result:", res.Result)
    }   
+
+
+   res, err = Query(kb, "GET triage bucket >> document bucket >> delbucket")
+   if err != nil {
+      fmt.Fprintf(os.Stderr, "%v\n", err)
+   } 
+   if res.Result != nil{
+      fmt.Println("get all DEL result:", res.Result)
+   }   
+
+
+   var deltests = []string {
+      "DEL triage bucket >> document bucket >> testbucket",
+      "DEL triage bucket >> document bucket >> testbucket >>>> test2",
+      "DEL triage bucket >> document bucket >> testbucket >>>> test3 :: _",
+      "DEL triage bucket >> document bucket >> delbucket >>>> _",
+   }
+
+   for _, value := range(deltests) {
+      _, err = Query(kb, value)
+      if err != nil {
+         fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
+      }
+   }
+
+   
 }
