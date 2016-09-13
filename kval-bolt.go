@@ -53,8 +53,13 @@ func queryhandler(kb kvalbolt) (kvalresult, error) {
       err := insHandler(kb)
       return kr, err
    case kvalparse.GET:
-      kr, err := getHandler(kb)
-      return kr, err
+      if kb.query.Key == "" {
+         //get all
+         getallHandler(kb)
+      } else {
+         kr, err := getHandler(kb)
+         return kr, err
+      }
    case kvalparse.LIS:
    case kvalparse.DEL:
    case kvalparse.REN:
@@ -84,4 +89,8 @@ func getHandler(kb kvalbolt) (kvalresult, error) {
       return kr, err
    }
    return kr, nil
+}
+
+func getallHandler(kb kvalbolt) {
+   getallfrombucket(kb)
 }

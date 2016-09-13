@@ -50,20 +50,10 @@ func viewboltentries(kb kvalbolt) (kvalresult, error) {
    var kr kvalresult
    var kq = kb.query
    err := kb.db.View(func(tx *bolt.Tx) error {
-      var bucket *bolt.Bucket
-      for index, bucketname := range kq.Buckets {
-         if index == 0 {
-            bucket = tx.Bucket([]byte(bucketname)) 
-            if bucket == nil {
-               return fmt.Errorf("Nil Bucket: Bucket does not exist", "\n")
-            }
-         } else {
-            bucket = bucket.Bucket([]byte(bucketname))
-            if bucket == nil {
-               return fmt.Errorf("Nil Bucket: Bucket does not exist", "\n")
-            }
-         }
-      }   
+      bucket, err := gotobucket(tx, kq.Buckets)
+      if err != nil {
+         return err
+      }
       if bucket != nil {
          val := bucket.Get([]byte(kq.Key))
          kr.String = string(val)
@@ -76,3 +66,33 @@ func viewboltentries(kb kvalbolt) (kvalresult, error) {
    }
    return kr, nil
 } 
+
+func getallfrombucket(kb kvalbolt) {
+   fmt.Println("trying something")
+   /*var kq = kb.query
+   err := kb.db.View(func(tx *bolt.Tx) error {
+      for index, bucketname := range kq.Buckets {
+         if index == 0 {
+            bucket = tx.Bucket([]byte(bucketname)) 
+         }
+      }
+   }*/
+}
+
+func gotobucket(tx *bolt.Tx, bucketslice []string) (*bolt.Bucket, error) {
+   var bucket *bolt.Bucket
+   for index, bucketname := range bucketslice {
+      if index == 0 {
+         bucket = tx.Bucket([]byte(bucketname)) 
+         if bucket == nil {
+            return bucket, fmt.Errorf("Nil Bucket: Bucket does not exist", "\n")
+         }
+      } else {
+         bucket = bucket.Bucket([]byte(bucketname))
+         if bucket == nil {
+            return bucket, fmt.Errorf("Nil Bucket: Bucket does not exist", "\n")
+         }
+      }
+   }   
+   return bucket, nil
+}

@@ -58,4 +58,9 @@ func main() {
          fmt.Println("GET loop:", res.String)
       }
    }
+
+   _, err = Query(kb, "GET triage bucket >> document bucket >> testbucket")
+   if err != nil {
+      fmt.Fprintf(os.Stderr, "Error trying to get all.")
+   }
 }
