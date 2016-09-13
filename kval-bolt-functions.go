@@ -66,7 +66,7 @@ func viewboltentries(kb kvalbolt) (kvalresult, error) {
       }   
       if bucket != nil {
          val := bucket.Get([]byte(kq.Key))
-         kr.Res = string(val)
+         kr.String = string(val)
       }
       //commit transaction 
       return nil

@@ -16,17 +16,46 @@ func main() {
 
    var res kvalresult
 
-   _, err = Query(kb, "INS triage bucket >> document bucket >> testbucket >>>> test :: value")
+   var testins = []string{
+      "INS triage bucket >> document bucket >> testbucket >>>> test1 :: value1",
+      "INS triage bucket >> document bucket >> testbucket >>>> test2 :: value2",
+      "INS triage bucket >> document bucket >> testbucket >>>> test3 :: value3",
+   }
+
+   for _, value := range(testins) {
+      _, err = Query(kb, value)
+      if err != nil {
+         fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
+      }
+   }
+
+
+   _, err = Query(kb, "INS triage bucket >> document bucket >> testbucket >>>> abc :: def")
    if err != nil {
       fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
    }
 
-   res, err = Query(kb, "GET triage bucket >> document bucket >> testbucket >>>> test")
+   res, err = Query(kb, "GET triage bucket >> document bucket >> testbucket >>>> abc")
    if err != nil {
       fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
    }   
    
    if res != nilresult {
-      fmt.Println(res.Res)
+      fmt.Println("Result one:", res.String)
+   }
+
+   var testget = []string{
+      "GET triage bucket >> document bucket >> testbucket >>>> test1",
+      "GET triage bucket >> document bucket >> testbucket >>>> test2",
+      "GET triage bucket >> document bucket >> testbucket >>>> test3",
+   }
+
+   for _, value := range(testget) {
+      res, err = Query(kb, value)
+      if err != nil {
+         fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
+      } else {
+         fmt.Println("GET loop:", res.String)
+      }
    }
 }
