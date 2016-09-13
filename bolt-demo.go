@@ -67,4 +67,11 @@ func main() {
    if res.Result != nil{
       fmt.Println("get all result:", res.Result)
    }
+
+   res, err = Query(kb, "GET triage bucket >> document bucket")
+   if err != nil {
+      fmt.Fprintf(os.Stderr, "%v\n", err)
+   } else if res.Result != nil{
+      fmt.Println("get all result:", res.Result)
+   }   
 }

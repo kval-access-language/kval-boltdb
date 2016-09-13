@@ -94,6 +94,14 @@ func getallfrombucket(kb kvalbolt) (kvalresult, error) {
          } else {
             return fmt.Errorf("No Keys: There are no key :: value pairs in this bucket.")
          }
+         //validate a little
+         if bs.InlineBucketN == 1 && len(kr.Result) == 1 {
+            //we're returning the string for a bucket
+            for x, _ := range(kr.Result) {
+               return fmt.Errorf("Bucket Only: %v is a Bucket and the only value here.", x)
+            }
+
+         }
       }
       //commit transaction
       return nil
