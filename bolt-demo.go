@@ -94,10 +94,10 @@ func main() {
 
 
    var deltests = []string {
-      "DEL triage bucket >> document bucket >> testbucket",
+      //"DEL triage bucket >> document bucket >> testbucket",
       "DEL triage bucket >> document bucket >> testbucket >>>> test2",
       "DEL triage bucket >> document bucket >> testbucket >>>> test3 :: _",
-      "DEL triage bucket >> document bucket >> delbucket >>>> _",
+      //"DEL triage bucket >> document bucket >> delbucket >>>> _",
    }
 
    for _, value := range(deltests) {
@@ -115,5 +115,5 @@ func main() {
       fmt.Println("get all DEL result:", res.Result)
    }      
 
-   
+
 }

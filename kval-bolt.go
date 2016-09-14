@@ -70,7 +70,7 @@ func queryhandler(kb kvalbolt) (kvalresult, error) {
       } else if kb.query.Key == "_" {
          //we're making nil "" values for all keys
          //use case, we want the keys, we don't want the values
-         err := delallfrombucketHandler(kb)
+         err := delbucketkeysHandler(kb)
          return kr, err
       } else if kb.query.Key != "" && kb.query.Key != "_" && kb.query.Value != "_" {
          //we're deleting a key and its value
@@ -125,8 +125,12 @@ func delbucketHandler(kb kvalbolt) error {
    return nil
 }
 
-func delallfrombucketHandler(kb kvalbolt) error {
-   fmt.Println("delete all from bucket, leave the bucket")
+func delbucketkeysHandler(kb kvalbolt) error {
+   fmt.Println("delete bucket keys")
+   err := deletebucketkeys(kb)
+   if err != nil {
+      return err
+   }
    return nil
 }
 
