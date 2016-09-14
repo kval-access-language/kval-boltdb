@@ -5,6 +5,8 @@ import (
    "github.com/kval-access-language/KVAL-Parse"
 )
 
+const NESTEDBUCKET = "NestedBucket"
+
 type kvalbolt struct {
    db       *bolt.DB
    fname    string

@@ -83,11 +83,10 @@ func getallfrombucket(kb kvalbolt) (kvalresult, error) {
             k,v := cursor.First()
             for k != nil {
                if v == nil {
-                  kr.Result[string(k)] = "Is a nested Bucket."
+                  kr.Result[string(k)] = NESTEDBUCKET
                } else {
                   kr.Result[string(k)] = string(v)
                }
-
                k, v = cursor.Next()
             }
          } else {
@@ -131,7 +130,7 @@ func deletebucketkeys(kb kvalbolt) error {
          if err != nil {
             if err == bolt.ErrIncompatibleValue {
                //likely we're trying to delete a nested bucket
-               err := bucket.DeleteBucket(k)
+               err = bucket.DeleteBucket(k)
                if err != nil {
                   return err
                }
@@ -144,6 +143,30 @@ func deletebucketkeys(kb kvalbolt) error {
       return err 
    })
    return err   
+}
+
+func deletekey(kb kvalbolt) error {
+   var kq = kb.query
+   err := kb.db.Update(func(tx *bolt.Tx) error {   
+      bucket, err := gotobucket(tx, kq.Buckets)
+      if err != nil {
+         return err
+      }
+      err = bucket.Delete([]byte(kb.query.Key))
+      if err != nil {
+         if err == bolt.ErrIncompatibleValue {
+            //likely we're trying to delete a nested bucket
+            err = bucket.DeleteBucket([]byte(kb.query.Key))
+            if err != nil {
+               return err
+            }
+         } else {
+            return err
+         }
+      }
+      return err
+   }) 
+   return err  
 }
 
 func gotobucket(tx *bolt.Tx, bucketslice []string) (*bolt.Bucket, error) {

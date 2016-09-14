@@ -74,7 +74,7 @@ func queryhandler(kb kvalbolt) (kvalresult, error) {
          return kr, err
       } else if kb.query.Key != "" && kb.query.Key != "_" && kb.query.Value != "_" {
          //we're deleting a key and its value
-         err := delkeyHandler(kb)
+         err := delonekeyHandler(kb)
          return kr, err
       } else if kb.query.Value == "_" {
          //we're deleting a value and leaving the key
@@ -126,7 +126,6 @@ func delbucketHandler(kb kvalbolt) error {
 }
 
 func delbucketkeysHandler(kb kvalbolt) error {
-   fmt.Println("delete bucket keys")
    err := deletebucketkeys(kb)
    if err != nil {
       return err
@@ -134,8 +133,11 @@ func delbucketkeysHandler(kb kvalbolt) error {
    return nil
 }
 
-func delkeyHandler(kb kvalbolt) error {
-   fmt.Println("delete key and value")
+func delonekeyHandler(kb kvalbolt) error {
+   err := deletekey(kb)
+   if err != nil {
+      return err
+   }
    return nil
 }
 

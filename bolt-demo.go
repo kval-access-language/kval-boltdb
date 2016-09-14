@@ -26,7 +26,8 @@ func main() {
       "INS triage bucket >> document bucket >> delbucket >>>> a2 :: b2",
       "INS triage bucket >> document bucket >> delbucket >>>> a3 :: b3",
       "INS triage bucket >> document bucket >> delbucket >>>> a4 :: b4",
-      "INS triage bucket >> document bucket >> delbucket >> bucketbucket",
+      "INS triage bucket >> document bucket >> delbucket >> bucketbucket",    //test delete nested buckets in one go
+      "INS triage bucket >> document bucket >> testbucket >> bucketbucket",      
    }
 
    for _, value := range(testins) {
@@ -96,9 +97,10 @@ func main() {
 
    var deltests = []string {
       //"DEL triage bucket >> document bucket >> testbucket",
-      "DEL triage bucket >> document bucket >> testbucket >>>> test2",
+      //"DEL triage bucket >> document bucket >> testbucket >>>> test2",
+      //"DEL triage bucket >> document bucket >> testbucket >>>> bucketbucket",
       "DEL triage bucket >> document bucket >> testbucket >>>> test3 :: _",
-      "DEL triage bucket >> document bucket >> delbucket >>>> _",
+      //"DEL triage bucket >> document bucket >> delbucket >>>> _",     //del all keys from a bucket
    }
 
    for _, value := range(deltests) {
