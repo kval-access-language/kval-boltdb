@@ -107,5 +107,13 @@ func main() {
       }
    }
 
+   res, err = Query(kb, "GET triage bucket >> document bucket >> delbucket")
+   if err != nil {
+      fmt.Fprintf(os.Stderr, "%v\n", err)
+   } 
+   if res.Result != nil{
+      fmt.Println("get all DEL result:", res.Result)
+   }      
+
    
 }

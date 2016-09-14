@@ -64,15 +64,23 @@ func queryhandler(kb kvalbolt) (kvalresult, error) {
    case kvalparse.LIS:
    case kvalparse.DEL:
       if kb.query.Key == "" {
+         //we're deleting a bucket (and all contents)
          err := delbucketHandler(kb)
          return kr, err      
       } else if kb.query.Key == "_" {
+         //we're making nil "" values for all keys
+         //use case, we want the keys, we don't want the values
          err := delallfrombucketHandler(kb)
          return kr, err
-      } else {
-         err := delvalHandler(kb)
+      } else if kb.query.Key != "" && kb.query.Key != "_" && kb.query.Value != "_" {
+         //we're deleting a key and its value
+         err := delkeyHandler(kb)
          return kr, err
-      }
+      } else if kb.query.Value == "_" {
+         //we're deleting a value and leaving the key
+         err := delvalHandler(kb)
+         return kr, err                  
+      } 
    case kvalparse.REN:
    default:
       fmt.Errorf("Function not implemented yet: %v", kb.query.Function)
@@ -82,9 +90,8 @@ func queryhandler(kb kvalbolt) (kvalresult, error) {
 
 //INS
 func insHandler(kb kvalbolt) error {
-   //as long as there are buckets, we can create
-   //anything we need. it all happens in a single
-   //transaction, based on kval query...
+   //as long as there are buckets, we can create anything we need. 
+   //it all happens in a single transaction, based on kval query...
    err := createboltentries(kb)
    if err != nil {
       return err
@@ -111,16 +118,21 @@ func getallHandler(kb kvalbolt) (kvalresult, error) {
 }
 
 func delbucketHandler(kb kvalbolt) error {
-   //err := del
+   fmt.Println("delete bucket")
    return nil
 }
 
 func delallfrombucketHandler(kb kvalbolt) error {
+   fmt.Println("delete all from bucket, leave the bucket")
+   return nil
+}
 
+func delkeyHandler(kb kvalbolt) error {
+   fmt.Println("delete key and value")
    return nil
 }
 
 func delvalHandler(kb kvalbolt) error {
-
+   fmt.Println("nullify a value")
    return nil
 }
