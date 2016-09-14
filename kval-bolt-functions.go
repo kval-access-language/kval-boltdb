@@ -169,6 +169,22 @@ func deletekey(kb kvalbolt) error {
    return err  
 }
 
+func nullifykeyvalue(kb kvalbolt) error {
+   var kq = kb.query
+   err := kb.db.Update(func(tx *bolt.Tx) error {   
+      bucket, err := gotobucket(tx, kq.Buckets)
+      if err != nil {
+         return err
+      }
+      err = bucket.Put([]byte(kq.Key), []byte(""))
+      if err != nil {
+         return err
+      }
+      return err
+   })
+   return err
+}
+
 func gotobucket(tx *bolt.Tx, bucketslice []string) (*bolt.Bucket, error) {
    var bucket *bolt.Bucket
    for index, bucketname := range bucketslice {

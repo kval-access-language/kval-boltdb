@@ -78,7 +78,7 @@ func queryhandler(kb kvalbolt) (kvalresult, error) {
          return kr, err
       } else if kb.query.Value == "_" {
          //we're deleting a value and leaving the key
-         err := delvalHandler(kb)
+         err := nullifyvalHandler(kb)
          return kr, err                  
       } 
    case kvalparse.REN:
@@ -141,7 +141,10 @@ func delonekeyHandler(kb kvalbolt) error {
    return nil
 }
 
-func delvalHandler(kb kvalbolt) error {
-   fmt.Println("nullify a value")
+func nullifyvalHandler(kb kvalbolt) error {
+   err := nullifykeyvalue(kb)
+   if err != nil {
+      return err
+   }
    return nil
 }

@@ -99,7 +99,7 @@ func main() {
       //"DEL triage bucket >> document bucket >> testbucket",
       //"DEL triage bucket >> document bucket >> testbucket >>>> test2",
       //"DEL triage bucket >> document bucket >> testbucket >>>> bucketbucket",
-      "DEL triage bucket >> document bucket >> testbucket >>>> test3 :: _",
+      "DEL  triage bucket >> document bucket >> delbucket >>>> a2 :: _",
       //"DEL triage bucket >> document bucket >> delbucket >>>> _",     //del all keys from a bucket
    }
 
