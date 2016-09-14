@@ -26,6 +26,7 @@ func main() {
       "INS triage bucket >> document bucket >> delbucket >>>> a2 :: b2",
       "INS triage bucket >> document bucket >> delbucket >>>> a3 :: b3",
       "INS triage bucket >> document bucket >> delbucket >>>> a4 :: b4",
+      "INS triage bucket >> document bucket >> delbucket >> bucketbucket",
    }
 
    for _, value := range(testins) {
@@ -97,7 +98,7 @@ func main() {
       //"DEL triage bucket >> document bucket >> testbucket",
       "DEL triage bucket >> document bucket >> testbucket >>>> test2",
       "DEL triage bucket >> document bucket >> testbucket >>>> test3 :: _",
-      //"DEL triage bucket >> document bucket >> delbucket >>>> _",
+      "DEL triage bucket >> document bucket >> delbucket >>>> _",
    }
 
    for _, value := range(deltests) {

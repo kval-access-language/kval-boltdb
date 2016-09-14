@@ -129,7 +129,15 @@ func deletebucketkeys(kb kvalbolt) error {
       for k != nil {
          err := bucket.Delete(k)
          if err != nil {
-            return err
+            if err == bolt.ErrIncompatibleValue {
+               //likely we're trying to delete a nested bucket
+               err := bucket.DeleteBucket(k)
+               if err != nil {
+                  return err
+               }
+            } else {
+               return err
+            }
          }
          k, _ = cursor.Next()
       }     
