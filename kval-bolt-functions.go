@@ -47,10 +47,7 @@ func createboltentries(kb kvalbolt) error {
       //commit transaction
       return nil
    })
-   if err != nil {
-      return err
-   }
-   return nil
+   return err
 }
 
 func viewboltentries(kb kvalbolt) (kvalresult, error) {
@@ -68,10 +65,7 @@ func viewboltentries(kb kvalbolt) (kvalresult, error) {
       //commit transaction 
       return nil
    })
-   if err != nil {
-      return kr, err
-   }
-   return kr, nil
+   return kr, err
 } 
 
 func getallfrombucket(kb kvalbolt) (kvalresult, error) {
@@ -103,10 +97,24 @@ func getallfrombucket(kb kvalbolt) (kvalresult, error) {
       //commit transaction
       return nil
    })
-   if err != nil {
-      return kr, err
-   }
-   return kr, nil
+   return kr, err
+}
+
+func deletebucket(kb kvalbolt) error {
+   var kq = kb.query
+   err := kb.db.Update(func(tx *bolt.Tx) error {
+      var searchindex = len(kq.Buckets)-1      
+      bucket, err := gotobucket(tx, kq.Buckets[:searchindex])
+      if err != nil {
+         return err
+      }
+      err = bucket.DeleteBucket([]byte(kq.Buckets[len(kq.Buckets)-1]))
+      if err != nil {
+         return err
+      }
+      return nil
+   })
+   return err
 }
 
 func gotobucket(tx *bolt.Tx, bucketslice []string) (*bolt.Bucket, error) {

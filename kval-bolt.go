@@ -118,7 +118,10 @@ func getallHandler(kb kvalbolt) (kvalresult, error) {
 }
 
 func delbucketHandler(kb kvalbolt) error {
-   fmt.Println("delete bucket")
+   err := deletebucket(kb)
+   if err != nil {
+      return err
+   }   
    return nil
 }
 
