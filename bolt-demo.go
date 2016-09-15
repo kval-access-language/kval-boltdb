@@ -27,7 +27,7 @@ func main() {
       "INS triage bucket >> document bucket >> delbucket >>>> a3 :: b3",
       "INS triage bucket >> document bucket >> delbucket >>>> a4 :: b4",
       "INS triage bucket >> document bucket >> delbucket >> bucketbucket",    //test delete nested buckets in one go
-      "INS triage bucket >> document bucket >> testbucket >> bucketbucket",      
+      "INS triage bucket >> document bucket >> testbucket >> bucketbucket",    
    }
 
    for _, value := range(testins) {
@@ -118,5 +118,16 @@ func main() {
       fmt.Println("get all DEL result:", res.Result)
    }      
 
+   var testrens = []string{
+      "REN triage bucket >> document bucket >> delbucket >>>> a4 => rename4", 
+      "REN triage bucket >> document bucket => renamedbucket",  
+   }
+
+    for _, value := range(testrens) {
+      _, err = Query(kb, value)
+      if err != nil {
+         fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
+      }
+   }     
 
 }

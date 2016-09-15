@@ -185,6 +185,16 @@ func nullifykeyvalue(kb kvalbolt) error {
    return err
 }
 
+func renamebucket(kb kvalbolt) error {
+   fmt.Println("rename bucket function")
+   return nil
+}
+
+func renamekey(kb kvalbolt) error {
+   fmt.Println("rename key function")
+   return nil
+}
+
 func gotobucket(tx *bolt.Tx, bucketslice []string) (*bolt.Bucket, error) {
    var bucket *bolt.Bucket
    for index, bucketname := range bucketslice {
@@ -202,3 +212,4 @@ func gotobucket(tx *bolt.Tx, bucketslice []string) (*bolt.Bucket, error) {
    }   
    return bucket, nil
 }
+

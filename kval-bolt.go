@@ -82,6 +82,11 @@ func queryhandler(kb kvalbolt) (kvalresult, error) {
          return kr, err                  
       } 
    case kvalparse.REN:
+      if kb.query.Key == "" {
+         renbucketHandler(kb)
+      } else if kb.query.Key != "" {
+         renkeyHandler(kb)
+      }
    default:
       fmt.Errorf("Function not implemented yet: %v", kb.query.Function)
    }
@@ -145,6 +150,22 @@ func nullifyvalHandler(kb kvalbolt) error {
    err := nullifykeyvalue(kb)
    if err != nil {
       return err
+   }
+   return nil
+}
+
+func renbucketHandler(kb kvalbolt) error {
+   err := renamebucket(kb)
+   if err != nil {
+      return err
+   }
+   return nil
+}
+
+func renkeyHandler(kb kvalbolt) error {
+   err := renamekey(kb)
+   if err != nil {
+      return err 
    }
    return nil
 }
