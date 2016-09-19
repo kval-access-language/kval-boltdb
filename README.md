@@ -15,20 +15,20 @@ The language specification: https://github.com/kval-access-language/KVAL
 Use is simple. There is one function which accepts a string formatted to KVAL's
 specification:
 
-   res, err = Query(kb, "GET Bucket One >> Bucket Two >>>> Requested Key")
-   if err != nil {
-      fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
-   } else {
-      //Access our result structure: res.Result (a map[string]string)
-   } 
+    res, err = Query(kb, "GET Bucket One >> Bucket Two >>>> Requested Key")
+    if err != nil {
+       fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
+    } else {
+       //Access our result structure: res.Result (a map[string]string)
+    } 
 
 For write operations we simply check for the existence of an error, else the
 operation passed as expected: 
 
-   res, err = Query(kb, "INS Bucket One >> Bucket Two >>>> Insert Key :: Insert Value")
-   if err != nil {
-      fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
-   }
+    res, err = Query(kb, "INS Bucket One >> Bucket Two >>>> Insert Key :: Insert Value")
+    if err != nil {
+       fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
+    }
 
 ###License
 
