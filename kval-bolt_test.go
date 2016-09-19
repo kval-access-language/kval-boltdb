@@ -14,6 +14,15 @@ var (
 
 func init() {
    log.Println("Info: Initialize unit tests.")   
+   setup()
+}
+
+func refreshdb() {
+   clear()
+   setup()
+}
+
+func setup() {
    kb, err = Connect(dbloc)
    if err != nil {
       log.Printf("Error opening bolt database: %v\n", err)
@@ -21,8 +30,7 @@ func init() {
    }
 }
 
-func teardown() {
-   log.Println("Info: Running tear-down.")
+func clear() {
    Disconnect(kb)
    f, err := os.Create(dbloc)
    if err != nil {
@@ -31,17 +39,29 @@ func teardown() {
    f.Close()
 }
 
-func TestQuery(t *testing.T) {
-   defer teardown()
+func teardown() {
+   log.Println("Info: Running tear-down.")
+   clear()
+}
 
+//give us some data to do testing with
+func doinserts() {
+   //clear db when we need it afresh...
+   refreshdb()  
+   //baseline inserts...   
    for _, value := range(ins_tests) {
       _, err = Query(kb, value)
       if err != nil {
          log.Printf("Error querying db: %v\n", err)
       }
    }
+}
 
-   //KeyN || Depty
+func testins(t *testing.T) {
+   doinserts()
+   // BoltDB Tree statistics.
+   // KeyN  int // number of keys/value pairs
+   // Depth int // number of levels in B+tree
    bs, _ := getbucketstats(kb, ins_getbuckets1)
    if bs.KeyN != ins_result1.keys && bs.Depth != ins_result1.depth {
       t.Errorf("Expected stats results for INS don't match")
@@ -56,6 +76,22 @@ func TestQuery(t *testing.T) {
    if bs.KeyN != ins_result3.keys && bs.Depth != ins_result3.depth {
       t.Errorf("Expected stats results for INS don't match")
    } 
+}
 
-   
+func testlis(t *testing.T) {
+   doinserts()
+   for k, v := range(lis_results) {
+      kq, err := Query(kb, k)
+      if err != nil {
+         log.Printf("Error querying db: %v\n", err)
+      }
+      if kq.Exists != v {
+         t.Errorf("Expected %b got %b.\n", v, kq.Exists)
+      } 
+   }
+}
+
+func TestQuery(t *testing.T) {
+   testins(t)   
+   testlis(t)
 }

@@ -66,7 +66,7 @@ var del_results = map[string]bool{
 //run testins again
 var lis_bucket_two = "LIS bucket one >> bucket two"
 var lis_test1 = "LIS bucket one >> bucket two >> bucket three >>>> test1"
-var lis_unknown_key = "LIS bucket one >> bucket two >> bucket three >>>> no-key"
+var lis_unknown_key = "LIS bucket one >> bucket two >> bucket three >>>> nokey"
 var lis_unknown_bucket = "LIS ins1 >> ins2 >> no-bucket"
 
 var lis_results = map[string]bool{
