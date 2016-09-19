@@ -37,7 +37,6 @@ func main() {
       }
    }
 
-
    _, err = Query(kb, "INS triage bucket >> document bucket >> testbucket >>>> abc :: def")
    if err != nil {
       fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
@@ -47,7 +46,7 @@ func main() {
    if err != nil {
       fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
    }   
-   
+    
    if res.Result != nil {
       fmt.Println("Result one:", res.Result)
    }
