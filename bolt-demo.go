@@ -119,7 +119,7 @@ func main() {
    }      
 
    var testrens = []string{
-      "INS r1 >> r2 >> r3 >>>> rk1 :: rv1",
+      "INS r1 >> r2 >> r3 >>>> rk1 :: vvvrv1",
       "INS r1 >> r2 >> r3 >>>> rk2 :: rv3",
       "INS r1 >> r2 >> r3 >> r4",
       "INS r1 >> r2 >> r3 >> r4 >>>> rk11 :: rv11",
@@ -139,7 +139,7 @@ func main() {
 
    res, err = Query(kb, "GET r1 >> r2")
    if err != nil {
-      fmt.Fprintf(os.Stderr, "%v\n", err)
+      fmt.Fprintf(os.Stderr, "Expected error result for r2: %v\n", err)
    } else {
       fmt.Println("REN result:", res.Result)
    }      
@@ -150,5 +150,4 @@ func main() {
    } else {
       fmt.Println("REN result:", res.Result)
    } 
-
 }

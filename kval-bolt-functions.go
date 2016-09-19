@@ -246,8 +246,29 @@ func copybuckets(from, to *bolt.Bucket) error {
 }
 
 func renamekey(kb kvalbolt) error {
-   fmt.Println("rename key function")
-   return nil
+   var kq = kb.query
+   err := kb.db.Update(func(tx *bolt.Tx) error {   
+      //the bucket containing the key we're renaming
+      bucket, err := gotobucket(tx, kq.Buckets)
+      if err != nil {
+         return err
+      }
+      v := bucket.Get([]byte(kq.Key))
+      if v == nil {
+         return fmt.Errorf("Nil Value: Key doesn't exist or points to a nested bucket.")
+      }
+      err = bucket.Put([]byte(kq.Newname), v)
+      if err != nil {
+         return err
+      }
+      err = bucket.Delete([]byte(kq.Key))
+      if err != nil {
+         return err
+      }
+      return nil
+   })
+
+   return err
 }
 
 func gotobucket(tx *bolt.Tx, bucketslice []string) (*bolt.Bucket, error) {
@@ -256,12 +277,12 @@ func gotobucket(tx *bolt.Tx, bucketslice []string) (*bolt.Bucket, error) {
       if index == 0 {
          bucket = tx.Bucket([]byte(bucketname)) 
          if bucket == nil {
-            return bucket, fmt.Errorf("Nil Bucket: Bucket does not exist.")
+            return bucket, fmt.Errorf("Nil Bucket: Bucket '%s' does not exist.", bucketname)
          }
       } else {
          bucket = bucket.Bucket([]byte(bucketname))
          if bucket == nil {
-            return bucket, fmt.Errorf("Nil Bucket: Bucket does not exist.")
+            return bucket, fmt.Errorf("Nil Bucket: Bucket '%s' does not exist.", bucketname)
          }
       }
    }   
