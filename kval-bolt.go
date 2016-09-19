@@ -37,15 +37,6 @@ func Query(kb kvalbolt, query string) (kvalresult, error) {
    return kr, nil
 }
 
-/*type KQUERY struct { 
-   function Token
-   buckets []string  
-   key string
-   value string
-   newname string
-   regex bool
-}*/
-
 func queryhandler(kb kvalbolt) (kvalresult, error) {
    var kr kvalresult
    switch kb.query.Function {
@@ -106,7 +97,6 @@ func insHandler(kb kvalbolt) error {
    return nil
 }
 
-//GET
 func getHandler(kb kvalbolt) (kvalresult, error) {
    var kr kvalresult
    kr, err := viewboltentries(kb)
