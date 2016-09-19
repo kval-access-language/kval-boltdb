@@ -271,6 +271,29 @@ func renamekey(kb kvalbolt) error {
    return err
 }
 
+func bucketkeyexists(kb kvalbolt) (kvalresult, error) {
+   var kq = kb.query
+   var kr = initkvalresult()
+   err := kb.db.Update(func(tx *bolt.Tx) error {   
+      //the bucket containing the key we're renaming
+      bucket, err := gotobucket(tx, kq.Buckets)
+      if err != nil {
+         return err
+      }
+      if kq.Key != "" {
+         k := bucket.Get([]byte(kq.Key))         
+         if k == nil {
+            return fmt.Errorf("Key '%s' does not exist.", kq.Key)
+         }
+      }
+      return nil
+   })
+   if err == nil {
+      kr.Exists = true
+   }
+   return kr, nil   
+}
+
 func gotobucket(tx *bolt.Tx, bucketslice []string) (*bolt.Bucket, error) {
    var bucket *bolt.Bucket
    for index, bucketname := range bucketslice {

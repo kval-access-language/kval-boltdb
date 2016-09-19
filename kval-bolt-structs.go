@@ -15,4 +15,5 @@ type kvalbolt struct {
 
 type kvalresult struct {
    Result   map[string]string
+   Exists   bool                 //IF LIS QEURY, however, idiomatic enough?
 }

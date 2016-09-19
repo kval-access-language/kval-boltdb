@@ -149,4 +149,21 @@ func main() {
    } else {
       fmt.Println("REN result:", res.Result)
    } 
+
+   var testlis = []string{
+      "INS ins1 >> ins2 >> ins3 >>>> key1 :: value1",
+      "LIS ins1 >> ins2",
+      "lis ins1 >> ins2 >> ins3 >>>> key1",
+      "lis ins1 >> ins2 >> ins3 >>>> keyunknown",
+      "lis ins1 >> ins2 >> ins4",
+   }
+
+   for _, value := range(testlis) {
+      kr, err := Query(kb, value)
+      if err != nil {
+         fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
+      } else {
+         fmt.Println("Exist results:", kr.Exists)
+      }
+   }     
 }

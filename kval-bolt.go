@@ -62,6 +62,8 @@ func queryhandler(kb kvalbolt) (kvalresult, error) {
          return kr, err
       }
    case kvalparse.LIS:
+      kr, err := lisHandler(kb)
+      return kr, err
    case kvalparse.DEL:
       if kb.query.Key == "" {
          //we're deleting a bucket (and all contents)
@@ -168,4 +170,16 @@ func renkeyHandler(kb kvalbolt) error {
       return err 
    }
    return nil
+}
+
+func lisHandler(kb kvalbolt) (kvalresult, error) {
+   kr, err := bucketkeyexists(kb)
+   if err != nil {
+      //Nil bucket returns an error we can use
+      if kr.Exists == true {
+         return kr, err
+      }
+      return kr, err
+   }
+   return kr, nil
 }
