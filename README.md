@@ -1,6 +1,6 @@
 # KVAL-BoltDB
 
-BoltDB findings for KVAL
+BoltDB bindings for KVAL
 
 ###Key Value Access Language
 
@@ -32,4 +32,4 @@ operation passed as expected:
 
 ###License
 
-GPL Version 3: https://github.com/kval-access-language/KVAL-BoltDB/blob/master/LICENSE
+**[http://choosealicense.com/licenses/gpl-3.0/](GPL Version 3)**: https://github.com/kval-access-language/KVAL-BoltDB/blob/master/LICENSE
