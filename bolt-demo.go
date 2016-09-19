@@ -119,15 +119,36 @@ func main() {
    }      
 
    var testrens = []string{
-      "REN triage bucket >> document bucket >> delbucket >>>> a4 => rename4", 
-      "REN triage bucket >> document bucket => renamedbucket",  
+      "INS r1 >> r2 >> r3 >>>> rk1 :: rv1",
+      "INS r1 >> r2 >> r3 >>>> rk2 :: rv3",
+      "INS r1 >> r2 >> r3 >> r4",
+      "INS r1 >> r2 >> r3 >> r4 >>>> rk11 :: rv11",
+      "INS r1 >> r2 >> r3 >> r4 >>>> rk21 :: rv21",
+      "INS r1 >> r2 >> r3 >> r4 >>>> rk31 :: rv31",
+      "INS r1 >> r2 >> r3 >>>> rk3 :: rv4",
+      "REN r1 >> r2 >> r3 >>>> rk1 => rename1", 
+      "REN r1 >> r2 => supersonic",  
    }
 
-    for _, value := range(testrens) {
+   for _, value := range(testrens) {
       _, err = Query(kb, value)
       if err != nil {
          fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
       }
    }     
+
+   res, err = Query(kb, "GET r1 >> r2")
+   if err != nil {
+      fmt.Fprintf(os.Stderr, "%v\n", err)
+   } else {
+      fmt.Println("REN result:", res.Result)
+   }      
+
+   res, err = Query(kb, "GET r1 >> supersonic >> r3")
+   if err != nil {
+      fmt.Fprintf(os.Stderr, "%v\n", err)
+   } else {
+      fmt.Println("REN result:", res.Result)
+   } 
 
 }

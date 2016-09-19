@@ -90,7 +90,7 @@ func getallfrombucket(kb kvalbolt) (kvalresult, error) {
                k, v = cursor.Next()
             }
          } else {
-            return fmt.Errorf("No Keys: There are no key :: value pairs in this bucket.")
+            return fmt.Errorf("No Keys: There are no key::value pairs in this bucket.")
          }
       }
       //commit transaction
@@ -186,7 +186,62 @@ func nullifykeyvalue(kb kvalbolt) error {
 }
 
 func renamebucket(kb kvalbolt) error {
-   fmt.Println("rename bucket function")
+   var kq = kb.query
+   err := kb.db.Update(func(tx *bolt.Tx) error {   
+      //the bucket containing the one we're renaming
+      var searchindex = len(kq.Buckets)-1      
+      containerbucket, err := gotobucket(tx, kq.Buckets[:searchindex])
+      if err != nil {
+         return err
+      }
+      //the bucket we're renaming      
+      oldbucket, err := gotobucket(tx, kq.Buckets)
+      if err != nil {
+         return err
+      }
+      //gotta create the new bucket here...
+      newbucket, err := containerbucket.CreateBucketIfNotExists([]byte(kq.Newname))
+      if err != nil {
+         return err
+      }      
+      err = copybuckets(oldbucket, newbucket)
+      if err != nil {
+         return err
+      }
+      //delete the origial bucket
+      oldname := []byte(kq.Buckets[len(kq.Buckets)-1:][0])
+      err = containerbucket.DeleteBucket(oldname)
+      if err != nil {
+         return err
+      }
+      //complete the transaction
+      return nil
+   })   
+   return err
+}
+
+func copybuckets(from, to *bolt.Bucket) error {
+   bs := from.Stats()
+   if bs.KeyN > 0 {
+      cursor := from.Cursor()
+      k,v := cursor.First()
+      for k != nil {
+         if v == nil {
+            //nested bucket 
+            to_nested, err := to.CreateBucketIfNotExists(k)
+            if err != nil {
+               return err
+            }
+            from_nested := from.Bucket(k)
+            copybuckets(from_nested, to_nested)
+         } else {
+            to.Put(k,v)
+         }
+         k, v = cursor.Next()
+      }
+   } else {
+      return fmt.Errorf("No Keys: There are no key::value pairs in this bucket.")
+   }
    return nil
 }
 
@@ -201,12 +256,12 @@ func gotobucket(tx *bolt.Tx, bucketslice []string) (*bolt.Bucket, error) {
       if index == 0 {
          bucket = tx.Bucket([]byte(bucketname)) 
          if bucket == nil {
-            return bucket, fmt.Errorf("Nil Bucket: Bucket does not exist", "\n")
+            return bucket, fmt.Errorf("Nil Bucket: Bucket does not exist.")
          }
       } else {
          bucket = bucket.Bucket([]byte(bucketname))
          if bucket == nil {
-            return bucket, fmt.Errorf("Nil Bucket: Bucket does not exist", "\n")
+            return bucket, fmt.Errorf("Nil Bucket: Bucket does not exist.")
          }
       }
    }   
