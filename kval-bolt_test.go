@@ -92,6 +92,7 @@ func testlis(t *testing.T) {
 }
 
 func TestQuery(t *testing.T) {
+   defer teardown()
    testins(t)   
    testlis(t)
 }
