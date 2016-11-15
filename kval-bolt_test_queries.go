@@ -57,9 +57,16 @@ var delkey = "DEL bucket one >> bucket two >> bucket three >>>> test1"          
 var nullvalue = "DEL bucket one >> bucket two >> bucket three >>>> test3 :: _"   //make value null without deleting key
 var delkeys = "DEL bucket one >> bucket two >> bucket three >>>> _"              //del all keys from a bucket
 var delbucket = "DEL bucket one >> bucket two"                                   //delete bucket two        
+var delnonekey = "DEL zero bucket >>>> nonkey"
+var delnonebucket = "DEL zero bucket"
 
 var del_results = map[string]bool{
-
+   //delkey: false,
+   //nullvalue: false,
+   //delkeys: false,
+   //delbucket: false,
+   delnonekey: true,
+   delnonebucket: true,
 }
 
 //test list procedures

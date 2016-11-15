@@ -102,14 +102,28 @@ func getallfrombucket(kb kvalbolt) (kvalresult, error) {
 func deletebucket(kb kvalbolt) error {
    var kq = kb.query
    err := kb.db.Update(func(tx *bolt.Tx) error {
-      var searchindex = len(kq.Buckets)-1      
-      bucket, err := gotobucket(tx, kq.Buckets[:searchindex])
-      if err != nil {
-         return err
-      }
-      err = bucket.DeleteBucket([]byte(kq.Buckets[len(kq.Buckets)-1]))
-      if err != nil {
-         return err
+      //as we're deleting a bucket we need a pointer to 
+      //bucket level we're deleting minus one, that is
+      //the container of the bucket we're deleting
+      var delname = kq.Buckets[len(kq.Buckets)-1]
+      var searchindex = len(kq.Buckets)-1
+      if searchindex == 0 {
+         //reset to one? this is the bucket we're deleting
+         searchindex = 1
+         delname = kq.Buckets[0]
+         err = tx.DeleteBucket([]byte(delname))
+         if err != nil {
+            return err
+         }
+      } else {
+         bucket, err := gotobucket(tx, kq.Buckets[:searchindex])
+         if err != nil {
+            return err
+         }
+         err = bucket.DeleteBucket([]byte(delname))
+         if err != nil {
+            return err
+         }
       }
       return nil
    })
@@ -296,19 +310,28 @@ func bucketkeyexists(kb kvalbolt) (kvalresult, error) {
 
 func gotobucket(tx *bolt.Tx, bucketslice []string) (*bolt.Bucket, error) {
    var bucket *bolt.Bucket
-   for index, bucketname := range bucketslice {
-      if index == 0 {
-         bucket = tx.Bucket([]byte(bucketname)) 
-         if bucket == nil {
-            return bucket, fmt.Errorf("Nil Bucket: Bucket '%s' does not exist.", bucketname)
+   if len(bucketslice) > 0 {
+      for index, bucketname := range bucketslice {
+         if index == 0 {   //need a bucket from our transaction pointer first
+            bucket = tx.Bucket([]byte(bucketname)) 
+            if bucket == nil {   //only ever get nil if our root bucket doesn't exist
+               return bucket, fmt.Errorf("Nil Bucket: Bucket '%s' does not exist.", bucketname)
+            }
+            if len(bucketslice) == 1 && bucket != nil {
+               //return early, we've got out bucket
+               return bucket, nil
+            }
+         } else {   //nested buckets, only returning if nil...
+            bucket = bucket.Bucket([]byte(bucketname))
+            if bucket == nil {
+               return bucket, fmt.Errorf("Nil Bucket: Bucket '%s' does not exist.", bucketname)
+            }
          }
-      } else {
-         bucket = bucket.Bucket([]byte(bucketname))
-         if bucket == nil {
-            return bucket, fmt.Errorf("Nil Bucket: Bucket '%s' does not exist.", bucketname)
-         }
-      }
-   }   
+      }   
+   } else {
+      //gold plating at this point, easily handled elsewhere...
+      return bucket, fmt.Errorf("ZERO Slice: Empty buckets slice provided.")
+   }
    return bucket, nil
 }
 

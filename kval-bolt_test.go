@@ -97,12 +97,18 @@ func testlis(t *testing.T) {
 
 func testdel(t *testing.T) {
    doinserts()
+   for k, _ := range(del_results) {
+      _, err := Query(kb, k)
+      if err != nil {
+         log.Printf("Error querying db: %v\n", err)
+      }
+   }
 }
 
 func TestQuery(t *testing.T) {
    defer teardown()
-   testins(t)   
-   testlis(t)
+   //testins(t)   
+   //testlis(t)
    testdel(t)
    //testget(t)
    //testren(t)
