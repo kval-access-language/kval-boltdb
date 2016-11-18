@@ -3,6 +3,7 @@ package main
 import (
    "fmt"
    "github.com/boltdb/bolt"
+   "github.com/pkg/errors"
 )
 
 func initkvalresult() (kvalresult) {
@@ -111,18 +112,19 @@ func deletebucket(kb kvalbolt) error {
          //reset to one? this is the bucket we're deleting
          searchindex = 1
          delname = kq.Buckets[0]
-         err = tx.DeleteBucket([]byte(delname))
+         err := tx.DeleteBucket([]byte(delname))
          if err != nil {
-            return err
+            return errors.Wrapf(err, "Bucket name: '%s'", delname)
          }
       } else {
-         bucket, err := gotobucket(tx, kq.Buckets[:searchindex])
+         bucketname := kq.Buckets[:searchindex]
+         bucket, err := gotobucket(tx, bucketname)
          if err != nil {
             return err
          }
          err = bucket.DeleteBucket([]byte(delname))
          if err != nil {
-            return err
+            return errors.Wrapf(err, "Bucket name: '%s'", delname)
          }
       }
       return nil
@@ -315,7 +317,7 @@ func gotobucket(tx *bolt.Tx, bucketslice []string) (*bolt.Bucket, error) {
          if index == 0 {   //need a bucket from our transaction pointer first
             bucket = tx.Bucket([]byte(bucketname)) 
             if bucket == nil {   //only ever get nil if our root bucket doesn't exist
-               return bucket, fmt.Errorf("Nil Bucket: Bucket '%s' does not exist.", bucketname)
+               return bucket, err_nil_bucket
             }
             if len(bucketslice) == 1 && bucket != nil {
                //return early, we've got out bucket
@@ -324,7 +326,7 @@ func gotobucket(tx *bolt.Tx, bucketslice []string) (*bolt.Bucket, error) {
          } else {   //nested buckets, only returning if nil...
             bucket = bucket.Bucket([]byte(bucketname))
             if bucket == nil {
-               return bucket, fmt.Errorf("Nil Bucket: Bucket '%s' does not exist.", bucketname)
+               return bucket, err_nil_bucket
             }
          }
       }   

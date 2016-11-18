@@ -7,6 +7,7 @@ import (
    "github.com/kval-access-language/KVAL-Parse"
 )
 
+//todo: delete this function before publishing...
 func donothing() {
    fmt.Println("Create a DB and return a connection.")
 }

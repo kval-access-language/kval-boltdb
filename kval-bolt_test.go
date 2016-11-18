@@ -4,6 +4,7 @@ import (
    "os"   
    "log"
    "testing"
+   "github.com/pkg/errors"
 )
 
 var (
@@ -95,14 +96,39 @@ func testlis(t *testing.T) {
    }
 }
 
+//Test delete functions associated with KVAL capabilities
 func testdel(t *testing.T) {
-   doinserts()
-   for k, _ := range(del_results) {
-      _, err := Query(kb, k)
+
+   //test results we expect to pass
+   for k := range(good_del_results) {
+      
+      //doinserts: slower but efficient for test writing... maintains
+      //constant state throughout *any* delete we do...       
+      doinserts()
+
+      //perform our queries on the Bolt DB...      
+      _, err := Query(kb, good_del_results[k])
       if err != nil {
-         log.Printf("Error querying db: %v\n", err)
+         t.Errorf("Invalid error for delete procedure (nil error expected): %v\n", err)
       }
    }
+
+   //test results we expect to fail, and check fail result...
+   for k, e := range(bad_del_results) {
+      
+      //doinserts: slower but efficient for test writing... maintains
+      //constant state throughout *any* delete we do...       
+      doinserts()
+
+      //perform our queries on the Bolt DB...      
+      _, err := Query(kb, k)
+      if err != nil {
+         if errors.Cause(err) != e {
+            t.Errorf("Invalid error for delete procedure (different error expected): %v\n", err)
+         }
+      }
+   }
+
 }
 
 func TestQuery(t *testing.T) {
