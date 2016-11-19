@@ -2,7 +2,7 @@ package main
 
 import (
    "github.com/boltdb/bolt"   
-   "github.com/kval-access-language/KVAL-Parse"
+   "github.com/kval-access-language/kval-parse"
 )
 
 const NESTEDBUCKET = "NestedBucket"

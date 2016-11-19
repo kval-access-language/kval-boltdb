@@ -16,11 +16,16 @@ var create_initial_state = []string{
    "INS bucket one >> bucket two >>>> test4 :: value4",
    "INS bucket one >> bucket two >>>> test5 :: value5",
    "INS bucket one >>>> test6 :: value6", 
+   "INS code bucket >>>> code example :: GET bucket one >> bucket two >>>> key1 :: key2",
 }
 
 var ins_getbuckets1 = []string{"bucket one", "bucket two", "bucket three"}
 var ins_getbuckets2 = []string{"bucket one", "bucket two"}
 var ins_getbuckets3 = []string{"bucket one"}
+
+// Utilise BoltDB Tree statistics.
+// KeyN  int // number of keys/value pairs
+// Depth int // number of levels in B+tree
 
 var ins_result1 = insresult{3, 1}
 var ins_result2 = insresult{6, 2}
@@ -76,12 +81,14 @@ var get_test1 = "GET bucket one >> bucket two >> bucket three >>>> test1"
 var get_test2 = "GET bucket one >> bucket two >> bucket three >>>> test2"
 var get_bucket_three = "GET bucket one >> bucket two >> bucket three"
 var get_bucket_one = "GET bucket one"
+var get_code_bucket = "INS code bucket >>>> code example"
 
 var get_sole_results = map[string]map[string]string {
    get_test1: map[string]string{"test1": "value1"},
    get_test2: map[string]string{"test2": "value2"},
    get_bucket_three: map[string]string{"test1": "value1", "test2": "value2", "test3": "value3"},
    get_bucket_one: map[string]string{"bucket two": NESTEDBUCKET, "test6": "value6"},
+   get_code_bucket: map[string]string{"code example": "GET bucket one >> bucket two >>>> key1 :: key2"},
 }
 
 //---------------------------------------------------------------------------//

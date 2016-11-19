@@ -64,6 +64,7 @@ func testnotimplementedfuncs(t *testing.T) {
    }
 }
 
+//Test binging's handling of unicode and big strings, e.g. for blogs...
 func testbigstring(t *testing.T) {
 
    var unistrings = [...]string{bigstring_one, bigstring_two}

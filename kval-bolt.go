@@ -4,7 +4,7 @@ import (
    "time"
    "github.com/boltdb/bolt"
    "github.com/pkg/errors"
-   "github.com/kval-access-language/KVAL-Parse"
+   "github.com/kval-access-language/kval-parse"
    "github.com/kval-access-language/kval-scanner"
 )
 
