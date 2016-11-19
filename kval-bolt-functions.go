@@ -91,9 +91,10 @@ func getboltkeyregex(kb kvalbolt) (kvalresult, error) {
             cursor := bucket.Cursor()
             k,v := cursor.First()
             for k != nil {
-               if v != nil {
-                  //nil means nested bucket: can't work with nested buckets for this search
-                  if re.MatchString(string(k)) {
+               if re.MatchString(string(k)) {
+                  if v == nil {
+                     kr.Result[string(k)] = NESTEDBUCKET
+                  } else {
                      kr.Result[string(k)] = string(v)
                   }
                }
