@@ -64,6 +64,28 @@ func testnotimplementedfuncs(t *testing.T) {
    }
 }
 
+func testbigstring(t *testing.T) {
+
+   var unistrings = [...]string{bigstring_one, bigstring_two}
+   var key = "str"   
+
+   for i := range(unistrings) {
+      _, err = Query(kb, "INS bigstring >>>> " + key + " :: " + unistrings[i])
+      if err != nil {
+         t.Errorf("Error returned when not expected while trying to store valid bigstring from BoltDB:", err)
+      }
+
+      res, err := Query(kb, "GET bigstring >>>> " + key)
+      if err != nil {
+         t.Errorf("Error returned when not expected while trying to retrieve valid bigstring from BoltDB:", err)
+      }
+
+      if res.Result[key] != unistrings[i] {
+         t.Errorf("Unicode big strings: Error retrieving expected Unicode result back from BoltDB.")
+      }
+   }
+}
+
 //---------------------------------------------------------------------------//
 
 //Populate a database with data to work with for testing
@@ -74,7 +96,8 @@ func create_state_inserts() {
    for _, value := range(create_initial_state) {
       _, err = Query(kb, value)
       if err != nil {
-         log.Printf("Error querying db: %v\n", err)
+         log.Printf("Error creating state for unit tests, exiting: %v\n", err)
+         os.Exit(1)
       }
    }
 }
@@ -186,9 +209,10 @@ func testget(t *testing.T) {
 func TestQuery(t *testing.T) {
    defer teardown()
    testnotimplementedfuncs(t)
+   testbigstring(t)
    //testins(t)   
    //testlis(t)
    //testdel(t)
-   testget(t)
+   //testget(t)
    //testren(t)
 }
