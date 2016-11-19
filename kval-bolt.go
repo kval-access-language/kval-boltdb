@@ -25,6 +25,11 @@ func Disconnect(kb kvalbolt) {
    kb.db.Close()
 }
 
+//Retrieve a pointer to BoltDB at any time for working with it manually.
+func GetBolt(kb kvalbolt) *bolt.DB {
+   return kb.db
+}
+
 //Query. Given a KVALBolt Structure, and a KVAL query string
 //this function will do all of the work for you when interacting with
 //BoltDB. Everything should become less programmatic making for cleaner code.
