@@ -17,10 +17,12 @@ var create_initial_state = []string{
    "INS bucket one >> bucket two >>>> test5 :: value5",
    "INS bucket one >>>> test6 :: value6", 
    "INS code bucket >>>> code example :: GET bucket one >> bucket two >>>> key1 :: key2",
-   "INS regex bucket >>>> regex example one :: abcdefg regex string hijklmnop",
-   "INS regex bucket >>>> regex example two :: regex string abcdefg hijklmnop",
-   "INS regex bucket >>>> regex example three :: abcdefg hijklmnop regex string",
-   "INS regex bucket >>>> regex example four :: unknown value",
+   "INS regex bucket >>>> regex example one :: middle regex string middle",
+   "INS regex bucket >>>> regex example two :: regex string beginning beginning",
+   "INS regex bucket >>>> regex example three :: end end regex string",
+   "INS regex bucket >>>> regex example four :: regex shouldn't match",
+   "INS regex bucket >>>> regex example five :: regex string",
+   "INS regex bucket >> regex bucket two >>>> regex example six :: nil bucket test regex string",
 }
 
 var ins_getbuckets1 = []string{"bucket one", "bucket two", "bucket three"}
@@ -102,14 +104,18 @@ var get_sole_results = map[string]map[string]string {
 //GET Prime Bucket >> Secondary Bucket >> Tertiary Bucket >>>> _ :: Value
 //GET Prime Bucket >> Secondary Bucket >> Tertiary Bucket >>>> _ :: {PAT}
 var get_regex_test1 = "GET bucket one >> bucket two >> bucket three >>>> {^test\\d+$}"
-var get_regex_test2 = "GET bucket one >> bucket two >> bucket three >>>> _ :: unknown value"
+var get_regex_test2 = "GET bucket one >> bucket two >> bucket three >>>> _ :: value3"
 var get_regex_test3 = "GET regex bucket >>>> _ :: {regex string}"
 
-var get_regex_results = map[string]bool {
+var regex_res1 = map[string]string{"test1": "value1", "test2": "value2", "test3": "value3"}
+var regex_res2 = map[string]string{"test3": "value3"}
+var regex_res3 = map[string]string{"regex example one": "middle regex string middle", "regex example two": "regex string beginning beginning", "regex example three": "end end regex string", "regex example five": "regex string"}
+
+var get_regex_results = map[string]map[string]string {
 //var get_sole_results = map[string]map[string]string {
-   get_regex_test1: true,
-   //get_regex_test2: true,
-   get_regex_test3: true,
+   get_regex_test1: regex_res1,
+   get_regex_test2: regex_res2,
+   get_regex_test3: regex_res3,
 }
 
 //---------------------------------------------------------------------------//

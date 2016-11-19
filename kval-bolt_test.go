@@ -196,6 +196,7 @@ func testdel(t *testing.T) {
 func testget(t *testing.T) {
    create_state_inserts()
 
+   //test regular gets
    for k, v := range(get_sole_results) {
       res, err := Query(kb, k)
       if err != nil {
@@ -212,7 +213,7 @@ func testget(t *testing.T) {
       if err != nil {
          t.Errorf("Unexpected error returned for GET regex: %v\n", err)
       } else {
-         log.Printf("%v\n", res)
+         log.Printf("xxx %v\n", res)
       }
    }
 }

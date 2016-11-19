@@ -137,15 +137,15 @@ func getallHandler(kb kvalbolt) (kvalresult, error) {
 //GET (Get Handler) handles GET (REGEX) capability of KVAL language
 func getregexHandler(kb kvalbolt) (kvalresult, error) {
    var kr kvalresult
+   var err error
    if kb.query.Value == "" {
       log.Println("key search:", kb.query)
-      kr, err := getboltkeyregex(kb)
+      kr, err = getboltkeyregex(kb)
       if err != nil {
          return kr, err
       }
    } else if kb.query.Key != "" && kb.query.Value != "" {
-      log.Println("value search:", kb.query)
-      kr, err := getboltvalueregex(kb)
+      kr, err = getboltvalueregex(kb)
       if err != nil {
          return kr, err
       }
