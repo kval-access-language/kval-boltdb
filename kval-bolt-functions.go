@@ -2,8 +2,9 @@ package main
 
 import (
    "fmt"
-   "github.com/boltdb/bolt"
+   "regexp"
    "github.com/pkg/errors"
+   "github.com/boltdb/bolt"
 )
 
 func initkvalresult() (kvalresult) {
@@ -53,7 +54,7 @@ func createboltentries(kb kvalbolt) error {
 }
 
 //Retrieve an entry from a BoltDB from a kval structure
-func viewboltentries(kb kvalbolt) (kvalresult, error) {
+func getboltentry(kb kvalbolt) (kvalresult, error) {
    var kr = initkvalresult()
    var kq = kb.query
    err := kb.db.View(func(tx *bolt.Tx) error {
@@ -69,6 +70,28 @@ func viewboltentries(kb kvalbolt) (kvalresult, error) {
       return nil
    })
    return kr, err
+} 
+
+//Retrieve an entry from a BoltDB using regular expression
+func getboltkeyregex(kb kvalbolt) (kvalresult, error) {
+   var kq = kb.query
+   var kr = initkvalresult()
+   _, err := regexp.Compile(kq.Key)
+   if err != nil {
+      return kr, err
+   }
+   return kr, nil
+} 
+
+//Retrieve an entry from a BoltDB using regular expression
+func getboltvalueregex(kb kvalbolt) (kvalresult, error) {
+   var kq = kb.query
+   var kr = initkvalresult()
+   _, err := regexp.Compile(kq.Value)
+   if err != nil {
+      return kr, err
+   }
+   return kr, nil
 } 
 
 //Retrieve all values from a single bucket per KVAL syntax

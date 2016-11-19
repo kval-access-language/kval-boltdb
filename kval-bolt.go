@@ -1,6 +1,7 @@
 package main
 
 import (
+   "log"
    "time"
    "github.com/boltdb/bolt"
    "github.com/pkg/errors"
@@ -56,6 +57,9 @@ func queryhandler(kb kvalbolt) (kvalresult, error) {
          //get all
          kr, err := getallHandler(kb)
          return kr, err
+      } else if kb.query.Regex {
+         kr, err := getregexHandler(kb)
+         return kr, err
       } else {
          kr, err := getHandler(kb)
          return kr, err
@@ -109,7 +113,7 @@ func insHandler(kb kvalbolt) error {
 //GET (Get Handler) handles GET capability of KVAL language
 func getHandler(kb kvalbolt) (kvalresult, error) {
    var kr kvalresult
-   kr, err := viewboltentries(kb)
+   kr, err := getboltentry(kb)
    if err != nil {
       return kr, err
    }
@@ -122,6 +126,25 @@ func getallHandler(kb kvalbolt) (kvalresult, error) {
    if err != nil {
       return kr, err
    }
+   return kr, nil
+}
+
+//GET (Get Handler) handles GET (REGEX) capability of KVAL language
+func getregexHandler(kb kvalbolt) (kvalresult, error) {
+   var kr kvalresult
+   if kb.query.Value == "" {
+      log.Println("key search:", kb.query)
+      kr, err := getboltkeyregex(kb)
+      if err != nil {
+         return kr, err
+      }
+   } else if kb.query.Key != "" && kb.query.Value != "" {
+      log.Println("value search:", kb.query)
+      kr, err := getboltvalueregex(kb)
+      if err != nil {
+         return kr, err
+      }
+   } 
    return kr, nil
 }
 

@@ -20,6 +20,7 @@ var create_initial_state = []string{
    "INS regex bucket >>>> regex example one :: abcdefg regex string hijklmnop",
    "INS regex bucket >>>> regex example two :: regex string abcdefg hijklmnop",
    "INS regex bucket >>>> regex example three :: abcdefg hijklmnop regex string",
+   "INS regex bucket >>>> regex example four :: unknown value",
 }
 
 var ins_getbuckets1 = []string{"bucket one", "bucket two", "bucket three"}
@@ -101,13 +102,13 @@ var get_sole_results = map[string]map[string]string {
 //GET Prime Bucket >> Secondary Bucket >> Tertiary Bucket >>>> _ :: Value
 //GET Prime Bucket >> Secondary Bucket >> Tertiary Bucket >>>> _ :: {PAT}
 var get_regex_test1 = "GET bucket one >> bucket two >> bucket three >>>> {^test\\d+$}"
-var get_regex_test2 = "GET bucket one >> bucket two >> bucket three >>>> _"
-var get_regex_test3 = "regex bucket >>>> regex example three :: {regex string}"
+var get_regex_test2 = "GET bucket one >> bucket two >> bucket three >>>> _ :: unknown value"
+var get_regex_test3 = "GET regex bucket >>>> _ :: {regex string}"
 
 var get_regex_results = map[string]bool {
 //var get_sole_results = map[string]map[string]string {
    get_regex_test1: true,
-   get_regex_test2: true,
+   //get_regex_test2: true,
    get_regex_test3: true,
 }
 

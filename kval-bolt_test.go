@@ -219,11 +219,11 @@ func testget(t *testing.T) {
 
 func TestQuery(t *testing.T) {
    defer teardown()
-   testnotimplementedfuncs(t)
-   testbigstring(t)
-   testins(t)   
-   testlis(t)
-   testdel(t)
+   //testnotimplementedfuncs(t)
+   //testbigstring(t)
+   //testins(t)   
+   //testlis(t)
+   //testdel(t)
    testget(t)
    //testren(t)
 }
