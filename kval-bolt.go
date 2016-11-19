@@ -1,7 +1,6 @@
 package main
 
 import (
-   "log"
    "time"
    "github.com/boltdb/bolt"
    "github.com/pkg/errors"
@@ -144,7 +143,6 @@ func getregexHandler(kb kvalbolt) (kvalresult, error) {
    var kr kvalresult
    var err error
    if kb.query.Value == "" {
-      log.Println("key search:", kb.query)
       kr, err = getboltkeyregex(kb)
       if err != nil {
          return kr, err
