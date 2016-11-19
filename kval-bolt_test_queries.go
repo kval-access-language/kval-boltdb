@@ -17,6 +17,9 @@ var create_initial_state = []string{
    "INS bucket one >> bucket two >>>> test5 :: value5",
    "INS bucket one >>>> test6 :: value6", 
    "INS code bucket >>>> code example :: GET bucket one >> bucket two >>>> key1 :: key2",
+   "INS regex bucket >>>> regex example one :: abcdefg regex string hijklmnop",
+   "INS regex bucket >>>> regex example two :: regex string abcdefg hijklmnop",
+   "INS regex bucket >>>> regex example three :: abcdefg hijklmnop regex string",
 }
 
 var ins_getbuckets1 = []string{"bucket one", "bucket two", "bucket three"}
@@ -81,7 +84,7 @@ var get_test1 = "GET bucket one >> bucket two >> bucket three >>>> test1"
 var get_test2 = "GET bucket one >> bucket two >> bucket three >>>> test2"
 var get_bucket_three = "GET bucket one >> bucket two >> bucket three"
 var get_bucket_one = "GET bucket one"
-var get_code_bucket = "INS code bucket >>>> code example"
+var get_code_bucket = "GET code bucket >>>> code example"
 
 var get_sole_results = map[string]map[string]string {
    get_test1: map[string]string{"test1": "value1"},
@@ -89,6 +92,23 @@ var get_sole_results = map[string]map[string]string {
    get_bucket_three: map[string]string{"test1": "value1", "test2": "value2", "test3": "value3"},
    get_bucket_one: map[string]string{"bucket two": NESTEDBUCKET, "test6": "value6"},
    get_code_bucket: map[string]string{"code example": "GET bucket one >> bucket two >>>> key1 :: key2"},
+}
+
+//---------------------------------------------------------------------------//
+
+//test get regex procedures
+//GET Prime Bucket >> Secondary Bucket >> Tertiary Bucket >>>> {PAT}
+//GET Prime Bucket >> Secondary Bucket >> Tertiary Bucket >>>> _ :: Value
+//GET Prime Bucket >> Secondary Bucket >> Tertiary Bucket >>>> _ :: {PAT}
+var get_regex_test1 = "GET bucket one >> bucket two >> bucket three >>>> {^test\\d+$}"
+var get_regex_test2 = "GET bucket one >> bucket two >> bucket three >>>> _"
+var get_regex_test3 = "regex bucket >>>> regex example three :: {regex string}"
+
+var get_regex_results = map[string]bool {
+//var get_sole_results = map[string]map[string]string {
+   get_regex_test1: true,
+   get_regex_test2: true,
+   get_regex_test3: true,
 }
 
 //---------------------------------------------------------------------------//

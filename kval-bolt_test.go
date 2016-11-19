@@ -205,15 +205,25 @@ func testget(t *testing.T) {
          t.Errorf("Unexpected result value for GET: %s, expected: %s\n", res.Result, v)
       }
    }
+
+   //test regex gets
+   for k, _ := range(get_regex_results) {
+      res, err := Query(kb, k)
+      if err != nil {
+         t.Errorf("Unexpected error returned for GET regex: %v\n", err)
+      } else {
+         log.Printf("%v\n", res)
+      }
+   }
 }
 
 func TestQuery(t *testing.T) {
    defer teardown()
    testnotimplementedfuncs(t)
    testbigstring(t)
-   //testins(t)   
-   //testlis(t)
-   //testdel(t)
-   //testget(t)
+   testins(t)   
+   testlis(t)
+   testdel(t)
+   testget(t)
    //testren(t)
 }
