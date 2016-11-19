@@ -117,6 +117,11 @@ func insHandler(kb kvalbolt) error {
 
 //GET (Get Handler) handles GET capability of KVAL language
 func getHandler(kb kvalbolt) (kvalresult, error) {
+   if kb.query.Key == "_" {
+      //turn our value into a regular expression for better search
+      kb.query.Value = "^" + kb.query.Value + "$"  
+      return getregexHandler(kb)
+   }
    var kr kvalresult
    kr, err := getboltentry(kb)
    if err != nil {
