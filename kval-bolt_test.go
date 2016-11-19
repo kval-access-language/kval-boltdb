@@ -120,12 +120,37 @@ func testdel(t *testing.T) {
       //constant state throughout *any* delete we do...       
       doinserts()
 
-      //perform our queries on the Bolt DB...      
-      _, err := Query(kb, k)
-      if err != nil {
-         if errors.Cause(err) != e {
-            t.Errorf("Invalid error for delete procedure (different error expected): %v\n", err)
-         }
+      switch k {
+         case delnonekeytwo:
+            //testing nul result where Bolt returns nil when trying to delete
+            //a key that doesn't actually exist...
+            bs, _ := getbucketstats(kb, bucket_nonekey)
+
+            //KeyN  int // number of keys/value pairs
+            //compare expected keys to remaining keys - should be identical
+            expectedkeys := bs.KeyN
+
+            _, err := Query(kb, k)
+            if err != nil {
+               if errors.Cause(err) != e {
+                  t.Errorf("Invalid error for delete procedure (nil expected for none key): %v\n", err)
+               }
+            }      
+
+            bs, _ = getbucketstats(kb, bucket_nonekey)
+            remainingkeys := bs.KeyN
+            if expectedkeys != remainingkeys {
+               t.Errorf("Invalid error deleting nil key. Expected 'nil' return from BoltDB: %v\n", err)
+            }
+
+         default: 
+            //perform our queries on the Bolt DB...      
+            _, err := Query(kb, k)
+            if err != nil {
+               if errors.Cause(err) != e {
+                  t.Errorf("Invalid error for delete procedure (different error expected): %v\n", err)
+               }
+            }      
       }
    }
 

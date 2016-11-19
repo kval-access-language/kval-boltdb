@@ -65,9 +65,11 @@ var good_del_results = [...]string{delkey, nullvalue, delkeys, delbucket}
 
 //bad procedures - error of certain types are expected... 
 var delnonekey = "DEL zero bucket >>>> nonkey"
-var delnonekeytwo = "DEL bucket one >>>> nonkey"      //silent fail of non-existent key is all BoltDB does
 var delnonebucket = "DEL zero bucket"
 var delnonebuckettwo = "DEL bucket one >> zero bucket two"
+
+var delnonekeytwo = "DEL bucket one >>>> nonkey"      //silent fail of non-existent key is all BoltDB does
+var bucket_nonekey = []string{"bucket one"}
 
 var bad_del_results = map[string]error{
    delnonekey: err_nil_bucket,
