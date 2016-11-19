@@ -75,10 +75,13 @@ var bad_del_results = map[string]error{
 var get_test1 = "GET bucket one >> bucket two >> bucket three >>>> test1"
 var get_test2 = "GET bucket one >> bucket two >> bucket three >>>> test2"
 var get_bucket_three = "GET bucket one >> bucket two >> bucket three"
-var get_bucket_one = "GET INS bucket one"
+var get_bucket_one = "GET bucket one"
 
-var get_results = map[string]bool {
-
+var get_sole_results = map[string]map[string]string {
+   get_test1: map[string]string{"test1": "value1"},
+   get_test2: map[string]string{"test2": "value2"},
+   get_bucket_three: map[string]string{"test1": "value1", "test2": "value2", "test3": "value3"},
+   get_bucket_one: map[string]string{"bucket two": NESTEDBUCKET, "test6": "value6"},
 }
 
 //---------------------------------------------------------------------------//
@@ -98,10 +101,14 @@ var ren_key = "REN ren1 >> ren2 >> ren3 >>>> r7 => renkey"
 var ren_bucket = "REN ren1 >> ren2 => renbuckets"
 
 var ren_results = map[string]bool {
-
+   
 }
 
 //---------------------------------------------------------------------------//
+
+//example kvalresults
+//a: kvalresult{map[string]string{"test1": "value1", "test2": "value2", "test3": "value3"}, false},
+//b: kvalresult{map[string]string{"bucket two": NESTEDBUCKET, "test6": "value6"}, false},
 
 //test list procedures
 var lis_bucket_two = "LIS bucket one >> bucket two"

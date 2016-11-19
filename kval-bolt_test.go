@@ -4,6 +4,7 @@ import (
    "os"   
    "log"
    "fmt"   
+   "reflect"
    "strings"
    "testing"
    "github.com/pkg/errors"
@@ -160,7 +161,7 @@ func testdel(t *testing.T) {
             _, err := Query(kb, k)
             if err != nil {
                if errors.Cause(err) != e {
-                  t.Errorf("Invalid error for delete procedure (different error expected): %v\n", err)
+                  t.Errorf("Invalid error for DEL procedure (different error expected): %v\n", err)
                }
             }      
       }
@@ -170,11 +171,15 @@ func testdel(t *testing.T) {
 
 func testget(t *testing.T) {
    create_state_inserts()
-   res, err := Query(kb, get_bucket_three)
-   if err != nil {
-      log.Println("xxx", err)
-   } else {
-      log.Println(res)
+
+   for k, v := range(get_sole_results) {
+      res, err := Query(kb, k)
+      if err != nil {
+         t.Errorf("Invalid error for GET procedure (zero errors expected): %v\n", err)
+      }
+      if !reflect.DeepEqual(res.Result, v) {
+         t.Errorf("Unexpected result value for GET: %s, expected: %s\n", res.Result, v)
+      }
    }
 }
 
