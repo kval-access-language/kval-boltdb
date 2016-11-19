@@ -3,6 +3,8 @@ package main
 import (
    "os"   
    "log"
+   "fmt"   
+   "strings"
    "testing"
    "github.com/pkg/errors"
 )
@@ -44,6 +46,24 @@ func teardown() {
    log.Println("Info: Running tear-down.")
    clear()
 }
+
+//---------------------------------------------------------------------------//
+
+//Miscellaneous tests (tests that don't group nicely together)
+func testnotimplementedfuncs(t *testing.T) {
+   _, err = Query(kb, make_tea)
+   if err == nil {
+      log.Printf("Error expected from test but not returned.")
+   } else {
+      //TODO: rethink testing the error string... can github.com/pkg/errors help?
+      teststr := fmt.Sprintf("%s", err)
+      if !strings.Contains(teststr, err_parse) {
+         log.Printf("Error querying db: %v\n", err)
+      }
+   }
+}
+
+//---------------------------------------------------------------------------//
 
 //Populate a database with data to work with for testing
 func create_state_inserts() {
@@ -160,6 +180,7 @@ func testget(t *testing.T) {
 
 func TestQuery(t *testing.T) {
    defer teardown()
+   testnotimplementedfuncs(t)
    //testins(t)   
    //testlis(t)
    //testdel(t)

@@ -2,6 +2,12 @@ package main
 
 import "github.com/boltdb/bolt"
 
+//test invalid/non-implemented capabilities
+
+var make_tea = "TEA bucket one >> bucket two >>>> cup :: saucer"
+
+//---------------------------------------------------------------------------//
+
 //test insert procedures
 var create_initial_state = []string{
    "INS bucket one >> bucket two >> bucket three >>>> test1 :: value1",
