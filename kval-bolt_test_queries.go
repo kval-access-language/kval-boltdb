@@ -3,7 +3,7 @@ package main
 import "github.com/boltdb/bolt"
 
 //test insert procedures
-var ins_tests = []string{
+var create_initial_state = []string{
    "INS bucket one >> bucket two >> bucket three >>>> test1 :: value1",
    "INS bucket one >> bucket two >> bucket three >>>> test2 :: value2",
    "INS bucket one >> bucket two >> bucket three >>>> test3 :: value3",
@@ -16,14 +16,25 @@ var ins_getbuckets1 = []string{"bucket one", "bucket two", "bucket three"}
 var ins_getbuckets2 = []string{"bucket one", "bucket two"}
 var ins_getbuckets3 = []string{"bucket one"}
 
+var ins_result1 = insresult{3, 1}
+var ins_result2 = insresult{6, 2}
+var ins_result3 = insresult{8, 3}
+
+type ins_check struct {
+   buckets []string 
+   counts insresult 
+}
+
 type insresult struct {
    keys int
    depth int
 }
 
-var ins_result1 = insresult{3, 1}
-var ins_result2 = insresult{6, 2}
-var ins_result3 = insresult{8, 3}
+var i1 = ins_check{ins_getbuckets1, ins_result1}
+var i2 = ins_check{ins_getbuckets2, ins_result2}
+var i3 = ins_check{ins_getbuckets3, ins_result3}
+
+var ins_checks_all = [...]ins_check{i1, i2, i3}
 
 //test get procedures
 var get_test1 = "GET bucket one >> bucket two >> bucket three >>>> test1"

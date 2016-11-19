@@ -46,11 +46,11 @@ func teardown() {
 }
 
 //Populate a database with data to work with for testing
-func doinserts() {
+func create_state_inserts() {
    //clear db when we need it afresh...
    refreshdb()  
    //baseline inserts...   
-   for _, value := range(ins_tests) {
+   for _, value := range(create_initial_state) {
       _, err = Query(kb, value)
       if err != nil {
          log.Printf("Error querying db: %v\n", err)
@@ -60,31 +60,23 @@ func doinserts() {
 
 //Test insert functions associated with KVAL capabilities
 func testins(t *testing.T) {
-   doinserts()
+   create_state_inserts()
 
    // Utilise BoltDB Tree statistics.
    // KeyN  int // number of keys/value pairs
    // Depth int // number of levels in B+tree
 
-   bs, _ := getbucketstats(kb, ins_getbuckets1)
-   if bs.KeyN != ins_result1.keys && bs.Depth != ins_result1.depth {
-      t.Errorf("Expected stats results for INS don't match")
-   } 
-
-   bs, _ = getbucketstats(kb, ins_getbuckets2)
-   if bs.KeyN != ins_result2.keys && bs.Depth != ins_result2.depth {
-      t.Errorf("Expected stats results for INS don't match")
-   } 
-
-   bs, _ = getbucketstats(kb, ins_getbuckets3)
-   if bs.KeyN != ins_result3.keys && bs.Depth != ins_result3.depth {
-      t.Errorf("Expected stats results for INS don't match")
-   } 
+   for i := range(ins_checks_all) {
+      bs, _ := getbucketstats(kb, ins_checks_all[i].buckets)
+      if bs.KeyN != ins_checks_all[i].counts.keys && bs.Depth != ins_checks_all[i].counts.depth {
+         t.Errorf("Expected stats results for INS don't match")
+      } 
+   }
 }
 
 //Test list functions associated with KVAL capabilities
 func testlis(t *testing.T) {
-   doinserts()
+   create_state_inserts()
    for k, v := range(lis_results) {
       kq, err := Query(kb, k)
       if err != nil {
@@ -102,9 +94,9 @@ func testdel(t *testing.T) {
    //test results we expect to pass
    for k := range(good_del_results) {
       
-      //doinserts: slower but efficient for test writing... maintains
+      //create_state_inserts: slower but efficient for test writing... maintains
       //constant state throughout *any* delete we do...       
-      doinserts()
+      create_state_inserts()
 
       //perform our queries on the Bolt DB...      
       _, err := Query(kb, good_del_results[k])
@@ -116,9 +108,9 @@ func testdel(t *testing.T) {
    //test results we expect to fail, and check fail result...
    for k, e := range(bad_del_results) {
       
-      //doinserts: slower but efficient for test writing... maintains
+      //create_state_inserts: slower but efficient for test writing... maintains
       //constant state throughout *any* delete we do...       
-      doinserts()
+      create_state_inserts()
 
       switch k {
          case delnonekeytwo:
