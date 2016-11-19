@@ -5,6 +5,7 @@ import (
    "github.com/boltdb/bolt"
    "github.com/pkg/errors"
    "github.com/kval-access-language/KVAL-Parse"
+   "github.com/kval-access-language/kval-scanner"
 )
 
 //Open a BoltDB with a given name to work with. 
@@ -47,10 +48,10 @@ func Query(kb kvalbolt, query string) (kvalresult, error) {
 func queryhandler(kb kvalbolt) (kvalresult, error) {
    var kr kvalresult
    switch kb.query.Function {
-   case kvalparse.INS:
+   case kvalscanner.INS:
       err := insHandler(kb)
       return kr, err
-   case kvalparse.GET:
+   case kvalscanner.GET:
       if kb.query.Key == "" {
          //get all
          kr, err := getallHandler(kb)
@@ -59,10 +60,10 @@ func queryhandler(kb kvalbolt) (kvalresult, error) {
          kr, err := getHandler(kb)
          return kr, err
       }
-   case kvalparse.LIS:
+   case kvalscanner.LIS:
       kr, err := lisHandler(kb)
       return kr, err
-   case kvalparse.DEL:
+   case kvalscanner.DEL:
       if kb.query.Key == "" {
          //we're deleting a bucket (and all contents)
          err := delbucketHandler(kb)
@@ -81,7 +82,7 @@ func queryhandler(kb kvalbolt) (kvalresult, error) {
          err := nullifyvalHandler(kb)
          return kr, err                  
       } 
-   case kvalparse.REN:
+   case kvalscanner.REN:
       if kb.query.Key == "" {
          renbucketHandler(kb)
       } else if kb.query.Key != "" {
