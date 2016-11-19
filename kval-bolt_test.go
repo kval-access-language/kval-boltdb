@@ -148,11 +148,21 @@ func testdel(t *testing.T) {
 
 }
 
+func testget(t *testing.T) {
+   create_state_inserts()
+   res, err := Query(kb, get_bucket_three)
+   if err != nil {
+      log.Println("xxx", err)
+   } else {
+      log.Println(res)
+   }
+}
+
 func TestQuery(t *testing.T) {
    defer teardown()
    //testins(t)   
    //testlis(t)
-   testdel(t)
-   //testget(t)
+   //testdel(t)
+   testget(t)
    //testren(t)
 }

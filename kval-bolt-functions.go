@@ -13,6 +13,7 @@ func initkvalresult() (kvalresult) {
    return kr
 }
 
+//Create bucket and key/value entries in BoltDB from a kval structure
 func createboltentries(kb kvalbolt) error {
    var kq = kb.query
    err := kb.db.Update(func(tx *bolt.Tx) error {
@@ -51,6 +52,7 @@ func createboltentries(kb kvalbolt) error {
    return err
 }
 
+//Retrieve an entry from a BoltDB from a kval structure
 func viewboltentries(kb kvalbolt) (kvalresult, error) {
    var kr = initkvalresult()
    var kq = kb.query
@@ -69,6 +71,7 @@ func viewboltentries(kb kvalbolt) (kvalresult, error) {
    return kr, err
 } 
 
+//Retrieve all values from a single bucket per KVAL syntax
 func getallfrombucket(kb kvalbolt) (kvalresult, error) {
    var kq = kb.query
    var kr = initkvalresult()
@@ -100,6 +103,7 @@ func getallfrombucket(kb kvalbolt) (kvalresult, error) {
    return kr, err
 }
 
+//Delete a single bucket from a BoltDB from a KVAL structure
 func deletebucket(kb kvalbolt) error {
    var kq = kb.query
    err := kb.db.Update(func(tx *bolt.Tx) error {
@@ -132,6 +136,7 @@ func deletebucket(kb kvalbolt) error {
    return err
 }
 
+//Delete all the keys in a BoltDB bucket leaving Bucket in tact
 func deletebucketkeys(kb kvalbolt) error {
    var kq = kb.query
    err := kb.db.Update(func(tx *bolt.Tx) error {     
@@ -161,6 +166,7 @@ func deletebucketkeys(kb kvalbolt) error {
    return err   
 }
 
+//Delete a key and its corresponding value from a BoltDB
 func deletekey(kb kvalbolt) error {
    var kq = kb.query
    err := kb.db.Update(func(tx *bolt.Tx) error {   
@@ -185,6 +191,7 @@ func deletekey(kb kvalbolt) error {
    return err  
 }
 
+//Turn a value for a given key to NULL based on KVAL capabilities
 func nullifykeyvalue(kb kvalbolt) error {
    var kq = kb.query
    err := kb.db.Update(func(tx *bolt.Tx) error {   
@@ -201,6 +208,7 @@ func nullifykeyvalue(kb kvalbolt) error {
    return err
 }
 
+//Rename a bucket (full OR empty) in a BoltDB
 func renamebucket(kb kvalbolt) error {
    var kq = kb.query
    err := kb.db.Update(func(tx *bolt.Tx) error {   
@@ -236,6 +244,7 @@ func renamebucket(kb kvalbolt) error {
    return err
 }
 
+//Helper function for rename to copy a bucket to a newly named bucket
 func copybuckets(from, to *bolt.Bucket) error {
    bs := from.Stats()
    if bs.KeyN > 0 {
@@ -261,6 +270,7 @@ func copybuckets(from, to *bolt.Bucket) error {
    return nil
 }
 
+//Rename a key in a BoltDB based on described KVAL capabilities such as rename
 func renamekey(kb kvalbolt) error {
    var kq = kb.query
    err := kb.db.Update(func(tx *bolt.Tx) error {   
@@ -287,6 +297,7 @@ func renamekey(kb kvalbolt) error {
    return err
 }
 
+//Check to see if a key exists in a BoltDB bucket, per KVAL LIS capabilities
 func bucketkeyexists(kb kvalbolt) (kvalresult, error) {
    var kq = kb.query
    var kr = initkvalresult()
@@ -310,6 +321,7 @@ func bucketkeyexists(kb kvalbolt) (kvalresult, error) {
    return kr, nil   
 }
 
+//Retrieve a bucket pointer to work with from the BoltDB
 func gotobucket(tx *bolt.Tx, bucketslice []string) (*bolt.Bucket, error) {
    var bucket *bolt.Bucket
    if len(bucketslice) > 0 {
@@ -332,7 +344,7 @@ func gotobucket(tx *bolt.Tx, bucketslice []string) (*bolt.Bucket, error) {
       }   
    } else {
       //gold plating at this point, easily handled elsewhere...
-      return bucket, fmt.Errorf("ZERO Slice: Empty buckets slice provided.")
+      return bucket, err_empty_bucket_slice
    }
    return bucket, nil
 }

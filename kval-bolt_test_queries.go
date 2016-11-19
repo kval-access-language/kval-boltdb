@@ -36,6 +36,35 @@ var i3 = ins_check{ins_getbuckets3, ins_result3}
 
 var ins_checks_all = [...]ins_check{i1, i2, i3}
 
+//---------------------------------------------------------------------------//
+
+//test delete procedures 
+
+//good delete procedures - nil error expected... 
+var delkey = "DEL bucket one >> bucket two >> bucket three >>>> test1"           //delete key test1
+var nullvalue = "DEL bucket one >> bucket two >> bucket three >>>> test3 :: _"   //make value null without deleting key
+var delkeys = "DEL bucket one >> bucket two >> bucket three >>>> _"              //del all keys from a bucket
+var delbucket = "DEL bucket one >> bucket two"                                   //delete bucket two        
+
+var good_del_results = [...]string{delkey, nullvalue, delkeys, delbucket}
+
+//bad delete procedures - error of certain types are expected... 
+var delnonekey = "DEL zero bucket >>>> nonkey"
+var delnonebucket = "DEL zero bucket"
+var delnonebuckettwo = "DEL bucket one >> zero bucket two"
+
+var delnonekeytwo = "DEL bucket one >>>> nonkey"      //silent fail of non-existent key is all BoltDB does
+var bucket_nonekey = []string{"bucket one"}
+
+var bad_del_results = map[string]error{
+   delnonekey: err_nil_bucket,
+   delnonekeytwo: nil,     //we only get a silent fail, test may have little value, but it's here...
+   delnonebucket: bolt.ErrBucketNotFound,
+   delnonebuckettwo: bolt.ErrBucketNotFound,
+}
+
+//---------------------------------------------------------------------------//
+
 //test get procedures
 var get_test1 = "GET bucket one >> bucket two >> bucket three >>>> test1"
 var get_test2 = "GET bucket one >> bucket two >> bucket three >>>> test2"
@@ -45,6 +74,8 @@ var get_bucket_one = "GET INS bucket one"
 var get_results = map[string]bool {
 
 }
+
+//---------------------------------------------------------------------------//
 
 //test rename procedures
 var ren_tests = []string{
@@ -64,33 +95,9 @@ var ren_results = map[string]bool {
 
 }
 
-//test delete procedures (reinstate all state before each test 'doinserts()')
-//good procedures - nil error expected... 
-var delkey = "DEL bucket one >> bucket two >> bucket three >>>> test1"           //delete key test1
-var nullvalue = "DEL bucket one >> bucket two >> bucket three >>>> test3 :: _"   //make value null without deleting key
-var delkeys = "DEL bucket one >> bucket two >> bucket three >>>> _"              //del all keys from a bucket
-var delbucket = "DEL bucket one >> bucket two"                                   //delete bucket two        
-
-//results that shouldn't cause an error...
-var good_del_results = [...]string{delkey, nullvalue, delkeys, delbucket}
-
-//bad procedures - error of certain types are expected... 
-var delnonekey = "DEL zero bucket >>>> nonkey"
-var delnonebucket = "DEL zero bucket"
-var delnonebuckettwo = "DEL bucket one >> zero bucket two"
-
-var delnonekeytwo = "DEL bucket one >>>> nonkey"      //silent fail of non-existent key is all BoltDB does
-var bucket_nonekey = []string{"bucket one"}
-
-var bad_del_results = map[string]error{
-   delnonekey: err_nil_bucket,
-   delnonekeytwo: nil,     //we only get a silent fail, test may have little value, but it's here...
-   delnonebucket: bolt.ErrBucketNotFound,
-   delnonebuckettwo: bolt.ErrBucketNotFound,
-}
+//---------------------------------------------------------------------------//
 
 //test list procedures
-//run testins again
 var lis_bucket_two = "LIS bucket one >> bucket two"
 var lis_test1 = "LIS bucket one >> bucket two >> bucket three >>>> test1"
 var lis_unknown_key = "LIS bucket one >> bucket two >> bucket three >>>> nokey"
@@ -103,3 +110,4 @@ var lis_results = map[string]bool{
    lis_unknown_bucket: false,
 }
 
+//---------------------------------------------------------------------------//
