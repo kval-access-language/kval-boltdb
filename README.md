@@ -18,7 +18,7 @@ The language specification: https://github.com/kval-access-language/KVAL
 * Start using BoltDB immediately without writing partial wrappers for your code
 * KVAL-Parse enables handling of Base64 binary BLOBS
 * Regular Expression based searching for key names and values
-* (KVAL Language)[https://github.com/kval-access-language/KVAL] specifies easy bulk or singleton DEL and RENAME capabilities
+* [KVAL Language](https://github.com/kval-access-language/KVAL) specifies easy bulk or singleton DEL and RENAME capabilities
 * Language specification at highest abstraction, so other bindings are hoped for
 
 ###Usage
