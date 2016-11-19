@@ -10,6 +10,17 @@ It allows for input and access of values to a key value store such as Golang's
 
 The language specification: https://github.com/kval-access-language/KVAL 
 
+###Features 
+
+* Single function entry-point:
+    * db.Query(INS B1 >> B2 >> B3 >>>> KEY :: VAL) (will create three buckets, plus k/v in one-go)
+    * db.Query(GET B1 >> B2 >> B3 >>>> KEY)        (will retrieve that entry in one-go)
+* Start using BoltDB immediately without writing partial wrappers for your code
+* KVAL-Parse enables handling of Base64 binary BLOBS
+* Regular Expression based searching for key names and values
+* (KVAL Language)[https://github.com/kval-access-language/KVAL] specifies easy bulk or singleton DEL and RENAME capabilities
+* Language specification at highest abstraction, so other bindings are hoped for
+
 ###Usage
 
 Use is simple. There is one function which accepts a string formatted to KVAL's
@@ -19,7 +30,7 @@ specification:
     if err != nil {
        fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
     } else {
-       //Access our result structure: res.Result (a map[string]string)
+       //Access our (result structure)[https://github.com/kval-access-language/kval-boltdb/blob/master/kval-bolt-structs.go#L16]: res.Result (a map[string]string)
     } 
 
 For write operations we simply check for the existence of an error, else the
