@@ -76,10 +76,36 @@ func getboltentry(kb kvalbolt) (kvalresult, error) {
 func getboltkeyregex(kb kvalbolt) (kvalresult, error) {
    var kq = kb.query
    var kr = initkvalresult()
-   _, err := regexp.Compile(kq.Key)
+   re, err := regexp.Compile(kq.Value)
    if err != nil {
       return kr, err
    }
+   err = kb.db.View(func(tx *bolt.Tx) error {
+      bucket, err := gotobucket(tx, kq.Buckets)
+      if err != nil {
+         return err
+      }
+      if bucket != nil {
+         bs := bucket.Stats()
+         if bs.KeyN > 0 {
+            cursor := bucket.Cursor()
+            k,v := cursor.First()
+            for k != nil {
+               if v != nil {
+                  //nil means nested bucket: can't work with nested buckets for this search
+                  if re.MatchString(string(k)) {
+                     kr.Result[string(k)] = string(v)
+                  }
+               }
+               k, v = cursor.Next()
+            }
+         } else {
+            return err_no_kv_in_bucket
+         }
+      }
+      //commit transaction
+      return nil
+   })
    return kr, nil
 } 
 
