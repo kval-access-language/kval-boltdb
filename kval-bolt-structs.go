@@ -9,7 +9,7 @@ import (
 const NESTEDBUCKET = "NestedBucket"
 const DATA = "data"
 const BASE64 = "base64"
-const BLOBLEN = 4
+const BLOBLEN = 4          //"data:<mimetype>:<encoding type>:<data>"
 
 type kvalbolt struct {
    db       *bolt.DB

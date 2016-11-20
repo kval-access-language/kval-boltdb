@@ -61,7 +61,7 @@ var ins_checks_all = [...]ins_check{i1, i2, i3}
 var delkey = "DEL bucket one >> bucket two >> bucket three >>>> test1"           //delete key test1
 var nullvalue = "DEL bucket one >> bucket two >> bucket three >>>> test3 :: _"   //make value null without deleting key
 var delkeys = "DEL bucket one >> bucket two >> bucket three >>>> _"              //del all keys from a bucket
-var delbucket = "DEL bucket one >> bucket two"                                   //delete bucket two        
+var delbucket = "DEL bucket one >> bucket two"                                   //delete bucket two
 
 var good_del_results = [...]string{delkey, nullvalue, delkeys, delbucket}
 

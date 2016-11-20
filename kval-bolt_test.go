@@ -190,6 +190,40 @@ func testdel(t *testing.T) {
       if err != nil {
          t.Errorf("Invalid error for delete procedure (nil error expected): %v\n", err)
       }
+
+      switch (good_del_results[k]) {
+         case delkey:
+            //"DEL bucket one >> bucket two >> bucket three >>>> test1" //delete key test1
+            res, _ := Query(kb, "LIS bucket one >> bucket two >> bucket three >>>> test1")
+            if res.Exists != false {
+               t.Errorf("Delete failed for key 'test1', still exists.")   
+            }
+         case nullvalue:
+            //"DEL bucket one >> bucket two >> bucket three >>>> test3 :: _" //make value null without deleting key
+            res, _ := Query(kb, "GET bucket one >> bucket two >> bucket three >>>> test3")
+            if val, ok := res.Result["test3"]; ok {
+               if val != "" {
+                  t.Errorf("Nullify key failed for key 'test3', found: %v", val)   
+               }
+            } else {
+               t.Errorf("Error querying key 'test3'. Key not found.")   
+            }
+         case delkeys:
+            //"DEL bucket one >> bucket two >> bucket three >>>> _" //del all keys from a bucket
+            bs, err := getbucketstats(kb, []string{"bucket one", "bucket two", "bucket three"})
+            if err != nil {
+               t.Errorf("Error retrieving key count for bucket, %v", err)
+            }else if bs.KeyN != 0 {
+               t.Errorf("Key count following delete from bucket is incorrect, %d", bs.KeyN)
+            }
+         case delbucket:
+            //"DEL bucket one >> bucket two" //delete bucket two
+            res, _ := Query(kb, "LIS bucket one >> bucket two")
+            if res.Exists != false {
+               t.Errorf("Delete failed for bucket 'bucket two', still exists.")   
+            }
+      }
+
    }
 
    //test results we expect to fail, and check fail result...
@@ -265,11 +299,11 @@ func TestQuery(t *testing.T) {
    defer teardown()
    //testnotimplementedfuncs(t)
    //testbigstring(t)
-   testbase64(t)
-   testPutBlob(t)
+   //testbase64(t)
+   //testPutBlob(t)
    //testins(t)   
    //testlis(t)
-   //testdel(t)
+   testdel(t)
    //testget(t)
    //testren(t)
 }
