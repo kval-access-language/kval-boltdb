@@ -297,13 +297,13 @@ func testget(t *testing.T) {
 
 func TestQuery(t *testing.T) {
    defer teardown()
-   //testnotimplementedfuncs(t)
-   //testbigstring(t)
-   //testbase64(t)
-   //testPutBlob(t)
-   //testins(t)   
-   //testlis(t)
+   testnotimplementedfuncs(t)
+   testbigstring(t)
+   testbase64(t)
+   testPutBlob(t)
+   testins(t)   
+   testlis(t)
    testdel(t)
-   //testget(t)
+   testget(t)
    //testren(t)
 }
