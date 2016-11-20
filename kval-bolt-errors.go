@@ -13,6 +13,8 @@ var err_blob_ins = errors.New("INS Only: Can only use INS to PUT blob")
 var err_blob_len = errors.New("Blob data supplied is not a blob, or is wrapped incorrectly")
 var err_blob_map_len = errors.New("Maplen not equal to one. May be multiple value context, or zero")
 
+var err_stat = errors.New("Cannot stat database. Stats struct will remain empty.")
+
 //Other non-error error strings...
 var err_parse = "Query parse failed"
 

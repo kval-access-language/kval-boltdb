@@ -19,7 +19,7 @@ type kvalbolt struct {
 
 type kvalresult struct {
    Result   map[string]string
-   Exists   bool                 //IF LIS QEURY, however, idiomatic enough?
+   Exists   bool   //If LIS query then we just need a flag to say if a value is there...                
 }
 
 type kvalblob struct {

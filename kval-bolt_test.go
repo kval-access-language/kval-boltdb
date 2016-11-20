@@ -137,7 +137,7 @@ func create_state_inserts() {
    refreshdb()  
    //baseline inserts...   
    for _, value := range(create_initial_state) {
-      _, err = Query(kb, value)
+      _, err := Query(kb, value)
       if err != nil {
          log.Printf("Error creating state for unit tests, exiting: %v\n", err)
          os.Exit(1)

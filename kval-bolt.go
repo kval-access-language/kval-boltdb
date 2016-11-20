@@ -132,7 +132,7 @@ func queryhandler(kb kvalbolt) (kvalresult, error) {
       if kb.query.Key == "" {
          //we're deleting a bucket (and all contents)
          err := delbucketHandler(kb)
-         return kr, err      
+         return kr, err
       } else if kb.query.Key == "_" {
          //we're making nil "" values for all keys
          //use case, we want the keys, we don't want the values
@@ -145,7 +145,7 @@ func queryhandler(kb kvalbolt) (kvalresult, error) {
       } else if kb.query.Value == "_" {
          //we're deleting a value and leaving the key
          err := nullifyvalHandler(kb)
-         return kr, err                  
+         return kr, err 
       } 
    case kvalscanner.REN:
       if kb.query.Key == "" {
