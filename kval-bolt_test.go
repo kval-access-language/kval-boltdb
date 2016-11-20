@@ -64,7 +64,7 @@ func testnotimplementedfuncs(t *testing.T) {
    }
 }
 
-//Test binging's handling of unicode and big strings, e.g. for blogs...
+//Test handling of unicode and big strings, e.g. for blogs...
 func testbigstring(t *testing.T) {
 
    var unistrings = [...]string{bigstring_one, bigstring_two}
@@ -85,6 +85,12 @@ func testbigstring(t *testing.T) {
          t.Errorf("Unicode big strings: Error retrieving expected Unicode result back from BoltDB.")
       }
    }
+}
+
+
+//Test handling of Base64 strings, e.g. for blob encoding...
+func testbase64(t *testing.T) {
+
 }
 
 //---------------------------------------------------------------------------//
@@ -223,9 +229,10 @@ func TestQuery(t *testing.T) {
    defer teardown()
    //testnotimplementedfuncs(t)
    //testbigstring(t)
+   testbase64(t)
    //testins(t)   
    //testlis(t)
    //testdel(t)
-   testget(t)
+   //testget(t)
    //testren(t)
 }
