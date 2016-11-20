@@ -120,9 +120,9 @@ var get_regex_results = map[string]map[string]string {
 
 //---------------------------------------------------------------------------//
 
-//example kvalresults
-//a: kvalresult{map[string]string{"test1": "value1", "test2": "value2", "test3": "value3"}, false},
-//b: kvalresult{map[string]string{"bucket two": NESTEDBUCKET, "test6": "value6"}, false},
+//example Kvalresults
+//a: Kvalresult{map[string]string{"test1": "value1", "test2": "value2", "test3": "value3"}, false},
+//b: Kvalresult{map[string]string{"bucket two": NESTEDBUCKET, "test6": "value6"}, false},
 
 //test list procedures
 var lis_bucket_two = "LIS bucket one >> bucket two"

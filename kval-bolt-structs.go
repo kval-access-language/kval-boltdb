@@ -30,17 +30,17 @@ type Kvalblob struct {
    Data        string
 }
 
-func initkvalblob(query string, mimetype string, data string) kvalblob {
-   return kvalblob{query, DATA, mimetype, BASE64, data}
+func initKvalblob(query string, mimetype string, data string) Kvalblob {
+   return Kvalblob{query, DATA, mimetype, BASE64, data}
 }
 
-func queryfromkvb(kvb kvalblob) string {
+func queryfromkvb(kvb Kvalblob) string {
    query := kvb.Query + " :: " + kvb.Datatype + ":" + kvb.Mimetype + ":" + kvb.Encoding + ":" + kvb.Data
    return query
 }
 
-func blobfromkvalresult(kv kvalresult) (kvalblob, error) {
-   var kvb kvalblob
+func blobfromKvalresult(kv Kvalresult) (Kvalblob, error) {
+   var kvb Kvalblob
    for k, v := range(kv.Result) {
       kvb.Query = k
       reslice := strings.Split(v, ":")

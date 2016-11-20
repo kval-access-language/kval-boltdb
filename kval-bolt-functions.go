@@ -7,8 +7,8 @@ import (
    "github.com/boltdb/bolt"
 )
 
-func initkvalresult() (kvalresult) {
-   kr := kvalresult{
+func initKvalresult() (Kvalresult) {
+   kr := Kvalresult{
       Result: map[string]string{},
    }
    return kr
@@ -54,8 +54,8 @@ func createboltentries(kb kvalbolt) error {
 }
 
 //Retrieve an entry from a BoltDB from a kval structure
-func getboltentry(kb kvalbolt) (kvalresult, error) {
-   var kr = initkvalresult()
+func getboltentry(kb kvalbolt) (Kvalresult, error) {
+   var kr = initKvalresult()
    var kq = kb.query
    err := kb.db.View(func(tx *bolt.Tx) error {
       bucket, err := gotobucket(tx, kq.Buckets)
@@ -73,9 +73,9 @@ func getboltentry(kb kvalbolt) (kvalresult, error) {
 } 
 
 //Retrieve an entry from a BoltDB using regular expression
-func getboltkeyregex(kb kvalbolt) (kvalresult, error) {
+func getboltkeyregex(kb kvalbolt) (Kvalresult, error) {
    var kq = kb.query
-   var kr = initkvalresult()
+   var kr = initKvalresult()
    re, err := regexp.Compile(kq.Value)
    if err != nil {
       return kr, err
@@ -111,9 +111,9 @@ func getboltkeyregex(kb kvalbolt) (kvalresult, error) {
 } 
 
 //Retrieve an entry from a BoltDB using regular expression
-func getboltvalueregex(kb kvalbolt) (kvalresult, error) {
+func getboltvalueregex(kb kvalbolt) (Kvalresult, error) {
    var kq = kb.query
-   var kr = initkvalresult()
+   var kr = initKvalresult()
    re, err := regexp.Compile(kq.Value)
    if err != nil {
       return kr, err
@@ -148,9 +148,9 @@ func getboltvalueregex(kb kvalbolt) (kvalresult, error) {
 } 
 
 //Retrieve all values from a single bucket per KVAL syntax
-func getallfrombucket(kb kvalbolt) (kvalresult, error) {
+func getallfrombucket(kb kvalbolt) (Kvalresult, error) {
    var kq = kb.query
-   var kr = initkvalresult()
+   var kr = initKvalresult()
    err := kb.db.View(func(tx *bolt.Tx) error {
       bucket, err := gotobucket(tx, kq.Buckets)
       if err != nil {
@@ -374,9 +374,9 @@ func renamekey(kb kvalbolt) error {
 }
 
 //Check to see if a key exists in a BoltDB bucket, per KVAL LIS capabilities
-func bucketkeyexists(kb kvalbolt) (kvalresult, error) {
+func bucketkeyexists(kb kvalbolt) (Kvalresult, error) {
    var kq = kb.query
-   var kr = initkvalresult()
+   var kr = initKvalresult()
    err := kb.db.Update(func(tx *bolt.Tx) error {   
       //the bucket containing the key we're renaming
       bucket, err := gotobucket(tx, kq.Buckets)

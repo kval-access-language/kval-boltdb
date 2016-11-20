@@ -34,8 +34,8 @@ func GetBolt(kb kvalbolt) *bolt.DB {
 //this function will do all of the work for you when interacting with
 //BoltDB. Everything should become less programmatic making for cleaner code.
 //The KVAL spec can be found here: https://github.com/kval-access-language/kval
-func Query(kb kvalbolt, query string) (kvalresult, error) {
-   var kr kvalresult
+func Query(kb kvalbolt, query string) (Kvalresult, error) {
+   var kr Kvalresult
    var err error
    kq, err := kvalparse.Parse(query)
    if err != nil {
@@ -74,7 +74,7 @@ func Putblob(kb kvalbolt, loc string, mime string, data []byte) error {
    encoded := b64.StdEncoding.EncodeToString([]byte(data))
 
    //Convert to known datatype and retrieve a standardised value from it
-   kvb := initkvalblob(loc, mime, encoded)
+   kvb := initKvalblob(loc, mime, encoded)
    query := queryfromkvb(kvb)  
 
    //Check our new query including base64 string validates okay
@@ -90,12 +90,12 @@ func Putblob(kb kvalbolt, loc string, mime string, data []byte) error {
 
 //If you retrieve a blob via GET, unwrap it here to see what
 //you asked for... 
-func Unwrapblob(kv kvalresult) (kvalblob, error) {
-   var kvb kvalblob
+func Unwrapblob(kv Kvalresult) (Kvalblob, error) {
+   var kvb Kvalblob
    if len(kv.Result) != 1 {
       return kvb, err_blob_map_len
    }
-   kvb, err := blobfromkvalresult(kv)
+   kvb, err := blobfromKvalresult(kv)
    return kvb, err
 }
 
@@ -107,8 +107,8 @@ func Version() string {
 
 //Abstracted away from Query() query handler is an unexported function that
 //will route all queries as required by the application when given by the user.
-func queryhandler(kb kvalbolt) (kvalresult, error) {
-   var kr kvalresult
+func queryhandler(kb kvalbolt) (Kvalresult, error) {
+   var kr Kvalresult
    switch kb.query.Function {
    case kvalscanner.INS:
       err := insHandler(kb)
@@ -172,13 +172,13 @@ func insHandler(kb kvalbolt) error {
 }
 
 //GET (Get Handler) handles GET capability of KVAL language
-func getHandler(kb kvalbolt) (kvalresult, error) {
+func getHandler(kb kvalbolt) (Kvalresult, error) {
    if kb.query.Key == "_" {
       //turn our value into a regular expression for better search
       kb.query.Value = "^" + kb.query.Value + "$"  
       return getregexHandler(kb)
    }
-   var kr kvalresult
+   var kr Kvalresult
    kr, err := getboltentry(kb)
    if err != nil {
       return kr, err
@@ -187,7 +187,7 @@ func getHandler(kb kvalbolt) (kvalresult, error) {
 }
 
 //GET (Get Handler) handles GET (ALL) capability of KVAL language
-func getallHandler(kb kvalbolt) (kvalresult, error) {
+func getallHandler(kb kvalbolt) (Kvalresult, error) {
    kr, err := getallfrombucket(kb)
    if err != nil {
       return kr, err
@@ -196,8 +196,8 @@ func getallHandler(kb kvalbolt) (kvalresult, error) {
 }
 
 //GET (Get Handler) handles GET (REGEX) capability of KVAL language
-func getregexHandler(kb kvalbolt) (kvalresult, error) {
-   var kr kvalresult
+func getregexHandler(kb kvalbolt) (Kvalresult, error) {
+   var kr Kvalresult
    var err error
    if kb.query.Value == "" {
       kr, err = getboltkeyregex(kb)
@@ -268,7 +268,7 @@ func renkeyHandler(kb kvalbolt) error {
 }
 
 //LIS (List Handler) Handles listing capability of KVAL (does (x) exist?) 
-func lisHandler(kb kvalbolt) (kvalresult, error) {
+func lisHandler(kb kvalbolt) (Kvalresult, error) {
    kr, err := bucketkeyexists(kb)
    if err != nil {
       //Nil bucket returns an error we can use
