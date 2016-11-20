@@ -120,26 +120,6 @@ var get_regex_results = map[string]map[string]string {
 
 //---------------------------------------------------------------------------//
 
-//test rename procedures
-var ren_tests = []string{
-   "INS ren1 >> ren2 >> ren3 >>>> r1 :: v1",
-   "INS ren1 >> ren2 >> ren3 >>>> r2 :: v2",
-   "INS ren1 >> ren2 >> ren3 >> ren4",
-   "INS ren1 >> ren2 >> ren3 >> ren4 >>>> r3 :: v3",
-   "INS ren1 >> ren2 >> ren3 >> ren4 >>>> r4 :: v4",
-   "INS ren1 >> ren2 >> ren3 >> ren4 >>>> r5 :: v5",
-   "INS ren1 >> ren2 >> ren3 >>>> r6 :: v6",  
-}
-
-var ren_key = "REN ren1 >> ren2 >> ren3 >>>> r7 => renkey" 
-var ren_bucket = "REN ren1 >> ren2 => renbuckets"
-
-var ren_results = map[string]bool {
-   
-}
-
-//---------------------------------------------------------------------------//
-
 //example kvalresults
 //a: kvalresult{map[string]string{"test1": "value1", "test2": "value2", "test3": "value3"}, false},
 //b: kvalresult{map[string]string{"bucket two": NESTEDBUCKET, "test6": "value6"}, false},
@@ -158,3 +138,43 @@ var lis_results = map[string]bool{
 }
 
 //---------------------------------------------------------------------------//
+
+//test rename procedures
+var rename_state = []string{
+   "INS ren1 >> ren2 >> ren3 >>>> r1 :: v1",             //2
+   "INS ren1 >> ren2 >> ren3 >>>> r2 :: v2",             //3
+   "INS ren1 >> ren2 >> ren3 >> ren4",                   //4
+   "INS ren1 >> ren2 >> ren3 >> ren4 >>>> r3 :: v3",     //5
+   "INS ren1 >> ren2 >> ren3 >> ren4 >>>> r4 :: v4",     //6
+   "INS ren1 >> ren2 >> ren3 >> ren4 >>>> r5 :: v5",     //7
+   "INS ren1 >> ren2 >> ren3 >>>> r6 :: v6",             //8
+   "INS ren1 >> ren2 >>>> r6 :: v6",                     //9
+   "INS ren1 >> ren2 >>>> r7 :: v6",                     //10
+   "INS ren1 >> ren2 >>>> r8 :: v6",                     //11
+   "INS ren1 >> ren2 >>>> r1 :: v1",                     //12
+   "INS ren1 >> renamekey >>>> key :: value",            //key to rename...
+}
+
+var r1 = "ren_key"
+var r2 = "ren_bucket"
+
+//though few, this should prove our capability adequately...
+var rename_tests = map[string]string {
+   r1: "REN ren1 >> renamekey >>>> key => newkey",    //rename key
+   r2: "REN ren1 >> ren2 => rnew",                    //rename bucket
+}
+
+//FALSE :: TRUE if rename has worked, we'll see true for second value
+var ren_lis1 = [2]string{"LIS ren1 >> renamekey >>>> key", "LIS ren1 >> renamekey >>>> newkey"}
+var ren_lis2 = [2]string{"LIS ren1 >> ren2", "LIS ren1 >> rnew"}
+
+//grab stats dynamically as well
+var ren_slice_old = []string{"ren1", "ren2"}
+var ren_slice_new = []string{"ren1", "rnew"}
+
+//check that the rename of the bucket results in the same number of keys
+var ren_number_keys = 12
+var ren_depth = 3
+
+//---------------------------------------------------------------------------//
+

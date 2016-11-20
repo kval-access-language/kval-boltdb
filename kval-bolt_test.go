@@ -295,15 +295,92 @@ func testget(t *testing.T) {
    }
 }
 
+func renamestate(t *testing.T) {
+   //setup new state for rename functions
+   for i := range(rename_state) {
+      _, err := Query(kb, rename_state[i])
+      if err != nil {
+         t.Errorf("Unexpected error returned setting up rename state: %v\n", err)
+      }     
+   }
+}
+
+func testren(t *testing.T) {
+   //setup state...
+   renamestate(t)
+
+   //run tests...
+   for k, v := range(rename_tests) {
+      var oldcount int
+
+      //grab a count for bucket rename tests
+      switch (k) {
+         case r2: 
+            bs, _ := getbucketstats(kb, ren_slice_old)
+            oldcount = bs.KeyN
+      }
+
+      _, err := Query(kb, v)
+      if err != nil {
+         t.Errorf("Error with rename function: %v\n", err)
+      }
+
+      //check list results for renames
+      switch (k) {
+         case r1:
+            for i := range(ren_lis1) {
+               res, _ := Query(kb, ren_lis1[i])
+               switch (i) {
+                  case 0:
+                     if res.Exists != false {
+                        t.Errorf("Rename key failed, bucket or key still exists.")
+                     }
+                  case 1:
+                     if res.Exists != true {
+                        t.Errorf("Rename key failed, bucket or key doesn't exist.")
+                     }
+               }
+            }
+         case r2: 
+            for i := range(ren_lis2) {
+               res, _ := Query(kb, ren_lis2[i])
+               switch (i) {
+                  case 0:
+                     if res.Exists != false {
+                        t.Errorf("Rename bucket failed, bucket or key still exists.")
+                     }
+                  case 1:
+                     if res.Exists != true {
+                        t.Errorf("Rename bucket failed, bucket or key doesn't exist.")
+                     }
+               }
+            }
+            newcount, _ := getbucketstats(kb, ren_slice_old)
+            if newcount.KeyN != oldcount {
+               t.Errorf("Bucket count following rename doesn't match: %d, old: %d", newcount.KeyN, oldcount)
+            }
+      }
+   }
+
+/*
+   bs, err := getbucketstats(kb, []string{"bucket one", "bucket two", "bucket three"})
+   if err != nil {
+      t.Errorf("Error retrieving key count for bucket, %v", err)
+   }else if bs.KeyN != 0 {
+      t.Errorf("Key count following delete from bucket is incorrect, %d", bs.KeyN)
+   }
+*/
+}
+
 func TestQuery(t *testing.T) {
    defer teardown()
-   testnotimplementedfuncs(t)
-   testbigstring(t)
-   testbase64(t)
-   testPutBlob(t)
-   testins(t)   
-   testlis(t)
-   testdel(t)
-   testget(t)
-   //testren(t)
+   //testnotimplementedfuncs(t)
+   //testbigstring(t)
+   //testbase64(t)
+   //testPutBlob(t)
+   //testins(t)   
+   //testlis(t)
+   //testdel(t)
+   //testget(t)
+   testren(t)
 }
