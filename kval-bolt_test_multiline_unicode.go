@@ -1,4 +1,4 @@
-package main
+package kvalbolt
 
 //multiline unicode string
 //http://www.madore.org/~david/misc/unitest/

@@ -1,4 +1,4 @@
-package main
+package kvalbolt
 
 import (
    "os"   
@@ -372,13 +372,13 @@ func testren(t *testing.T) {
 
 func TestQuery(t *testing.T) {
    defer teardown()
-   //testnotimplementedfuncs(t)
-   //testbigstring(t)
-   //testbase64(t)
-   //testPutBlob(t)
-   //testins(t)   
-   //testlis(t)
-   //testdel(t)
-   //testget(t)
+   testnotimplementedfuncs(t)
+   testbigstring(t)
+   testbase64(t)
+   testPutBlob(t)
+   testins(t)   
+   testlis(t)
+   testdel(t)
+   testget(t)
    testren(t)
 }

@@ -1,4 +1,4 @@
-package main
+package kvalbolt
 
 var simple_b64_results = map[string]string {
    "A simple string to test.":"QSBzaW1wbGUgc3RyaW5nIHRvIHRlc3Qu",

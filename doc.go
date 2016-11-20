@@ -6,4 +6,4 @@ structures.
 More information can be found in the primary README for the project. 
 */
 
-package main
+package kvalbolt
