@@ -91,6 +91,22 @@ func testbigstring(t *testing.T) {
 //Test handling of Base64 strings, e.g. for blob encoding...
 func testbase64(t *testing.T) {
 
+   for _, value := range(ins_b64_values) {
+      _, err = Query(kb, value)
+      if err != nil {
+         log.Printf("Error creating state for base64 unit tests: %v\n", err)
+      }
+   }
+
+   for k, v := range(get_b64_results) {
+      res, err := Query(kb, k)
+      if err != nil {
+         log.Printf("Error found when not expected in Base64 retrieve tests: %v\n", err)
+      }
+      if !reflect.DeepEqual(res.Result, v) {
+         t.Errorf("Base64 retrieve failed for query: %v\n", k)
+      }
+   }
 }
 
 //---------------------------------------------------------------------------//
