@@ -88,7 +88,8 @@ func PutBlob(kb kvalbolt, loc string, mime string, data []byte) error {
    return err
 }
 
-//If you retrieve via GET a blob, 
+//If you retrieve a blob via GET, unwrap it here to see what
+//you asked for... 
 func UnwrapBlob() (kvalblob, error) {
    var kvb kvalblob
    return kvb, nil

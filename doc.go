@@ -1,7 +1,9 @@
 /*
-Package that will contain a BoltDB binding for the KVAL - Key Value Access Language
-The entry point will be converted to unit tests once the basic functions are up and
-running. Main will become package kvalboltdb.
+BoltDB Binding for KVAL (Key Value Access Language): https://github.com/kval-access-language/kval
+Import this and BoltDB https://github.com/boltdb/bolt for easy manipulation of BoltDB
+structures. 
+
+More information can be found in the primary README for the project. 
 */
 
 package main
