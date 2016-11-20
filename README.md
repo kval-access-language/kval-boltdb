@@ -13,13 +13,13 @@ The language specification: https://github.com/kval-access-language/KVAL
 ###Features 
 
 * Single function entry-point:
-    * db.Query(INS B1 >> B2 >> B3 >>>> KEY :: VAL) &nbsp; &nbsp; //(will create three buckets, plus k/v in one-go)
-    * db.Query(GET B1 >> B2 >> B3 >>>> KEY) &nbsp; &nbsp; &nbsp; //(will retrieve that entry in one-go)
+    * res, err := Query(INS B1 >> B2 >> B3 >>>> KEY :: VAL) &nbsp; &nbsp; //(will create three buckets, plus k/v in one-go)
+    * res, err := Query(GET B1 >> B2 >> B3 >>>> KEY) &nbsp; &nbsp; &nbsp; //(will retrieve that entry in one-go)
 * Start using BoltDB immediately without writing partial wrappers for your code
 * KVAL-Parse enables handling of Base64 binary BLOBS
 * Regular Expression based searching for key names and values
 * [KVAL Language](https://github.com/kval-access-language/KVAL) specifies easy bulk or singleton DEL and RENAME capabilities
-* Language specification at highest abstraction, so other bindings are hoped for
+* Language specification at highest abstraction, so other bindings for other DBs are hoped for (hint: [NOMS!](https://github.com/attic-labs/noms)) 
 
 ###Usage
 
