@@ -1,5 +1,6 @@
 # KVAL-BoltDB
 
+[![Build Status](https://travis-ci.org/kval-access-language/kval-boltdb.svg?branch=master)](https://travis-ci.org/kval-access-language/kval-boltdb)
 [![GoDoc](https://godoc.org/github.com/kval-access-language/kval-boltdb?status.svg)](https://godoc.org/github.com/kval-access-language/kval-boltdb)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kval-access-language/kval-boltdb)](https://goreportcard.com/report/github.com/kval-access-language/kval-boltdb)
 
