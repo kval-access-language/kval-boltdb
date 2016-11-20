@@ -306,18 +306,21 @@ func renamestate(t *testing.T) {
 }
 
 func testren(t *testing.T) {
-   //setup state...
-   renamestate(t)
 
    //run tests...
    for k, v := range(rename_tests) {
-      var oldcount int
+      var oldcount, olddepth int
+
+      //setup state...
+      renamestate(t)
 
       //grab a count for bucket rename tests
       switch (k) {
          case r2: 
+            //query how many keys are in our bucket before renaming...
             bs, _ := getbucketstats(kb, ren_slice_old)
             oldcount = bs.KeyN
+            olddepth = bs.Depth
       }
 
       _, err := Query(kb, v)
@@ -355,21 +358,16 @@ func testren(t *testing.T) {
                      }
                }
             }
-            newcount, _ := getbucketstats(kb, ren_slice_old)
+            //now query the count for our newly renamed bucket, and compare to the old count...
+            newcount, _ := getbucketstats(kb, ren_slice_new)
             if newcount.KeyN != oldcount {
                t.Errorf("Bucket count following rename doesn't match: %d, old: %d", newcount.KeyN, oldcount)
             }
+            if newcount.Depth != olddepth {
+               t.Errorf("Bucket count following rename doesn't match: %d, old: %d", newcount.Depth, olddepth)
+            }
       }
    }
-
-/*
-   bs, err := getbucketstats(kb, []string{"bucket one", "bucket two", "bucket three"})
-   if err != nil {
-      t.Errorf("Error retrieving key count for bucket, %v", err)
-   }else if bs.KeyN != 0 {
-      t.Errorf("Key count following delete from bucket is incorrect, %d", bs.KeyN)
-   }
-*/
 }
 
 func TestQuery(t *testing.T) {

@@ -172,9 +172,5 @@ var ren_lis2 = [2]string{"LIS ren1 >> ren2", "LIS ren1 >> rnew"}
 var ren_slice_old = []string{"ren1", "ren2"}
 var ren_slice_new = []string{"ren1", "rnew"}
 
-//check that the rename of the bucket results in the same number of keys
-var ren_number_keys = 12
-var ren_depth = 3
-
 //---------------------------------------------------------------------------//
 
