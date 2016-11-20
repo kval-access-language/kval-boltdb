@@ -1,6 +1,7 @@
 # KVAL-BoltDB
 
 [![GoDoc](https://godoc.org/github.com/kval-access-language/kval-boltdb?status.svg)](https://godoc.org/github.com/kval-access-language/kval-boltdb)
+[![Go Report Card](https://goreportcard.com/badge/github.com/kval-access-language/kval-boltdb)](https://goreportcard.com/report/github.com/kval-access-language/kval-boltdb)
 
 BoltDB bindings for KVAL
 
