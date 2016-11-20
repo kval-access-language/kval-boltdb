@@ -95,6 +95,12 @@ func UnwrapBlob() (kvalblob, error) {
    return kvb, nil
 }
 
+//Return an indication of which version of the KVAL language we are
+//working from and the version of the library that you are implementing from
+func Version() string {
+   return kval_boltdb_version
+}
+
 //Abstracted away from Query() query handler is an unexported function that
 //will route all queries as required by the application when given by the user.
 func queryhandler(kb kvalbolt) (kvalresult, error) {
