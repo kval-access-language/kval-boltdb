@@ -53,7 +53,7 @@ func Query(kb kvalbolt, query string) (kvalresult, error) {
 //this data inside Key-Value databases, that goes like this: 
 //data:mimetype;base64;{base64 data}. Use Unwrap to get the datastream back
 //location should be specified in the form of a query, e.g. INS bucket >>>> key
-func PutBlob(kb kvalbolt, loc string, mime string, data []byte) error {
+func Putblob(kb kvalbolt, loc string, mime string, data []byte) error {
 
    //Check location query parses correctly...
    kq, err := kvalparse.Parse(loc)
@@ -90,9 +90,13 @@ func PutBlob(kb kvalbolt, loc string, mime string, data []byte) error {
 
 //If you retrieve a blob via GET, unwrap it here to see what
 //you asked for... 
-func UnwrapBlob() (kvalblob, error) {
+func Unwrapblob(kv kvalresult) (kvalblob, error) {
    var kvb kvalblob
-   return kvb, nil
+   if len(kv.Result) != 1 {
+      return kvb, err_blob_map_len
+   }
+   kvb, err := blobfromkvalresult(kv)
+   return kvb, err
 }
 
 //Return an indication of which version of the KVAL language we are

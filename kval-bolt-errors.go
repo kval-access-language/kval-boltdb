@@ -10,6 +10,8 @@ var err_no_kv_in_bucket = errors.New("No Keys: There are no key::value pairs in 
 var err_blob_key = errors.New("No Key: attempting to add blob but key value is empty or '_'")
 var err_blob_val = errors.New("Value added: attempting to add blob but have specified value")
 var err_blob_ins = errors.New("INS Only: Can only use INS to PUT blob")
+var err_blob_len = errors.New("Blob data supplied is not a blob, or is wrapped incorrectly")
+var err_blob_map_len = errors.New("Maplen not equal to one. May be multiple value context, or zero")
 
 //Other non-error error strings...
 var err_parse = "Query parse failed"

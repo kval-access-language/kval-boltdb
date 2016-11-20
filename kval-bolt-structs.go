@@ -1,6 +1,7 @@
 package main
 
 import (
+   "strings"
    "github.com/boltdb/bolt"   
    "github.com/kval-access-language/kval-parse"
 )
@@ -8,6 +9,7 @@ import (
 const NESTEDBUCKET = "NestedBucket"
 const DATA = "data"
 const BASE64 = "base64"
+const BLOBLEN = 4
 
 type kvalbolt struct {
    db       *bolt.DB
@@ -21,18 +23,34 @@ type kvalresult struct {
 }
 
 type kvalblob struct {
-   query       string
-   datatype    string
-   mimetype    string
-   encoding    string
-   data        string
+   Query       string
+   Datatype    string
+   Mimetype    string
+   Encoding    string
+   Data        string
 }
 
-func initkvalblob(query string, mime string, data string) kvalblob {
-   return kvalblob{query, DATA, mime, BASE64, data}
+func initkvalblob(query string, mimetype string, data string) kvalblob {
+   return kvalblob{query, DATA, mimetype, BASE64, data}
 }
 
 func queryfromkvb(kvb kvalblob) string {
-   query := kvb.query + " :: " + kvb.datatype + ":" + kvb.mimetype + ":" + kvb.encoding + ":" + kvb.data
+   query := kvb.Query + " :: " + kvb.Datatype + ":" + kvb.Mimetype + ":" + kvb.Encoding + ":" + kvb.Data
    return query
+}
+
+func blobfromkvalresult(kv kvalresult) (kvalblob, error) {
+   var kvb kvalblob
+   for k, v := range(kv.Result) {
+      kvb.Query = k
+      reslice := strings.Split(v, ":")
+      if len(reslice) != 4 {
+         return kvb, err_blob_len
+      }
+      kvb.Datatype = reslice[0]
+      kvb.Mimetype = reslice[1]
+      kvb.Encoding = reslice[2]
+      kvb.Data     = reslice[3]
+   }   
+   return kvb, nil
 }

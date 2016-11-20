@@ -1,5 +1,11 @@
 package main
 
+var simple_b64_results = map[string]string {
+   "A simple string to test.":"QSBzaW1wbGUgc3RyaW5nIHRvIHRlc3Qu",
+   "0123456789": "MDEyMzQ1Njc4OQ==",
+   "The Quick Brown Fox": "VGhlIFF1aWNrIEJyb3duIEZveA==",
+}
+
 var b64_res1 = map[string]string{"image1": b641}
 var b64_res2 = map[string]string{"image2": b642}
 var b64_res3 = map[string]string{"image3": b643}

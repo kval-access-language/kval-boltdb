@@ -109,9 +109,23 @@ func testbase64(t *testing.T) {
 
 //Tests PutBlob with various scnarios, starting with a simple one
 func testPutBlob(t *testing.T) {
-   err := PutBlob(kb, "INS BlobBucket >>>> BlobKey", "image/png", []byte("A simple string to test."))
-   if err != nil {
-      log.Println("error with putblob", err)
+
+   for encode, result := range(simple_b64_results) {   
+      err := Putblob(kb, "INS Blob Bucket >>>> Blob Key", "image/png", []byte(encode))
+      if err != nil {
+         t.Errorf("Putblob failed for query: %v\n", err)
+      }
+      res, err := Query(kb, "GET Blob Bucket >>>> Blob Key")   
+      if err != nil {
+         t.Errorf("Retrieve failed for GET query: %v\n", err)
+      }
+      kvb, err := Unwrapblob(res)
+      if err != nil {
+         t.Errorf("Unwrapblob failed: %v\n", err)
+      }
+      if kvb.Data != result {
+         t.Errorf("Unwrap failed with incorrect result: %s expected: %s\n", kvb.Data, result)
+      }
    }
 }
 
