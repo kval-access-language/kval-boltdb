@@ -1,5 +1,5 @@
 language: go
-go_import_path: github.com/pkg/errors
+go_import_path: github.com/kval-access-language/kval-boltdb
 go:
   - 1.4.3
   - 1.5.4
