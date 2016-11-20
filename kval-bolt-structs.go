@@ -17,12 +17,12 @@ type kvalbolt struct {
    query    kvalparse.KQUERY
 }
 
-type kvalresult struct {
+type Kvalresult struct {
    Result   map[string]string
    Exists   bool   //If LIS query then we just need a flag to say if a value is there...                
 }
 
-type kvalblob struct {
+type Kvalblob struct {
    Query       string
    Datatype    string
    Mimetype    string
