@@ -66,10 +66,8 @@ func testnotimplementedfuncs(t *testing.T) {
 
 //Test handling of unicode and big strings, e.g. for blogs...
 func testbigstring(t *testing.T) {
-
    var unistrings = [...]string{bigstring_one, bigstring_two}
    var key = "str"   
-
    for i := range(unistrings) {
       _, err = Query(kb, "INS bigstring >>>> " + key + " :: " + unistrings[i])
       if err != nil {
@@ -106,6 +104,14 @@ func testbase64(t *testing.T) {
       if !reflect.DeepEqual(res.Result, v) {
          t.Errorf("Base64 retrieve failed for query: %v\n", k)
       }
+   }
+}
+
+//Tests PutBlob with various scnarios, starting with a simple one
+func testPutBlob(t *testing.T) {
+   err := PutBlob(kb, "INS BlobBucket >>>> BlobKey", "image/png", []byte("A simple string to test."))
+   if err != nil {
+      log.Println("error with putblob", err)
    }
 }
 
@@ -246,6 +252,7 @@ func TestQuery(t *testing.T) {
    //testnotimplementedfuncs(t)
    //testbigstring(t)
    testbase64(t)
+   testPutBlob(t)
    //testins(t)   
    //testlis(t)
    //testdel(t)

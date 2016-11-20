@@ -1,6 +1,7 @@
 package main
 
 import (
+   b64 "encoding/base64"
    "time"
    "github.com/boltdb/bolt"
    "github.com/pkg/errors"
@@ -46,6 +47,51 @@ func Query(kb kvalbolt, query string) (kvalresult, error) {
       return kr, err
    }  
    return kr, nil
+}
+
+//Wrap a blob of data, KVAL-Bolt/KVAL proposes a standard encoding for
+//this data inside Key-Value databases, that goes like this: 
+//data:mimetype;base64;{base64 data}. Use Unwrap to get the datastream back
+//location should be specified in the form of a query, e.g. INS bucket >>>> key
+func PutBlob(kb kvalbolt, loc string, mime string, data []byte) error {
+
+   //Check location query parses correctly...
+   kq, err := kvalparse.Parse(loc)
+   if err != nil {
+      return errors.Wrapf(err, "%s: '%s'", err_parse, loc)
+   }
+
+   //Validate for certain features...
+   if kq.Function != kvalscanner.INS {
+      return err_blob_ins
+   } else if kq.Key == "" || kq.Key == "_" {
+      return err_blob_key
+   } else if kq.Value != "" {
+      return err_blob_val
+   }
+
+   //Encode our data as base64
+   encoded := b64.StdEncoding.EncodeToString([]byte(data))
+
+   //Convert to known datatype and retrieve a standardised value from it
+   kvb := initkvalblob(loc, mime, encoded)
+   query := queryfromkvb(kvb)  
+
+   //Check our new query including base64 string validates okay
+   kq, err = kvalparse.Parse(query)
+   if err != nil {
+      return errors.Wrapf(err, "%s: '%s'", err_parse, query)
+   }
+
+   //Finally... do the rest of the work with one of our other Exported functions
+   _, err = Query(kb, query)
+   return err
+}
+
+//If you retrieve via GET a blob, 
+func UnwrapBlob() (kvalblob, error) {
+   var kvb kvalblob
+   return kvb, nil
 }
 
 //Abstracted away from Query() query handler is an unexported function that
