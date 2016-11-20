@@ -1,5 +1,7 @@
 # KVAL-BoltDB
 
+[![GoDoc](https://godoc.org/github.com/kval-access-language/kval-boltdb?status.svg)](https://godoc.org/github.com/kval-access-language/kval-boltdb)
+
 BoltDB bindings for KVAL
 
 ###Key Value Access Language
