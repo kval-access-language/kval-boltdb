@@ -59,12 +59,17 @@ operation passed as expected:
        fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
     }
 
+###Demo
+
+Have a look at some of the bits and pieces implemented as part of this binding 
+in the demo Go app here: https://github.com/kval-access-language/kval-boltdb-demo 
+
 ###How to contribute
 
 I will be starting to use the code in my own work once the dust has settled from thie first tranche of work. As I do that,
 and before then, I need the following:
 
-* Comments on the KVAL specification
+* Comments on the KVAL specification, working towards a version 1.
 * Code review
 * Code testers - Get using it and report your issues! 
 * Spread the word
