@@ -9,9 +9,9 @@ import (
 	"time"
 )
 
-//Open a BoltDB with a given name to work with.
-//Our first most important function. Returns a KVAL Bolt structure
-//with the details required for KBAL BoltDB to perform queries.
+// Connect should first be used to open a connection to a BoltDB with a given 
+// name. Returns a KVAL Bolt structure with the details required for future 
+// KVAL BoltDB operations.
 func Connect(dbname string) (Kvalbolt, error) {
 	var kb Kvalbolt
 	db, err := bolt.Open(dbname, 0600, &bolt.Options{Timeout: 2 * time.Second})
@@ -19,21 +19,22 @@ func Connect(dbname string) (Kvalbolt, error) {
 	return kb, err
 }
 
-//Disconnect from a BoltDB.
-//Recommended that this is made a deferred function call where possible.
+// Disconnect lets us disconnect from a BoltDB. It is recommended that this 
+// function is deffered where possible. 
 func Disconnect(kb Kvalbolt) {
 	kb.db.Close()
 }
 
-//Retrieve a pointer to BoltDB at any time for working with it manually.
+// GetBolt retrieves a pointer to BoltDB at any time for working with it manually.
 func GetBolt(kb Kvalbolt) *bolt.DB {
 	return kb.db
 }
 
-//Query. Given a KVALBolt Structure, and a KVAL query string
-//this function will do all of the work for you when interacting with
-//BoltDB. Everything should become less programmatic making for cleaner code.
-//The KVAL spec can be found here: https://github.com/kval-access-language/kval
+// Query is our primary function once we've opened a BoltDB connection. 
+// Given a KVALBolt Structure, and a KVAL query string
+// this function will do all of the work for you when interacting with
+// BoltDB. Everything should become less programmatic making for cleaner code.
+// The KVAL spec can be found here: https://github.com/kval-access-language/kval.
 func Query(kb Kvalbolt, query string) (Kvalresult, error) {
 	var kr Kvalresult
 	var err error
@@ -49,10 +50,13 @@ func Query(kb Kvalbolt, query string) (Kvalresult, error) {
 	return kr, nil
 }
 
-//Wrap a blob of data, KVAL-Bolt/KVAL proposes a standard encoding for
-//this data inside Key-Value databases, that goes like this:
-//data:mimetype;base64;{base64 data}. Use Unwrap to get the datastream back
-//location should be specified in the form of a query, e.g. INS bucket >>>> key
+// StoreBlob is used to wrap a blob of data. 
+// KVAL-Bolt/KVAL proposes a standard encoding for this data inside Key-Value 
+// databases, that goes like this: data:mimetype;base64;{base64 data}. Use 
+// Unwrap to get the datastream back and futher GetBlobdata as a shortcut to 
+// decode it from Base64. 
+// Location for StoreBlob should be specified in the form of a query: 
+// e.g. INS bucket >>>> key
 func StoreBlob(kb Kvalbolt, loc string, mime string, data []byte) error {
 
 	//Check location query parses correctly...
@@ -88,8 +92,7 @@ func StoreBlob(kb Kvalbolt, loc string, mime string, data []byte) error {
 	return err
 }
 
-//If you retrieve a blob via GET, unwrap it here to see what
-//you asked for...
+// UnwrapBlob can be used to unwrap a blob you are retrieving via GET
 func UnwrapBlob(kv Kvalresult) (Kvalblob, error) {
 	var kvb Kvalblob
 	if len(kv.Result) != 1 {
@@ -97,6 +100,12 @@ func UnwrapBlob(kv Kvalresult) (Kvalblob, error) {
 	}
 	kvb, err := blobfromKvalresult(kv)
 	return kvb, err
+}
+
+// GetBlobData decodes the Base64 data stored in a Kvalblob object
+func GetBlobData(kvalblob) error {
+
+	return nil
 }
 
 //Abstracted away from Query() query handler is an unexported function that
