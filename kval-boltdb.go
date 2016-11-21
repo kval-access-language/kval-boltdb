@@ -53,7 +53,7 @@ func Query(kb Kvalbolt, query string) (Kvalresult, error) {
 // StoreBlob is used to wrap a blob of data.
 // KVAL-Bolt/KVAL proposes a standard encoding for this data inside Key-Value
 // databases, that goes like this: data:mimetype;base64;{base64 data}. Use
-// Unwrap to get the datastream back and futher GetBlobdata as a shortcut to
+// Unwrap to get the datastream back and further GetBlobdata as a shortcut to
 // decode it from Base64.
 // Location for StoreBlob should be specified in the form of a query:
 // e.g. INS bucket >>>> key

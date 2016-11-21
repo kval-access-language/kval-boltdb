@@ -30,7 +30,7 @@ type Kvalbolt struct {
 // retrieving all from a Bucket through various different mechanisms.
 // Maplen will be one if a single result. Users should understand their data, but
 // also be curious to the results they're getting from their various queries,
-// therefore checking this lenght is a good approach.
+// therefore checking this length is a good approach.
 type Kvalresult struct {
 	Result map[string]string // Result map to access various types of result post-query
 	Exists bool              //	When using a LIS query this is set to true if we can find our data
