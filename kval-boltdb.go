@@ -103,9 +103,9 @@ func UnwrapBlob(kv Kvalresult) (Kvalblob, error) {
 }
 
 // GetBlobData decodes the Base64 data stored in a Kvalblob object
-func GetBlobData(kvalblob) error {
-
-	return nil
+func GetBlobData(kvb Kvalblob) ([]byte, error) {
+	data, err := b64.StdEncoding.DecodeString(kvb.Data)
+	return data, err
 }
 
 //Abstracted away from Query() query handler is an unexported function that

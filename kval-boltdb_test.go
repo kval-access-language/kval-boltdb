@@ -108,7 +108,7 @@ func testbase64(t *testing.T) {
 
 //Tests PutBlob with various scnarios, starting with a simple one
 func testPutBlob(t *testing.T) {
-
+	//Test complete cycle of behaviour that a user might go through...
 	for encode, result := range simpleB64Results {
 		err := StoreBlob(kb, "INS Blob Bucket >>>> Blob Key", "image/png", []byte(encode))
 		if err != nil {
@@ -124,6 +124,14 @@ func testPutBlob(t *testing.T) {
 		}
 		if kvb.Data != result {
 			t.Errorf("Unwrap failed with incorrect result: %s expected: %s\n", kvb.Data, result)
+		}
+		data, err := GetBlobData(kvb)
+		if err != nil {
+			t.Errorf("Error with GetBlobData: %v.", err)		
+		} else {
+			if string(data) != encode {
+				t.Errorf("Base64 blob not decoded correctly: %v, expected: %v.", string(data), encode)		
+			}
 		}
 	}
 }
