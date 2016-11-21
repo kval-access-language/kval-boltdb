@@ -11,7 +11,7 @@ var errBlobKey = errors.New("No Key: attempting to add blob but key value is emp
 var errBlobVal = errors.New("Value added: attempting to add blob but have specified value")
 var errBlobIns = errors.New("INS Only: Can only use INS to PUT blob")
 var errBlobLen = errors.New("Blob data supplied is not a blob, or is wrapped incorrectly")
-var err_blob_map_len = errors.New("Maplen not equal to one. May be multiple value context, or zero")
+var errBlobMapLen = errors.New("Maplen not equal to one. May be multiple value context, or zero")
 
 var errStat = errors.New("Cannot stat database. Stats struct will remain empty.")
 

@@ -131,7 +131,7 @@ func testPutBlob(t *testing.T) {
 //---------------------------------------------------------------------------//
 
 //Populate a database with data to work with for testing
-func create_state_inserts() {
+func createStateInserts() {
 	//clear db when we need it afresh...
 	refreshdb()
 	//baseline inserts...
@@ -146,7 +146,7 @@ func create_state_inserts() {
 
 //Test insert functions associated with KVAL capabilities
 func testins(t *testing.T) {
-	create_state_inserts()
+	createStateInserts()
 
 	// Utilise BoltDB Tree statistics.
 	// KeyN  int // number of keys/value pairs
@@ -162,7 +162,7 @@ func testins(t *testing.T) {
 
 //Test list functions associated with KVAL capabilities
 func testlis(t *testing.T) {
-	create_state_inserts()
+	createStateInserts()
 	for k, v := range lisResults {
 		kq, err := Query(kb, k)
 		if err != nil {
@@ -182,7 +182,7 @@ func testdel(t *testing.T) {
 
 		//create_state_inserts: slower but efficient for test writing... maintains
 		//constant state throughout *any* delete we do...
-		create_state_inserts()
+		createStateInserts()
 
 		//perform our queries on the Bolt DB...
 		_, err := Query(kb, goodDelResults[k])
@@ -230,7 +230,7 @@ func testdel(t *testing.T) {
 
 		//create_state_inserts: slower but efficient for test writing... maintains
 		//constant state throughout *any* delete we do...
-		create_state_inserts()
+		createStateInserts()
 
 		switch k {
 		case delnonekeytwo:
@@ -269,7 +269,7 @@ func testdel(t *testing.T) {
 }
 
 func testget(t *testing.T) {
-	create_state_inserts()
+	createStateInserts()
 
 	//test regular gets
 	for k, v := range getSoleResults {

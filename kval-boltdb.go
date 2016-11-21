@@ -93,7 +93,7 @@ func Putblob(kb kvalbolt, loc string, mime string, data []byte) error {
 func Unwrapblob(kv Kvalresult) (Kvalblob, error) {
 	var kvb Kvalblob
 	if len(kv.Result) != 1 {
-		return kvb, err_blob_map_len
+		return kvb, errBlobMapLen
 	}
 	kvb, err := blobfromKvalresult(kv)
 	return kvb, err
