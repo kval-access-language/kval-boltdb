@@ -1,4 +1,4 @@
-package Kvalbolt
+package kvalbolt
 
 var kvalBoltdbVersion = "0.0.0-KVAL-Working-Draft"
 

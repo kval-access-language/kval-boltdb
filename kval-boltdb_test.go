@@ -1,4 +1,4 @@
-package Kvalbolt
+package kvalbolt
 
 import (
 	"fmt"

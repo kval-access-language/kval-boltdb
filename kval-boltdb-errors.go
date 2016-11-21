@@ -1,4 +1,4 @@
-package Kvalbolt
+package kvalbolt
 
 import "github.com/pkg/errors"
 

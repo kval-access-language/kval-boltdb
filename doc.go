@@ -16,5 +16,4 @@ README: https://github.com/kval-access-language/kval-boltdb/blob/master/README.m
 The most up-to-date specification for KVAL can be found here:
 https://github.com/kval-access-language/kval
 */
-
-package Kvalbolt
+package kvalbolt
