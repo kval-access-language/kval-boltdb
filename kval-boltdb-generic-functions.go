@@ -3,6 +3,7 @@ package kvalbolt
 import (
 	"github.com/boltdb/bolt"
 	"github.com/pkg/errors"
+	"github.com/kval-access-language/kval-scanner"
 )
 
 // Constant values for statdb to be able to externalize bucket stats
@@ -35,7 +36,7 @@ func statdb(kb Kvalboltdb, kr Kvalresult) (Kvalresult, error) {
 	kbuckets := kb.query.Buckets
 	klen := len(kbuckets)
 
-	if !kr.Exists {
+	if kb.query.Function == kvalscanner.LIS && !kr.Exists {
 		// e.g. a LIS query for which a null result has been returned
 		// our query is about the existence of something, stats can be
 		// returned a better way than a search for non-existence
