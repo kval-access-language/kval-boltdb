@@ -6,29 +6,43 @@ import (
 	"strings"
 )
 
-const Nestedbucket = "NestedBucket" // Const to help users validate Kvalblob struct
-const Data = "data"                 // Const to help users validate Kvalblob struct
-const Base64 = "base64"             // Const to help users validate Kvalblob struct
+// Nestedbucket, const to help users validate Kvalblob struct
+const Nestedbucket = "NestedBucket" 
 
-const bloblen = 4 // Unexported const to validate Kvalblob "data:<mimetype>:<encoding type>:<data>"
+// Datam const to help users validate Kvalblob struct
+const Data = "data"                 
 
+// Base64, const to help users validate Kvalblob struct
+const Base64 = "base64"             
+
+// Unexported const to validate Kvalblob "data:<mimetype>:<encoding type>:<data>"
+const bloblen = 4 
+
+// Kvalbolt represents a parsed query structure that we can pass aound in code
 type Kvalbolt struct {
-	db    *bolt.DB
-	fname string
-	query kvalparse.KQuery
+	db    *bolt.DB	// Pointer to BoltDB
+	fname string	// Filename used to create our DB with
+	query kvalparse.KQuery	// Parsed query string returned as struct for manipulation
 }
 
+// Kvalresult provides a mechanism for users to interact with results.
+// It also allows for a wide-variety of results from single GET results, to
+// retrieving all from a Bucket through various different mechanisms. 
+// Maplen will be one if a single result. Users should understand their data, but
+// also be curious to the results they're getting from their various queries,
+// therefore checking this lenght is a good approach. 
 type Kvalresult struct {
-	Result map[string]string
-	Exists bool //If LIS query then we just need a flag to say if a value is there...
+	Result map[string]string	// Result map to access various types of result post-query
+	Exists bool //	When using a LIS query this is set to true if we can find our data
 }
 
+// Kvalblob struct to allow users to work with Base64 encoded blobs
 type Kvalblob struct {
-	Query    string
-	Datatype string
-	Mimetype string
-	Encoding string
-	Data     string
+	Query    string	// Where valid, the query used is stored here
+	Datatype string	// Datatype is stored here, expected: 'data'
+	Mimetype string	// Mimetype is recorded here and is up to users to insert correctly
+	Encoding string	// Encoding is stored here, expected:'base64'
+	Data     string	// Our data is stored here as a base64 string 
 }
 
 func initKvalblob(query string, mimetype string, data string) Kvalblob {
