@@ -14,7 +14,7 @@ const BLOBLEN = 4 //"data:<mimetype>:<encoding type>:<data>"
 type kvalbolt struct {
 	db    *bolt.DB
 	fname string
-	query kvalparse.KQUERY
+	query kvalparse.KQuery
 }
 
 type Kvalresult struct {
