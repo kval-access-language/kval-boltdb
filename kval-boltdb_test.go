@@ -12,7 +12,7 @@ import (
 
 var (
 	dbloc = "bolt-test-db/test-db.bolt"
-	kb    Kvalbolt
+	kb    Kvalboltdb
 	err   error
 )
 

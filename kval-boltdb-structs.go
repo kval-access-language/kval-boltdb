@@ -18,11 +18,11 @@ const Base64 = "base64"
 // Unexported const to validate Kvalblob "data:<mimetype>:<encoding type>:<data>"
 const bloblen = 4
 
-// Kvalbolt represents a parsed query structure that we can pass aound in code
-type Kvalbolt struct {
-	db    *bolt.DB         // Pointer to BoltDB
-	fname string           // Filename used to create our DB with
-	query kvalparse.KQuery // Parsed query string returned as struct for manipulation
+// Kvalboltdb represents a parsed query structure that we can pass aound in code
+type Kvalboltdb struct {
+	DB     *bolt.DB         // Pointer to BoltDB, users can access directly or via function call
+	Fname  string           // Filename used to create our DB with
+	query  kvalparse.KQuery // Parsed query string returned as struct for manipulation
 }
 
 // Kvalresult provides a mechanism for users to interact with results.
@@ -33,7 +33,9 @@ type Kvalbolt struct {
 // therefore checking this length is a good approach.
 type Kvalresult struct {
 	Result map[string]string // Result map to access various types of result post-query
-	Exists bool              //	When using a LIS query this is set to true if we can find our data
+	Exists bool              // When using a LIS query this is set to true if we can find our data
+	Stat   bolt.BucketStats  // BoltDB bucket stats relevant to the operation performed by the user
+	opcode int               // Additional non-user metadata about the type of operation performed by the query
 }
 
 // Kvalblob struct to allow users to work with Base64 encoded blobs

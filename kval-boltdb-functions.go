@@ -15,9 +15,9 @@ func initKvalresult() Kvalresult {
 }
 
 //Create bucket and key/value entries in BoltDB from a kval structure
-func createboltentries(kb Kvalbolt) error {
+func createboltentries(kb Kvalboltdb) error {
 	var kq = kb.query
-	err := kb.db.Update(func(tx *bolt.Tx) error {
+	err := kb.DB.Update(func(tx *bolt.Tx) error {
 		var bucket *bolt.Bucket //we only ever need the 'last' bucket in memory
 		var err error
 		//create buckets
@@ -54,10 +54,10 @@ func createboltentries(kb Kvalbolt) error {
 }
 
 //Retrieve an entry from a BoltDB from a kval structure
-func getboltentry(kb Kvalbolt) (Kvalresult, error) {
+func getboltentry(kb Kvalboltdb) (Kvalresult, error) {
 	var kr = initKvalresult()
 	var kq = kb.query
-	err := kb.db.View(func(tx *bolt.Tx) error {
+	err := kb.DB.View(func(tx *bolt.Tx) error {
 		bucket, err := gotobucket(tx, kq.Buckets)
 		if err != nil {
 			return err
@@ -73,14 +73,14 @@ func getboltentry(kb Kvalbolt) (Kvalresult, error) {
 }
 
 //Retrieve an entry from a BoltDB using regular expression
-func getboltkeyregex(kb Kvalbolt) (Kvalresult, error) {
+func getboltkeyregex(kb Kvalboltdb) (Kvalresult, error) {
 	var kq = kb.query
 	var kr = initKvalresult()
 	re, err := regexp.Compile(kq.Value)
 	if err != nil {
 		return kr, err
 	}
-	err = kb.db.View(func(tx *bolt.Tx) error {
+	err = kb.DB.View(func(tx *bolt.Tx) error {
 		bucket, err := gotobucket(tx, kq.Buckets)
 		if err != nil {
 			return err
@@ -111,14 +111,14 @@ func getboltkeyregex(kb Kvalbolt) (Kvalresult, error) {
 }
 
 //Retrieve an entry from a BoltDB using regular expression
-func getboltvalueregex(kb Kvalbolt) (Kvalresult, error) {
+func getboltvalueregex(kb Kvalboltdb) (Kvalresult, error) {
 	var kq = kb.query
 	var kr = initKvalresult()
 	re, err := regexp.Compile(kq.Value)
 	if err != nil {
 		return kr, err
 	}
-	err = kb.db.View(func(tx *bolt.Tx) error {
+	err = kb.DB.View(func(tx *bolt.Tx) error {
 		bucket, err := gotobucket(tx, kq.Buckets)
 		if err != nil {
 			return err
@@ -148,10 +148,10 @@ func getboltvalueregex(kb Kvalbolt) (Kvalresult, error) {
 }
 
 //Retrieve all values from a single bucket per KVAL syntax
-func getallfrombucket(kb Kvalbolt) (Kvalresult, error) {
+func getallfrombucket(kb Kvalboltdb) (Kvalresult, error) {
 	var kq = kb.query
 	var kr = initKvalresult()
-	err := kb.db.View(func(tx *bolt.Tx) error {
+	err := kb.DB.View(func(tx *bolt.Tx) error {
 		bucket, err := gotobucket(tx, kq.Buckets)
 		if err != nil {
 			return err
@@ -180,9 +180,9 @@ func getallfrombucket(kb Kvalbolt) (Kvalresult, error) {
 }
 
 //Delete a single bucket from a BoltDB from a KVAL structure
-func deletebucket(kb Kvalbolt) error {
+func deletebucket(kb Kvalboltdb) error {
 	var kq = kb.query
-	err := kb.db.Update(func(tx *bolt.Tx) error {
+	err := kb.DB.Update(func(tx *bolt.Tx) error {
 		//as we're deleting a bucket we need a pointer to
 		//bucket level we're deleting minus one, that is
 		//the container of the bucket we're deleting
@@ -213,9 +213,9 @@ func deletebucket(kb Kvalbolt) error {
 }
 
 //Delete all the keys in a BoltDB bucket leaving Bucket in tact
-func deletebucketkeys(kb Kvalbolt) error {
+func deletebucketkeys(kb Kvalboltdb) error {
 	var kq = kb.query
-	err := kb.db.Update(func(tx *bolt.Tx) error {
+	err := kb.DB.Update(func(tx *bolt.Tx) error {
 		bucket, err := gotobucket(tx, kq.Buckets)
 		if err != nil {
 			return err
@@ -243,9 +243,9 @@ func deletebucketkeys(kb Kvalbolt) error {
 }
 
 //Delete a key and its corresponding value from a BoltDB
-func deletekey(kb Kvalbolt) error {
+func deletekey(kb Kvalboltdb) error {
 	var kq = kb.query
-	err := kb.db.Update(func(tx *bolt.Tx) error {
+	err := kb.DB.Update(func(tx *bolt.Tx) error {
 		bucket, err := gotobucket(tx, kq.Buckets)
 		if err != nil {
 			return err
@@ -268,9 +268,9 @@ func deletekey(kb Kvalbolt) error {
 }
 
 //Turn a value for a given key to NULL based on KVAL capabilities
-func nullifykeyvalue(kb Kvalbolt) error {
+func nullifykeyvalue(kb Kvalboltdb) error {
 	var kq = kb.query
-	err := kb.db.Update(func(tx *bolt.Tx) error {
+	err := kb.DB.Update(func(tx *bolt.Tx) error {
 		bucket, err := gotobucket(tx, kq.Buckets)
 		if err != nil {
 			return err
@@ -285,9 +285,9 @@ func nullifykeyvalue(kb Kvalbolt) error {
 }
 
 //Rename a bucket (full OR empty) in a BoltDB
-func renamebucket(kb Kvalbolt) error {
+func renamebucket(kb Kvalboltdb) error {
 	var kq = kb.query
-	err := kb.db.Update(func(tx *bolt.Tx) error {
+	err := kb.DB.Update(func(tx *bolt.Tx) error {
 		//the bucket containing the one we're renaming
 		var searchindex = len(kq.Buckets) - 1
 		containerbucket, err := gotobucket(tx, kq.Buckets[:searchindex])
@@ -347,9 +347,9 @@ func copybuckets(from, to *bolt.Bucket) error {
 }
 
 //Rename a key in a BoltDB based on described KVAL capabilities such as rename
-func renamekey(kb Kvalbolt) error {
+func renamekey(kb Kvalboltdb) error {
 	var kq = kb.query
-	err := kb.db.Update(func(tx *bolt.Tx) error {
+	err := kb.DB.Update(func(tx *bolt.Tx) error {
 		//the bucket containing the key we're renaming
 		bucket, err := gotobucket(tx, kq.Buckets)
 		if err != nil {
@@ -374,10 +374,10 @@ func renamekey(kb Kvalbolt) error {
 }
 
 //Check to see if a key exists in a BoltDB bucket, per KVAL LIS capabilities
-func bucketkeyexists(kb Kvalbolt) (Kvalresult, error) {
+func bucketkeyexists(kb Kvalboltdb) (Kvalresult, error) {
 	var kq = kb.query
 	var kr = initKvalresult()
-	err := kb.db.Update(func(tx *bolt.Tx) error {
+	err := kb.DB.Update(func(tx *bolt.Tx) error {
 		//the bucket containing the key we're renaming
 		bucket, err := gotobucket(tx, kq.Buckets)
 		if err != nil {
