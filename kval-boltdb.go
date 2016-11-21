@@ -1,12 +1,12 @@
 package kvalbolt
 
 import (
-	"time"
 	b64 "encoding/base64"
-	"github.com/pkg/errors"
 	"github.com/boltdb/bolt"
 	"github.com/kval-access-language/kval-parse"
 	"github.com/kval-access-language/kval-scanner"
+	"github.com/pkg/errors"
+	"time"
 )
 
 // Connect should first be used to open a connection to a BoltDB with a given

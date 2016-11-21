@@ -136,6 +136,61 @@ func testPutBlob(t *testing.T) {
 	}
 }
 
+//Test that stats.db is working as we hope, that is, test that each query
+//returns with an appropriate BucketStats structure associated with it.
+func teststatsdb(t *testing.T) {
+
+	var statstest1 = map[string]int{"LIS one bucket": 0}
+	var statstest2 = map[string]int{"INS one bucket >>>> only key": 1}
+	var statstest3 = map[string]int{"GET one bucket >>>> only key": 1}
+	var statstest4 = map[string]int{"INS one bucket >>>> another key": 2}
+	var statstest5 = map[string]int{"REN one bucket >>>> another key => new name": 2}
+	var statstest6 = map[string]int{"LIS one bucket >>>> new name": 2}
+	var statstest7 = map[string]int{"DEL one bucket >>>> new name": 1}
+	var statstest8 = map[string]int{"LIS one bucket": 1}
+	var statstest9 = map[string]int{"REN one bucket => delete me": 1}
+	var statstest10 = map[string]int{"LIS one bucket": 0}
+	var statstest11 = map[string]int{"LIS delete me": 1}
+	var statstest12 = map[string]int{"GET delete me": 1}
+	var statstest13 = map[string]int{"DEL delete me": 0}
+	var statstest14 = map[string]int{"LIS delete me": 0}
+
+	var statstests = [...]map[string]int{statstest1, statstest2, statstest3,
+		statstest4, statstest5, statstest6, statstest7,
+		statstest8, statstest9, statstest10, statstest11,
+		statstest12, statstest13, statstest14}
+
+	//TODO: Have a think about making these tests work a bit more systematically
+	for i := range statstests {
+		for k, v := range statstests[i] {
+			res, err := Query(kb, k)
+			if err != nil {
+				log.Println(k, err)
+			}
+			if res.Stats.KeyN != v {
+				t.Errorf("Incorrect stats returned query: %s: %d, %d", k, res.Stats.KeyN, v)
+			}
+			// take this opportunity to do some additional tests
+			if k == "LIS delete me" && v == 1 {
+				if res.Exists != true {
+					t.Error("Bucket should have been created as part of rename.")
+				}
+			} else if k == "LIS one bucket" && v == 0 {
+				if res.Exists != false {
+					t.Error("Bucket should have been deleted as part of rename at tx level.")
+				}
+			} else if k == "GET delete me" {
+				if len(res.Result) != 1 {
+					t.Error("Error spotted renaming bucket at the transaction level.")
+				}
+				if _, ok := res.Result["only key"]; !ok {
+					t.Error("Error spotted renaming bucket at the transaction level.")
+				}
+			}
+		}
+	}
+}
+
 //---------------------------------------------------------------------------//
 
 //Populate a database with data to work with for testing
@@ -250,16 +305,15 @@ func testdel(t *testing.T) {
 			//compare expected keys to remaining keys - should be identical
 			expectedkeys := bs.KeyN
 
-			_, err := Query(kb, k)
+			results, err := Query(kb, k)
 			if err != nil {
 				if errors.Cause(err) != e {
 					t.Errorf("Invalid error for delete procedure (nil expected for none key): %v\n", err)
 				}
 			}
-
-			bs, _ = getbucketstats(kb, bucketNoneKey)
-			remainingkeys := bs.KeyN
-			if expectedkeys != remainingkeys {
+			//compare our expected keys statistic with the stats produced from
+			//running the query. Also allows us to make use of statsdb again.
+			if expectedkeys != results.Stats.KeyN {
 				t.Errorf("Invalid error deleting nil key. Expected 'nil' return from BoltDB: %v\n", err)
 			}
 
@@ -328,7 +382,7 @@ func testren(t *testing.T) {
 			//allows us to doubly check LIS still works and statdb works...
 			oldstats, _ = Query(kb, renOldList)
 		}
-	
+
 		_, err := Query(kb, v)
 		if err != nil {
 			t.Errorf("Error with rename function: %v\n", err)
@@ -379,13 +433,14 @@ func testren(t *testing.T) {
 
 func TestQuery(t *testing.T) {
 	defer teardown()
-	testnotimplementedfuncs(t)
-	testbigstring(t)
-	testbase64(t)
-	testPutBlob(t)
-	testins(t)
-	testlis(t)
-	testdel(t)
-	testget(t)
-	testren(t)
+	//testnotimplementedfuncs(t)
+	//testbigstring(t)
+	//testbase64(t)
+	//testPutBlob(t)
+	teststatsdb(t)
+	//testins(t)
+	//testlis(t)
+	//testdel(t)
+	//testget(t)
+	//testren(t)
 }

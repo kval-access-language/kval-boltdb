@@ -286,41 +286,78 @@ func nullifykeyvalue(kb Kvalboltdb) error {
 
 //Rename a bucket (full OR empty) in a BoltDB
 func renamebucket(kb Kvalboltdb) error {
+
 	var kq = kb.query
 	err := kb.DB.Update(func(tx *bolt.Tx) error {
-		//the bucket containing the one we're renaming
-		var searchindex = len(kq.Buckets) - 1
-		containerbucket, err := gotobucket(tx, kq.Buckets[:searchindex])
-		if err != nil {
-			return err
+
+		var err error
+		var searchindex int
+		var newbucket, containerbucket *bolt.Bucket
+		bucketslen := len(kq.Buckets)
+
+		if bucketslen > 1 {
+			// we're working at the level of nested buckets
+			searchindex = bucketslen - 1
+
+			// Retrieve a container bucket in which to create our new bucket.
+			// it also contains the bucket that we're renaming, hence container.
+			// This will become a direct copy of the bucket we're renaming.
+			containerbucket, err = gotobucket(tx, kq.Buckets[:searchindex])
+			if err != nil {
+				return err
+			}
+			// create the new bucket here...
+			newbucket, err = containerbucket.CreateBucketIfNotExists([]byte(kq.Newname)) // n.b. bucket get
+			if err != nil {
+				return err
+			}
+			// get the bucket we're renaming
+			oldbucket, err := gotobucket(tx, kq.Buckets)
+			if err != nil {
+				return err
+			}
+			// copy the two buckets
+			err = copybuckets(oldbucket, newbucket)
+			if err != nil {
+				return err
+			}
+			// delete the origial bucket
+			oldname := []byte(kq.Buckets[len(kq.Buckets)-1:][0]) //n.b. bucket delete
+			err = containerbucket.DeleteBucket(oldname)
+			if err != nil {
+				return err
+			}
+		} else {
+			// we're working at the transaction level to create this new information
+			// create the new bucket here...
+			newbucket, err = tx.CreateBucketIfNotExists([]byte(kq.Newname)) //n.b. transaction get
+			if err != nil {
+				return err
+			}
+			// get the bucket we're renaming
+			oldbucket, err := gotobucket(tx, kq.Buckets)
+			if err != nil {
+				return err
+			}
+			// copy the two buckets
+			err = copybuckets(oldbucket, newbucket)
+			if err != nil {
+				return err
+			}
+			// delete the origial bucket
+			oldname := []byte(kq.Buckets[0])
+			err = tx.DeleteBucket(oldname) //n.b. transaction delete
+			if err != nil {
+				return err
+			}
 		}
-		//the bucket we're renaming
-		oldbucket, err := gotobucket(tx, kq.Buckets)
-		if err != nil {
-			return err
-		}
-		//gotta create the new bucket here...
-		newbucket, err := containerbucket.CreateBucketIfNotExists([]byte(kq.Newname))
-		if err != nil {
-			return err
-		}
-		err = copybuckets(oldbucket, newbucket)
-		if err != nil {
-			return err
-		}
-		//delete the origial bucket
-		oldname := []byte(kq.Buckets[len(kq.Buckets)-1:][0])
-		err = containerbucket.DeleteBucket(oldname)
-		if err != nil {
-			return err
-		}
-		//complete the transaction
+		// complete the transaction to allow bucket to be written
 		return nil
 	})
 	return err
 }
 
-//Helper function for rename to copy a bucket to a newly named bucket
+// Helper function for rename to copy a bucket to a newly named bucket
 func copybuckets(from, to *bolt.Bucket) error {
 	bs := from.Stats()
 	if bs.KeyN > 0 {

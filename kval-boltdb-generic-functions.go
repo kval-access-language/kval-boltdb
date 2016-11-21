@@ -2,8 +2,8 @@ package kvalbolt
 
 import (
 	"github.com/boltdb/bolt"
-	"github.com/pkg/errors"
 	"github.com/kval-access-language/kval-scanner"
+	"github.com/pkg/errors"
 )
 
 // Constant values for statdb to be able to externalize bucket stats
@@ -12,7 +12,7 @@ const (
 	opcodeNormal       int = iota // opcodeNormal refers to LIS, GET, INS, and certain REN/DEL functions
 	opcodeDelBucket               // delete functions that delete a bucket thus can't be handled as easily
 	opcodeRenameBucket            // rename functions that rename a bucket thus can't be handled as easily
-	opcodeUnknown						// cannot stat for an unknown function
+	opcodeUnknown                 // cannot stat for an unknown function
 )
 
 //get boltdb bucket stats
@@ -44,7 +44,7 @@ func statdb(kb Kvalboltdb, kr Kvalresult) (Kvalresult, error) {
 		return kr, nil
 	}
 
-	switch(kr.opcode) {
+	switch kr.opcode {
 	case opcodeNormal:
 		kr.Stats, err = getbucketstats(kb, kbuckets)
 		if err != nil {
