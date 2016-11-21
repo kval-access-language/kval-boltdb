@@ -6,10 +6,11 @@ import (
 	"strings"
 )
 
-const Nestedbucket = "NestedBucket"
-const Data = "data"
-const Base64 = "base64"
-const bloblen = 4 //"data:<mimetype>:<encoding type>:<data>"
+const Nestedbucket = "NestedBucket" // Const to help users validate Kvalblob struct
+const Data = "data"                 // Const to help users validate Kvalblob struct
+const Base64 = "base64"             // Const to help users validate Kvalblob struct
+
+const bloblen = 4 // Unexported const to validate Kvalblob "data:<mimetype>:<encoding type>:<data>"
 
 type Kvalbolt struct {
 	db    *bolt.DB
