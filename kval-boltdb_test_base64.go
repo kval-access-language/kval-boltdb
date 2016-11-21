@@ -1,21 +1,21 @@
 package kvalbolt
 
-var simple_b64_results = map[string]string{
+var simpleB64Results = map[string]string{
 	"A simple string to test.": "QSBzaW1wbGUgc3RyaW5nIHRvIHRlc3Qu",
 	"0123456789":               "MDEyMzQ1Njc4OQ==",
 	"The Quick Brown Fox":      "VGhlIFF1aWNrIEJyb3duIEZveA==",
 }
 
-var b64_res1 = map[string]string{"image1": b641}
-var b64_res2 = map[string]string{"image2": b642}
-var b64_res3 = map[string]string{"image3": b643}
+var b64Res1 = map[string]string{"image1": b641}
+var b64Res2 = map[string]string{"image2": b642}
+var b64Res3 = map[string]string{"image3": b643}
 
-var ins_b64_values = [...]string{insBase64Img1, insBase64Img2, insBase64Img3}
+var insB64Values = [...]string{insBase64Img1, insBase64Img2, insBase64Img3}
 
-var get_b64_results = map[string]map[string]string{
-	getBase64Img1: b64_res1,
-	getBase64Img2: b64_res2,
-	getBase64Img3: b64_res3,
+var getB64Results = map[string]map[string]string{
+	getBase64Img1: b64Res1,
+	getBase64Img2: b64Res2,
+	getBase64Img3: b64Res3,
 }
 
 var insBase64Img1 = "INS image bucket >>>> image1 :: " + b641

@@ -88,14 +88,14 @@ func testbigstring(t *testing.T) {
 //Test handling of Base64 strings, e.g. for blob encoding...
 func testbase64(t *testing.T) {
 
-	for _, value := range ins_b64_values {
+	for _, value := range insB64Values {
 		_, err = Query(kb, value)
 		if err != nil {
 			log.Printf("Error creating state for base64 unit tests: %v\n", err)
 		}
 	}
 
-	for k, v := range get_b64_results {
+	for k, v := range getB64Results {
 		res, err := Query(kb, k)
 		if err != nil {
 			log.Printf("Error found when not expected in Base64 retrieve tests: %v\n", err)
@@ -109,7 +109,7 @@ func testbase64(t *testing.T) {
 //Tests PutBlob with various scnarios, starting with a simple one
 func testPutBlob(t *testing.T) {
 
-	for encode, result := range simple_b64_results {
+	for encode, result := range simpleB64Results {
 		err := Putblob(kb, "INS Blob Bucket >>>> Blob Key", "image/png", []byte(encode))
 		if err != nil {
 			t.Errorf("Putblob failed for query: %v\n", err)

@@ -329,12 +329,12 @@ func copybuckets(from, to *bolt.Bucket) error {
 		for k != nil {
 			if v == nil {
 				//nested bucket
-				to_nested, err := to.CreateBucketIfNotExists(k)
+				toNested, err := to.CreateBucketIfNotExists(k)
 				if err != nil {
 					return err
 				}
-				from_nested := from.Bucket(k)
-				copybuckets(from_nested, to_nested)
+				fromNested := from.Bucket(k)
+				copybuckets(fromNested, toNested)
 			} else {
 				to.Put(k, v)
 			}
