@@ -6,10 +6,10 @@ import (
 	"strings"
 )
 
-const NESTEDBUCKET = "NestedBucket"
-const DATA = "data"
-const BASE64 = "base64"
-const BLOBLEN = 4 //"data:<mimetype>:<encoding type>:<data>"
+const Nestedbucket = "NestedBucket"
+const Data = "data"
+const Base64 = "base64"
+const bloblen = 4 //"data:<mimetype>:<encoding type>:<data>"
 
 type Kvalbolt struct {
 	db    *bolt.DB
@@ -31,7 +31,7 @@ type Kvalblob struct {
 }
 
 func initKvalblob(query string, mimetype string, data string) Kvalblob {
-	return Kvalblob{query, DATA, mimetype, BASE64, data}
+	return Kvalblob{query, Data, mimetype, Base64, data}
 }
 
 func queryfromkvb(kvb Kvalblob) string {

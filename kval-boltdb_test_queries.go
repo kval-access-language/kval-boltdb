@@ -93,7 +93,7 @@ var getSoleResults = map[string]map[string]string{
 	getTest1:       {"test1": "value1"},
 	getTest2:       {"test2": "value2"},
 	getBucketThree: {"test1": "value1", "test2": "value2", "test3": "value3"},
-	getBucketOne:   {"bucket two": NESTEDBUCKET, "test6": "value6"},
+	getBucketOne:   {"bucket two": Nestedbucket, "test6": "value6"},
 	getCodeBucket:  {"code example": "GET bucket one >> bucket two >>>> key1 :: key2"},
 }
 

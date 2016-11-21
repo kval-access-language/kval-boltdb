@@ -93,7 +93,7 @@ func getboltkeyregex(kb Kvalbolt) (Kvalresult, error) {
 				for k != nil {
 					if re.MatchString(string(k)) {
 						if v == nil {
-							kr.Result[string(k)] = NESTEDBUCKET
+							kr.Result[string(k)] = Nestedbucket
 						} else {
 							kr.Result[string(k)] = string(v)
 						}
@@ -163,7 +163,7 @@ func getallfrombucket(kb Kvalbolt) (Kvalresult, error) {
 				k, v := cursor.First()
 				for k != nil {
 					if v == nil {
-						kr.Result[string(k)] = NESTEDBUCKET
+						kr.Result[string(k)] = Nestedbucket
 					} else {
 						kr.Result[string(k)] = string(v)
 					}
