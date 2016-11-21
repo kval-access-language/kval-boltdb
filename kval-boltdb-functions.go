@@ -107,7 +107,7 @@ func getboltkeyregex(kb Kvalbolt) (Kvalresult, error) {
 		//commit transaction
 		return nil
 	})
-	return kr, nil
+	return kr, err
 }
 
 //Retrieve an entry from a BoltDB using regular expression
@@ -144,7 +144,7 @@ func getboltvalueregex(kb Kvalbolt) (Kvalresult, error) {
 		//commit transaction
 		return nil
 	})
-	return kr, nil
+	return kr, err
 }
 
 //Retrieve all values from a single bucket per KVAL syntax
