@@ -3,7 +3,7 @@ package kvalbolt
 //multiline unicode string
 //http://www.madore.org/~david/misc/unitest/
 
-var bigstring_one = `The following lines are the first chapter of the Qur'an (note that the text runs right to left, and should probably be aligned on the right margin):
+var bigStringOne = `The following lines are the first chapter of the Qur'an (note that the text runs right to left, and should probably be aligned on the right margin):
 
 بِسْمِ ٱللّٰهِ ٱلرَّحْمـَبنِ ٱلرَّحِيمِ
 
@@ -55,7 +55,7 @@ Lead us on the right path.
 
 The path of those on whom Thou hast bestowed favors. Not of those who have earned Thy wrath, nor of those who go astray.`
 
-var bigstring_two = `The following are the two first lines of the Analects by Confucius:
+var bigStringTwo = `The following are the two first lines of the Analects by Confucius:
 
 子曰：「學而時習之，不亦說乎？有朋自遠方來，不亦樂乎？ 
 人不知而不慍，不亦君子乎？」

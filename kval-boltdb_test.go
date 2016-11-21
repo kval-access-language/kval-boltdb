@@ -52,7 +52,7 @@ func teardown() {
 
 //Miscellaneous tests (tests that don't group nicely together)
 func testnotimplementedfuncs(t *testing.T) {
-	_, err = Query(kb, make_tea)
+	_, err = Query(kb, makeTea)
 	if err == nil {
 		log.Printf("Error expected from test but not returned.")
 	} else {
@@ -66,7 +66,7 @@ func testnotimplementedfuncs(t *testing.T) {
 
 //Test handling of unicode and big strings, e.g. for blogs...
 func testbigstring(t *testing.T) {
-	var unistrings = [...]string{bigstring_one, bigstring_two}
+	var unistrings = [...]string{bigStringOne, bigStringTwo}
 	var key = "str"
 	for i := range unistrings {
 		_, err = Query(kb, "INS bigstring >>>> "+key+" :: "+unistrings[i])
@@ -135,7 +135,7 @@ func create_state_inserts() {
 	//clear db when we need it afresh...
 	refreshdb()
 	//baseline inserts...
-	for _, value := range create_initial_state {
+	for _, value := range createInitialState {
 		_, err := Query(kb, value)
 		if err != nil {
 			log.Printf("Error creating state for unit tests, exiting: %v\n", err)
@@ -152,9 +152,9 @@ func testins(t *testing.T) {
 	// KeyN  int // number of keys/value pairs
 	// Depth int // number of levels in B+tree
 
-	for i := range ins_checks_all {
-		bs, _ := getbucketstats(kb, ins_checks_all[i].buckets)
-		if bs.KeyN != ins_checks_all[i].counts.keys && bs.Depth != ins_checks_all[i].counts.depth {
+	for i := range insChecksAll {
+		bs, _ := getbucketstats(kb, insChecksAll[i].buckets)
+		if bs.KeyN != insChecksAll[i].counts.keys && bs.Depth != insChecksAll[i].counts.depth {
 			t.Errorf("Expected stats results for INS don't match")
 		}
 	}
@@ -163,7 +163,7 @@ func testins(t *testing.T) {
 //Test list functions associated with KVAL capabilities
 func testlis(t *testing.T) {
 	create_state_inserts()
-	for k, v := range lis_results {
+	for k, v := range lisResults {
 		kq, err := Query(kb, k)
 		if err != nil {
 			log.Printf("Error querying db: %v\n", err)
@@ -178,19 +178,19 @@ func testlis(t *testing.T) {
 func testdel(t *testing.T) {
 
 	//test results we expect to pass
-	for k := range good_del_results {
+	for k := range goodDelResults {
 
 		//create_state_inserts: slower but efficient for test writing... maintains
 		//constant state throughout *any* delete we do...
 		create_state_inserts()
 
 		//perform our queries on the Bolt DB...
-		_, err := Query(kb, good_del_results[k])
+		_, err := Query(kb, goodDelResults[k])
 		if err != nil {
 			t.Errorf("Invalid error for delete procedure (nil error expected): %v\n", err)
 		}
 
-		switch good_del_results[k] {
+		switch goodDelResults[k] {
 		case delkey:
 			//"DEL bucket one >> bucket two >> bucket three >>>> test1" //delete key test1
 			res, _ := Query(kb, "LIS bucket one >> bucket two >> bucket three >>>> test1")
@@ -226,7 +226,7 @@ func testdel(t *testing.T) {
 	}
 
 	//test results we expect to fail, and check fail result...
-	for k, e := range bad_del_results {
+	for k, e := range badDelResults {
 
 		//create_state_inserts: slower but efficient for test writing... maintains
 		//constant state throughout *any* delete we do...
@@ -236,7 +236,7 @@ func testdel(t *testing.T) {
 		case delnonekeytwo:
 			//testing nul result where Bolt returns nil when trying to delete
 			//a key that doesn't actually exist...
-			bs, _ := getbucketstats(kb, bucket_nonekey)
+			bs, _ := getbucketstats(kb, bucketNoneKey)
 
 			//KeyN  int // number of keys/value pairs
 			//compare expected keys to remaining keys - should be identical
@@ -249,7 +249,7 @@ func testdel(t *testing.T) {
 				}
 			}
 
-			bs, _ = getbucketstats(kb, bucket_nonekey)
+			bs, _ = getbucketstats(kb, bucketNoneKey)
 			remainingkeys := bs.KeyN
 			if expectedkeys != remainingkeys {
 				t.Errorf("Invalid error deleting nil key. Expected 'nil' return from BoltDB: %v\n", err)
@@ -272,7 +272,7 @@ func testget(t *testing.T) {
 	create_state_inserts()
 
 	//test regular gets
-	for k, v := range get_sole_results {
+	for k, v := range getSoleResults {
 		res, err := Query(kb, k)
 		if err != nil {
 			t.Errorf("Invalid error for GET procedure (zero errors expected): %v\n", err)
@@ -283,7 +283,7 @@ func testget(t *testing.T) {
 	}
 
 	//test regex gets
-	for k, v := range get_regex_results {
+	for k, v := range getRegexResults {
 		res, err := Query(kb, k)
 		if err != nil {
 			t.Errorf("Unexpected error returned for GET regex: %v\n", err)
@@ -296,8 +296,8 @@ func testget(t *testing.T) {
 
 func renamestate(t *testing.T) {
 	//setup new state for rename functions
-	for i := range rename_state {
-		_, err := Query(kb, rename_state[i])
+	for i := range renameState {
+		_, err := Query(kb, renameState[i])
 		if err != nil {
 			t.Errorf("Unexpected error returned setting up rename state: %v\n", err)
 		}
@@ -307,7 +307,7 @@ func renamestate(t *testing.T) {
 func testren(t *testing.T) {
 
 	//run tests...
-	for k, v := range rename_tests {
+	for k, v := range renameTests {
 		var oldcount, olddepth int
 
 		//setup state...
@@ -317,7 +317,7 @@ func testren(t *testing.T) {
 		switch k {
 		case r2:
 			//query how many keys are in our bucket before renaming...
-			bs, _ := getbucketstats(kb, ren_slice_old)
+			bs, _ := getbucketstats(kb, errSliceOld)
 			oldcount = bs.KeyN
 			olddepth = bs.Depth
 		}
@@ -330,8 +330,8 @@ func testren(t *testing.T) {
 		//check list results for renames
 		switch k {
 		case r1:
-			for i := range ren_lis1 {
-				res, _ := Query(kb, ren_lis1[i])
+			for i := range renLis1 {
+				res, _ := Query(kb, renLis1[i])
 				switch i {
 				case 0:
 					if res.Exists != false {
@@ -344,8 +344,8 @@ func testren(t *testing.T) {
 				}
 			}
 		case r2:
-			for i := range ren_lis2 {
-				res, _ := Query(kb, ren_lis2[i])
+			for i := range renLis2 {
+				res, _ := Query(kb, renLis2[i])
 				switch i {
 				case 0:
 					if res.Exists != false {
@@ -358,7 +358,7 @@ func testren(t *testing.T) {
 				}
 			}
 			//now query the count for our newly renamed bucket, and compare to the old count...
-			newcount, _ := getbucketstats(kb, ren_slice_new)
+			newcount, _ := getbucketstats(kb, errSliceNew)
 			if newcount.KeyN != oldcount {
 				t.Errorf("Bucket count following rename doesn't match: %d, old: %d", newcount.KeyN, oldcount)
 			}

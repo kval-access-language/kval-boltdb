@@ -4,12 +4,12 @@ import "github.com/boltdb/bolt"
 
 //test invalid/non-implemented capabilities
 
-var make_tea = "TEA bucket one >> bucket two >>>> cup :: saucer"
+var makeTea = "TEA bucket one >> bucket two >>>> cup :: saucer"
 
 //---------------------------------------------------------------------------//
 
 //test insert procedures
-var create_initial_state = []string{
+var createInitialState = []string{
 	"ins bucket one >> bucket two >> bucket three >>>> test1 :: value1",
 	"INS bucket one >> bucket two >> bucket three >>>> test2 :: value2",
 	"INS bucket one >> bucket two >> bucket three >>>> test3 :: value3",
@@ -25,19 +25,19 @@ var create_initial_state = []string{
 	"INS regex bucket >> regex bucket two >>>> regex example six :: nil bucket test regex string",
 }
 
-var ins_getbuckets1 = []string{"bucket one", "bucket two", "bucket three"}
-var ins_getbuckets2 = []string{"bucket one", "bucket two"}
-var ins_getbuckets3 = []string{"bucket one"}
+var insGetBuckets1 = []string{"bucket one", "bucket two", "bucket three"}
+var insGetBuckets2 = []string{"bucket one", "bucket two"}
+var insGetBuckets3 = []string{"bucket one"}
 
 // Utilise BoltDB Tree statistics.
 // KeyN  int // number of keys/value pairs
 // Depth int // number of levels in B+tree
 
-var ins_result1 = insresult{3, 1}
-var ins_result2 = insresult{6, 2}
-var ins_result3 = insresult{8, 3}
+var insResult1 = insresult{3, 1}
+var insResult2 = insresult{6, 2}
+var insResult3 = insresult{8, 3}
 
-type ins_check struct {
+type insCheck struct {
 	buckets []string
 	counts  insresult
 }
@@ -47,11 +47,11 @@ type insresult struct {
 	depth int
 }
 
-var i1 = ins_check{ins_getbuckets1, ins_result1}
-var i2 = ins_check{ins_getbuckets2, ins_result2}
-var i3 = ins_check{ins_getbuckets3, ins_result3}
+var i1 = insCheck{insGetBuckets1, insResult1}
+var i2 = insCheck{insGetBuckets2, insResult2}
+var i3 = insCheck{insGetBuckets3, insResult3}
 
-var ins_checks_all = [...]ins_check{i1, i2, i3}
+var insChecksAll = [...]insCheck{i1, i2, i3}
 
 //---------------------------------------------------------------------------//
 
@@ -63,7 +63,7 @@ var nullvalue = "DEL bucket one >> bucket two >> bucket three >>>> test3 :: _" /
 var delkeys = "del bucket one >> bucket two >> bucket three >>>> _"            //del all keys from a bucket
 var delbucket = "DEL bucket one >> bucket two"                                 //delete bucket two
 
-var good_del_results = [...]string{delkey, nullvalue, delkeys, delbucket}
+var goodDelResults = [...]string{delkey, nullvalue, delkeys, delbucket}
 
 //bad delete procedures - error of certain types are expected...
 var delnonekey = "DEL zero bucket >>>> nonkey"
@@ -71,9 +71,9 @@ var delnonebucket = "DEL zero bucket"
 var delnonebuckettwo = "DEL bucket one >> zero bucket two"
 
 var delnonekeytwo = "DEL bucket one >>>> nonkey" //silent fail of non-existent key is all BoltDB does
-var bucket_nonekey = []string{"bucket one"}
+var bucketNoneKey = []string{"bucket one"}
 
-var bad_del_results = map[string]error{
+var badDelResults = map[string]error{
 	delnonekey:       errNilBucket,
 	delnonekeytwo:    nil, //we only get a silent fail, test may have little value, but it's here...
 	delnonebucket:    bolt.ErrBucketNotFound,
@@ -83,18 +83,18 @@ var bad_del_results = map[string]error{
 //---------------------------------------------------------------------------//
 
 //test get procedures
-var get_test1 = "GET bucket one >> bucket two >> bucket three >>>> test1"
-var get_test2 = "GET bucket one >> bucket two >> bucket three >>>> test2"
-var get_bucket_three = "GET bucket one >> bucket two >> bucket three"
-var get_bucket_one = "GET bucket one"
-var get_code_bucket = "GET code bucket >>>> code example"
+var getTest1 = "GET bucket one >> bucket two >> bucket three >>>> test1"
+var getTest2 = "GET bucket one >> bucket two >> bucket three >>>> test2"
+var getBucketThree = "GET bucket one >> bucket two >> bucket three"
+var getBucketOne = "GET bucket one"
+var getCodeBucket = "GET code bucket >>>> code example"
 
-var get_sole_results = map[string]map[string]string{
-	get_test1:        {"test1": "value1"},
-	get_test2:        {"test2": "value2"},
-	get_bucket_three: {"test1": "value1", "test2": "value2", "test3": "value3"},
-	get_bucket_one:   {"bucket two": NESTEDBUCKET, "test6": "value6"},
-	get_code_bucket:  {"code example": "GET bucket one >> bucket two >>>> key1 :: key2"},
+var getSoleResults = map[string]map[string]string{
+	getTest1:       {"test1": "value1"},
+	getTest2:       {"test2": "value2"},
+	getBucketThree: {"test1": "value1", "test2": "value2", "test3": "value3"},
+	getBucketOne:   {"bucket two": NESTEDBUCKET, "test6": "value6"},
+	getCodeBucket:  {"code example": "GET bucket one >> bucket two >>>> key1 :: key2"},
 }
 
 //---------------------------------------------------------------------------//
@@ -103,19 +103,19 @@ var get_sole_results = map[string]map[string]string{
 //GET Prime Bucket >> Secondary Bucket >> Tertiary Bucket >>>> {PAT}
 //GET Prime Bucket >> Secondary Bucket >> Tertiary Bucket >>>> _ :: Value
 //GET Prime Bucket >> Secondary Bucket >> Tertiary Bucket >>>> _ :: {PAT}
-var get_regex_test1 = "GET bucket one >> bucket two >> bucket three >>>> {^test\\d+$}"
-var get_regex_test2 = "GET bucket one >> bucket two >> bucket three >>>> _ :: value3"
-var get_regex_test3 = "GET regex bucket >>>> _ :: {regex string}"
+var getRegexTest1 = "GET bucket one >> bucket two >> bucket three >>>> {^test\\d+$}"
+var getRegexTest2 = "GET bucket one >> bucket two >> bucket three >>>> _ :: value3"
+var getRegexTest3 = "GET regex bucket >>>> _ :: {regex string}"
 
-var regex_res1 = map[string]string{"test1": "value1", "test2": "value2", "test3": "value3"}
-var regex_res2 = map[string]string{"test3": "value3"}
-var regex_res3 = map[string]string{"regex example one": "middle regex string middle", "regex example two": "regex string beginning beginning", "regex example three": "end end regex string", "regex example five": "regex string"}
+var regexRes1 = map[string]string{"test1": "value1", "test2": "value2", "test3": "value3"}
+var regexRes2 = map[string]string{"test3": "value3"}
+var regexRes3 = map[string]string{"regex example one": "middle regex string middle", "regex example two": "regex string beginning beginning", "regex example three": "end end regex string", "regex example five": "regex string"}
 
-var get_regex_results = map[string]map[string]string{
+var getRegexResults = map[string]map[string]string{
 	//var get_sole_results = map[string]map[string]string {
-	get_regex_test1: regex_res1,
-	get_regex_test2: regex_res2,
-	get_regex_test3: regex_res3,
+	getRegexTest1: regexRes1,
+	getRegexTest2: regexRes2,
+	getRegexTest3: regexRes3,
 }
 
 //---------------------------------------------------------------------------//
@@ -125,22 +125,22 @@ var get_regex_results = map[string]map[string]string{
 //b: Kvalresult{map[string]string{"bucket two": NESTEDBUCKET, "test6": "value6"}, false},
 
 //test list procedures
-var lis_bucket_two = "LIS bucket one >> bucket two"
-var lis_test1 = "LIS bucket one >> bucket two >> bucket three >>>> test1"
-var lis_unknown_key = "LIS bucket one >> bucket two >> bucket three >>>> nokey"
-var lis_unknown_bucket = "LIS ins1 >> ins2 >> no-bucket"
+var lisBucketTwo = "LIS bucket one >> bucket two"
+var lisTest1 = "LIS bucket one >> bucket two >> bucket three >>>> test1"
+var lisUnknownKey = "LIS bucket one >> bucket two >> bucket three >>>> nokey"
+var lisUnknownBucket = "LIS ins1 >> ins2 >> no-bucket"
 
-var lis_results = map[string]bool{
-	lis_bucket_two:     true,
-	lis_test1:          true,
-	lis_unknown_key:    false,
-	lis_unknown_bucket: false,
+var lisResults = map[string]bool{
+	lisBucketTwo:     true,
+	lisTest1:         true,
+	lisUnknownKey:    false,
+	lisUnknownBucket: false,
 }
 
 //---------------------------------------------------------------------------//
 
 //test rename procedures
-var rename_state = []string{
+var renameState = []string{
 	"INS ren1 >> ren2 >> ren3 >>>> r1 :: v1",         //2
 	"INS ren1 >> ren2 >> ren3 >>>> r2 :: v2",         //3
 	"INS ren1 >> ren2 >> ren3 >> ren4",               //4
@@ -159,17 +159,17 @@ var r1 = "ren_key"
 var r2 = "ren_bucket"
 
 //though few, this should prove our capability adequately...
-var rename_tests = map[string]string{
+var renameTests = map[string]string{
 	r1: "REN ren1 >> renamekey >>>> key => newkey", //rename key
 	r2: "REN ren1 >> ren2 => rnew",                 //rename bucket
 }
 
 //FALSE :: TRUE if rename has worked, we'll see true for second value
-var ren_lis1 = [2]string{"LIS ren1 >> renamekey >>>> key", "LIS ren1 >> renamekey >>>> newkey"}
-var ren_lis2 = [2]string{"LIS ren1 >> ren2", "LIS ren1 >> rnew"}
+var renLis1 = [2]string{"LIS ren1 >> renamekey >>>> key", "LIS ren1 >> renamekey >>>> newkey"}
+var renLis2 = [2]string{"LIS ren1 >> ren2", "LIS ren1 >> rnew"}
 
 //grab stats dynamically as well
-var ren_slice_old = []string{"ren1", "ren2"}
-var ren_slice_new = []string{"ren1", "rnew"}
+var errSliceOld = []string{"ren1", "ren2"}
+var errSliceNew = []string{"ren1", "rnew"}
 
 //---------------------------------------------------------------------------//
