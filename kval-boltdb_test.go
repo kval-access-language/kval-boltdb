@@ -1,4 +1,4 @@
-package kvalbolt
+package Kvalbolt
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ import (
 
 var (
 	dbloc = "bolt-test-db/test-db.bolt"
-	kb    kvalbolt
+	kb    Kvalbolt
 	err   error
 )
 

@@ -1,4 +1,4 @@
-package kvalbolt
+package Kvalbolt
 
 import (
 	b64 "encoding/base64"
@@ -13,7 +13,7 @@ import (
 //Our first most important function. Returns a KVAL Bolt structure
 //with the details required for KBAL BoltDB to perform queries.
 func Connect(dbname string) (Kvalbolt, error) {
-	var kb kvalbolt
+	var kb Kvalbolt
 	db, err := bolt.Open(dbname, 0600, &bolt.Options{Timeout: 2 * time.Second})
 	kb.db = db
 	return kb, err
@@ -21,12 +21,12 @@ func Connect(dbname string) (Kvalbolt, error) {
 
 //Disconnect from a BoltDB.
 //Recommended that this is made a deferred function call where possible.
-func Disconnect(kb kvalbolt) {
+func Disconnect(kb Kvalbolt) {
 	kb.db.Close()
 }
 
 //Retrieve a pointer to BoltDB at any time for working with it manually.
-func GetBolt(kb kvalbolt) *bolt.DB {
+func GetBolt(kb Kvalbolt) *bolt.DB {
 	return kb.db
 }
 
@@ -34,7 +34,7 @@ func GetBolt(kb kvalbolt) *bolt.DB {
 //this function will do all of the work for you when interacting with
 //BoltDB. Everything should become less programmatic making for cleaner code.
 //The KVAL spec can be found here: https://github.com/kval-access-language/kval
-func Query(kb kvalbolt, query string) (Kvalresult, error) {
+func Query(kb Kvalbolt, query string) (Kvalresult, error) {
 	var kr Kvalresult
 	var err error
 	kq, err := kvalparse.Parse(query)
@@ -53,7 +53,7 @@ func Query(kb kvalbolt, query string) (Kvalresult, error) {
 //this data inside Key-Value databases, that goes like this:
 //data:mimetype;base64;{base64 data}. Use Unwrap to get the datastream back
 //location should be specified in the form of a query, e.g. INS bucket >>>> key
-func StoreBlob(kb kvalbolt, loc string, mime string, data []byte) error {
+func StoreBlob(kb Kvalbolt, loc string, mime string, data []byte) error {
 
 	//Check location query parses correctly...
 	kq, err := kvalparse.Parse(loc)
@@ -101,7 +101,7 @@ func UnwrapBlob(kv Kvalresult) (Kvalblob, error) {
 
 //Abstracted away from Query() query handler is an unexported function that
 //will route all queries as required by the application when given by the user.
-func queryhandler(kb kvalbolt) (Kvalresult, error) {
+func queryhandler(kb Kvalbolt) (Kvalresult, error) {
 	var kr Kvalresult
 	switch kb.query.Function {
 	case kvalscanner.INS:
@@ -155,7 +155,7 @@ func queryhandler(kb kvalbolt) (Kvalresult, error) {
 }
 
 //INS (Insert Handler) handles INS capability of KVAL language
-func insHandler(kb kvalbolt) error {
+func insHandler(kb Kvalbolt) error {
 	//as long as there are buckets, we can create anything we need.
 	//it all happens in a single transaction, based on kval query...
 	err := createboltentries(kb)
@@ -166,7 +166,7 @@ func insHandler(kb kvalbolt) error {
 }
 
 //GET (Get Handler) handles GET capability of KVAL language
-func getHandler(kb kvalbolt) (Kvalresult, error) {
+func getHandler(kb Kvalbolt) (Kvalresult, error) {
 	if kb.query.Key == "_" {
 		//turn our value into a regular expression for better search
 		kb.query.Value = "^" + kb.query.Value + "$"
@@ -181,7 +181,7 @@ func getHandler(kb kvalbolt) (Kvalresult, error) {
 }
 
 //GET (Get Handler) handles GET (ALL) capability of KVAL language
-func getallHandler(kb kvalbolt) (Kvalresult, error) {
+func getallHandler(kb Kvalbolt) (Kvalresult, error) {
 	kr, err := getallfrombucket(kb)
 	if err != nil {
 		return kr, err
@@ -190,7 +190,7 @@ func getallHandler(kb kvalbolt) (Kvalresult, error) {
 }
 
 //GET (Get Handler) handles GET (REGEX) capability of KVAL language
-func getregexHandler(kb kvalbolt) (Kvalresult, error) {
+func getregexHandler(kb Kvalbolt) (Kvalresult, error) {
 	var kr Kvalresult
 	var err error
 	if kb.query.Value == "" {
@@ -208,7 +208,7 @@ func getregexHandler(kb kvalbolt) (Kvalresult, error) {
 }
 
 //DEL (Delete Handler) handles DEL bucket capability of KVAL language
-func delbucketHandler(kb kvalbolt) error {
+func delbucketHandler(kb Kvalbolt) error {
 	err := deletebucket(kb)
 	if err != nil {
 		return err
@@ -217,7 +217,7 @@ func delbucketHandler(kb kvalbolt) error {
 }
 
 //DEL (Delete Handler) handles DEL all keys capability of KVAL language
-func delbucketkeysHandler(kb kvalbolt) error {
+func delbucketkeysHandler(kb Kvalbolt) error {
 	err := deletebucketkeys(kb)
 	if err != nil {
 		return err
@@ -226,7 +226,7 @@ func delbucketkeysHandler(kb kvalbolt) error {
 }
 
 //DEL (Delete Handler) handles DEL one key capability of KVAL language
-func delonekeyHandler(kb kvalbolt) error {
+func delonekeyHandler(kb Kvalbolt) error {
 	err := deletekey(kb)
 	if err != nil {
 		return err
@@ -235,7 +235,7 @@ func delonekeyHandler(kb kvalbolt) error {
 }
 
 //DEL (Delete Handler) Handles DEL (or in this case, NULL, capability of KVAL
-func nullifyvalHandler(kb kvalbolt) error {
+func nullifyvalHandler(kb Kvalbolt) error {
 	err := nullifykeyvalue(kb)
 	if err != nil {
 		return err
@@ -244,7 +244,7 @@ func nullifyvalHandler(kb kvalbolt) error {
 }
 
 //REN (Rename Handler) Handles rename bucket capability of KVAL
-func renbucketHandler(kb kvalbolt) error {
+func renbucketHandler(kb Kvalbolt) error {
 	err := renamebucket(kb)
 	if err != nil {
 		return err
@@ -253,7 +253,7 @@ func renbucketHandler(kb kvalbolt) error {
 }
 
 //REN (Rename Handler) Handles rename key capability of KVAL
-func renkeyHandler(kb kvalbolt) error {
+func renkeyHandler(kb Kvalbolt) error {
 	err := renamekey(kb)
 	if err != nil {
 		return err
@@ -262,7 +262,7 @@ func renkeyHandler(kb kvalbolt) error {
 }
 
 //LIS (List Handler) Handles listing capability of KVAL (does (x) exist?)
-func lisHandler(kb kvalbolt) (Kvalresult, error) {
+func lisHandler(kb Kvalbolt) (Kvalresult, error) {
 	kr, err := bucketkeyexists(kb)
 	if err != nil {
 		//Nil bucket returns an error we can use

@@ -1,4 +1,4 @@
-package kvalbolt
+package Kvalbolt
 
 import (
 	"fmt"
@@ -15,7 +15,7 @@ func initKvalresult() Kvalresult {
 }
 
 //Create bucket and key/value entries in BoltDB from a kval structure
-func createboltentries(kb kvalbolt) error {
+func createboltentries(kb Kvalbolt) error {
 	var kq = kb.query
 	err := kb.db.Update(func(tx *bolt.Tx) error {
 		var bucket *bolt.Bucket //we only ever need the 'last' bucket in memory
@@ -54,7 +54,7 @@ func createboltentries(kb kvalbolt) error {
 }
 
 //Retrieve an entry from a BoltDB from a kval structure
-func getboltentry(kb kvalbolt) (Kvalresult, error) {
+func getboltentry(kb Kvalbolt) (Kvalresult, error) {
 	var kr = initKvalresult()
 	var kq = kb.query
 	err := kb.db.View(func(tx *bolt.Tx) error {
@@ -73,7 +73,7 @@ func getboltentry(kb kvalbolt) (Kvalresult, error) {
 }
 
 //Retrieve an entry from a BoltDB using regular expression
-func getboltkeyregex(kb kvalbolt) (Kvalresult, error) {
+func getboltkeyregex(kb Kvalbolt) (Kvalresult, error) {
 	var kq = kb.query
 	var kr = initKvalresult()
 	re, err := regexp.Compile(kq.Value)
@@ -111,7 +111,7 @@ func getboltkeyregex(kb kvalbolt) (Kvalresult, error) {
 }
 
 //Retrieve an entry from a BoltDB using regular expression
-func getboltvalueregex(kb kvalbolt) (Kvalresult, error) {
+func getboltvalueregex(kb Kvalbolt) (Kvalresult, error) {
 	var kq = kb.query
 	var kr = initKvalresult()
 	re, err := regexp.Compile(kq.Value)
@@ -148,7 +148,7 @@ func getboltvalueregex(kb kvalbolt) (Kvalresult, error) {
 }
 
 //Retrieve all values from a single bucket per KVAL syntax
-func getallfrombucket(kb kvalbolt) (Kvalresult, error) {
+func getallfrombucket(kb Kvalbolt) (Kvalresult, error) {
 	var kq = kb.query
 	var kr = initKvalresult()
 	err := kb.db.View(func(tx *bolt.Tx) error {
@@ -180,7 +180,7 @@ func getallfrombucket(kb kvalbolt) (Kvalresult, error) {
 }
 
 //Delete a single bucket from a BoltDB from a KVAL structure
-func deletebucket(kb kvalbolt) error {
+func deletebucket(kb Kvalbolt) error {
 	var kq = kb.query
 	err := kb.db.Update(func(tx *bolt.Tx) error {
 		//as we're deleting a bucket we need a pointer to
@@ -213,7 +213,7 @@ func deletebucket(kb kvalbolt) error {
 }
 
 //Delete all the keys in a BoltDB bucket leaving Bucket in tact
-func deletebucketkeys(kb kvalbolt) error {
+func deletebucketkeys(kb Kvalbolt) error {
 	var kq = kb.query
 	err := kb.db.Update(func(tx *bolt.Tx) error {
 		bucket, err := gotobucket(tx, kq.Buckets)
@@ -243,7 +243,7 @@ func deletebucketkeys(kb kvalbolt) error {
 }
 
 //Delete a key and its corresponding value from a BoltDB
-func deletekey(kb kvalbolt) error {
+func deletekey(kb Kvalbolt) error {
 	var kq = kb.query
 	err := kb.db.Update(func(tx *bolt.Tx) error {
 		bucket, err := gotobucket(tx, kq.Buckets)
@@ -268,7 +268,7 @@ func deletekey(kb kvalbolt) error {
 }
 
 //Turn a value for a given key to NULL based on KVAL capabilities
-func nullifykeyvalue(kb kvalbolt) error {
+func nullifykeyvalue(kb Kvalbolt) error {
 	var kq = kb.query
 	err := kb.db.Update(func(tx *bolt.Tx) error {
 		bucket, err := gotobucket(tx, kq.Buckets)
@@ -285,7 +285,7 @@ func nullifykeyvalue(kb kvalbolt) error {
 }
 
 //Rename a bucket (full OR empty) in a BoltDB
-func renamebucket(kb kvalbolt) error {
+func renamebucket(kb Kvalbolt) error {
 	var kq = kb.query
 	err := kb.db.Update(func(tx *bolt.Tx) error {
 		//the bucket containing the one we're renaming
@@ -347,7 +347,7 @@ func copybuckets(from, to *bolt.Bucket) error {
 }
 
 //Rename a key in a BoltDB based on described KVAL capabilities such as rename
-func renamekey(kb kvalbolt) error {
+func renamekey(kb Kvalbolt) error {
 	var kq = kb.query
 	err := kb.db.Update(func(tx *bolt.Tx) error {
 		//the bucket containing the key we're renaming
@@ -374,7 +374,7 @@ func renamekey(kb kvalbolt) error {
 }
 
 //Check to see if a key exists in a BoltDB bucket, per KVAL LIS capabilities
-func bucketkeyexists(kb kvalbolt) (Kvalresult, error) {
+func bucketkeyexists(kb Kvalbolt) (Kvalresult, error) {
 	var kq = kb.query
 	var kr = initKvalresult()
 	err := kb.db.Update(func(tx *bolt.Tx) error {

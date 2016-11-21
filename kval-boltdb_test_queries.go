@@ -1,4 +1,4 @@
-package kvalbolt
+package Kvalbolt
 
 import "github.com/boltdb/bolt"
 
