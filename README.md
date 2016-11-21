@@ -4,7 +4,7 @@
 [![GoDoc](https://godoc.org/github.com/kval-access-language/kval-boltdb?status.svg)](https://godoc.org/github.com/kval-access-language/kval-boltdb)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kval-access-language/kval-boltdb)](https://goreportcard.com/report/github.com/kval-access-language/kval-boltdb)
 
-BoltDB bindings for KVAL
+BoltDB bindings for [KVAL](https://github.com/kval-access-language/kval)
 
 Package kvalbolt implements a BoltDB binding for KVAL (Key Value Access Language)
 The binding provides more than just 'boilerplate' for working with BoltDB. It
