@@ -110,7 +110,7 @@ func testbase64(t *testing.T) {
 func testPutBlob(t *testing.T) {
 
 	for encode, result := range simpleB64Results {
-		err := Putblob(kb, "INS Blob Bucket >>>> Blob Key", "image/png", []byte(encode))
+		err := StoreBlob(kb, "INS Blob Bucket >>>> Blob Key", "image/png", []byte(encode))
 		if err != nil {
 			t.Errorf("Putblob failed for query: %v\n", err)
 		}
@@ -118,7 +118,7 @@ func testPutBlob(t *testing.T) {
 		if err != nil {
 			t.Errorf("Retrieve failed for GET query: %v\n", err)
 		}
-		kvb, err := Unwrapblob(res)
+		kvb, err := UnwrapBlob(res)
 		if err != nil {
 			t.Errorf("Unwrapblob failed: %v\n", err)
 		}

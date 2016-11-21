@@ -12,7 +12,7 @@ import (
 //Open a BoltDB with a given name to work with.
 //Our first most important function. Returns a KVAL Bolt structure
 //with the details required for KBAL BoltDB to perform queries.
-func Connect(dbname string) (kvalbolt, error) {
+func Connect(dbname string) (Kvalbolt, error) {
 	var kb kvalbolt
 	db, err := bolt.Open(dbname, 0600, &bolt.Options{Timeout: 2 * time.Second})
 	kb.db = db
@@ -53,7 +53,7 @@ func Query(kb kvalbolt, query string) (Kvalresult, error) {
 //this data inside Key-Value databases, that goes like this:
 //data:mimetype;base64;{base64 data}. Use Unwrap to get the datastream back
 //location should be specified in the form of a query, e.g. INS bucket >>>> key
-func Putblob(kb kvalbolt, loc string, mime string, data []byte) error {
+func StoreBlob(kb kvalbolt, loc string, mime string, data []byte) error {
 
 	//Check location query parses correctly...
 	kq, err := kvalparse.Parse(loc)
@@ -90,7 +90,7 @@ func Putblob(kb kvalbolt, loc string, mime string, data []byte) error {
 
 //If you retrieve a blob via GET, unwrap it here to see what
 //you asked for...
-func Unwrapblob(kv Kvalresult) (Kvalblob, error) {
+func UnwrapBlob(kv Kvalresult) (Kvalblob, error) {
 	var kvb Kvalblob
 	if len(kv.Result) != 1 {
 		return kvb, errBlobMapLen

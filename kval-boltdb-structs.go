@@ -11,7 +11,7 @@ const DATA = "data"
 const BASE64 = "base64"
 const BLOBLEN = 4 //"data:<mimetype>:<encoding type>:<data>"
 
-type kvalbolt struct {
+type Kvalbolt struct {
 	db    *bolt.DB
 	fname string
 	query kvalparse.KQuery
