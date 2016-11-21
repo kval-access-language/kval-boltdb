@@ -9,8 +9,8 @@ import (
 	"time"
 )
 
-// Connect should first be used to open a connection to a BoltDB with a given 
-// name. Returns a KVAL Bolt structure with the details required for future 
+// Connect should first be used to open a connection to a BoltDB with a given
+// name. Returns a KVAL Bolt structure with the details required for future
 // KVAL BoltDB operations.
 func Connect(dbname string) (Kvalbolt, error) {
 	var kb Kvalbolt
@@ -19,8 +19,8 @@ func Connect(dbname string) (Kvalbolt, error) {
 	return kb, err
 }
 
-// Disconnect lets us disconnect from a BoltDB. It is recommended that this 
-// function is deffered where possible. 
+// Disconnect lets us disconnect from a BoltDB. It is recommended that this
+// function is deffered where possible.
 func Disconnect(kb Kvalbolt) {
 	kb.db.Close()
 }
@@ -30,7 +30,7 @@ func GetBolt(kb Kvalbolt) *bolt.DB {
 	return kb.db
 }
 
-// Query is our primary function once we've opened a BoltDB connection. 
+// Query is our primary function once we've opened a BoltDB connection.
 // Given a KVALBolt Structure, and a KVAL query string
 // this function will do all of the work for you when interacting with
 // BoltDB. Everything should become less programmatic making for cleaner code.
@@ -50,12 +50,12 @@ func Query(kb Kvalbolt, query string) (Kvalresult, error) {
 	return kr, nil
 }
 
-// StoreBlob is used to wrap a blob of data. 
-// KVAL-Bolt/KVAL proposes a standard encoding for this data inside Key-Value 
-// databases, that goes like this: data:mimetype;base64;{base64 data}. Use 
-// Unwrap to get the datastream back and futher GetBlobdata as a shortcut to 
-// decode it from Base64. 
-// Location for StoreBlob should be specified in the form of a query: 
+// StoreBlob is used to wrap a blob of data.
+// KVAL-Bolt/KVAL proposes a standard encoding for this data inside Key-Value
+// databases, that goes like this: data:mimetype;base64;{base64 data}. Use
+// Unwrap to get the datastream back and futher GetBlobdata as a shortcut to
+// decode it from Base64.
+// Location for StoreBlob should be specified in the form of a query:
 // e.g. INS bucket >>>> key
 func StoreBlob(kb Kvalbolt, loc string, mime string, data []byte) error {
 

@@ -127,10 +127,10 @@ func testPutBlob(t *testing.T) {
 		}
 		data, err := GetBlobData(kvb)
 		if err != nil {
-			t.Errorf("Error with GetBlobData: %v.", err)		
+			t.Errorf("Error with GetBlobData: %v.", err)
 		} else {
 			if string(data) != encode {
-				t.Errorf("Base64 blob not decoded correctly: %v, expected: %v.", string(data), encode)		
+				t.Errorf("Base64 blob not decoded correctly: %v, expected: %v.", string(data), encode)
 			}
 		}
 	}
