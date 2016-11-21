@@ -39,7 +39,7 @@ func Query(kb kvalbolt, query string) (Kvalresult, error) {
 	var err error
 	kq, err := kvalparse.Parse(query)
 	if err != nil {
-		return kr, errors.Wrapf(err, "%s: '%s'", err_parse, query)
+		return kr, errors.Wrapf(err, "%s: '%s'", errParse, query)
 	}
 	kb.query = kq
 	kr, err = queryhandler(kb)
@@ -58,16 +58,16 @@ func Putblob(kb kvalbolt, loc string, mime string, data []byte) error {
 	//Check location query parses correctly...
 	kq, err := kvalparse.Parse(loc)
 	if err != nil {
-		return errors.Wrapf(err, "%s: '%s'", err_parse, loc)
+		return errors.Wrapf(err, "%s: '%s'", errParse, loc)
 	}
 
 	//Validate for certain features...
 	if kq.Function != kvalscanner.INS {
-		return err_blob_ins
+		return errBlobIns
 	} else if kq.Key == "" || kq.Key == "_" {
-		return err_blob_key
+		return errBlobKey
 	} else if kq.Value != "" {
-		return err_blob_val
+		return errBlobVal
 	}
 
 	//Encode our data as base64
@@ -80,7 +80,7 @@ func Putblob(kb kvalbolt, loc string, mime string, data []byte) error {
 	//Check our new query including base64 string validates okay
 	kq, err = kvalparse.Parse(query)
 	if err != nil {
-		return errors.Wrapf(err, "%s: '%s'", err_parse, query)
+		return errors.Wrapf(err, "%s: '%s'", errParse, query)
 	}
 
 	//Finally... do the rest of the work with one of our other Exported functions
@@ -149,7 +149,7 @@ func queryhandler(kb kvalbolt) (Kvalresult, error) {
 		}
 	default:
 		//function is parsed correctly but not recognised by binding
-		return kr, errors.Wrapf(err_not_implemented, "%v", kb.query.Function)
+		return kr, errors.Wrapf(errNotImplemented, "%v", kb.query.Function)
 	}
 	return kr, nil
 }

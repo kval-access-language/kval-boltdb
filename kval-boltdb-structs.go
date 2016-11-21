@@ -45,7 +45,7 @@ func blobfromKvalresult(kv Kvalresult) (Kvalblob, error) {
 		kvb.Query = k
 		reslice := strings.Split(v, ":")
 		if len(reslice) != 4 {
-			return kvb, err_blob_len
+			return kvb, errBlobLen
 		}
 		kvb.Datatype = reslice[0]
 		kvb.Mimetype = reslice[1]

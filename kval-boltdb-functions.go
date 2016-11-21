@@ -101,7 +101,7 @@ func getboltkeyregex(kb kvalbolt) (Kvalresult, error) {
 					k, v = cursor.Next()
 				}
 			} else {
-				return err_no_kv_in_bucket
+				return errNoKVInBucket
 			}
 		}
 		//commit transaction
@@ -138,7 +138,7 @@ func getboltvalueregex(kb kvalbolt) (Kvalresult, error) {
 					k, v = cursor.Next()
 				}
 			} else {
-				return err_no_kv_in_bucket
+				return errNoKVInBucket
 			}
 		}
 		//commit transaction
@@ -170,7 +170,7 @@ func getallfrombucket(kb kvalbolt) (Kvalresult, error) {
 					k, v = cursor.Next()
 				}
 			} else {
-				return err_no_kv_in_bucket
+				return errNoKVInBucket
 			}
 		}
 		//commit transaction
@@ -341,7 +341,7 @@ func copybuckets(from, to *bolt.Bucket) error {
 			k, v = cursor.Next()
 		}
 	} else {
-		return err_no_kv_in_bucket
+		return errNoKVInBucket
 	}
 	return nil
 }
@@ -405,7 +405,7 @@ func gotobucket(tx *bolt.Tx, bucketslice []string) (*bolt.Bucket, error) {
 			if index == 0 { //need a bucket from our transaction pointer first
 				bucket = tx.Bucket([]byte(bucketname))
 				if bucket == nil { //only ever get nil if our root bucket doesn't exist
-					return bucket, err_nil_bucket
+					return bucket, errNilBucket
 				}
 				if len(bucketslice) == 1 && bucket != nil {
 					//return early, we've got out bucket
@@ -414,13 +414,13 @@ func gotobucket(tx *bolt.Tx, bucketslice []string) (*bolt.Bucket, error) {
 			} else { //nested buckets, only returning if nil...
 				bucket = bucket.Bucket([]byte(bucketname))
 				if bucket == nil {
-					return bucket, err_nil_bucket
+					return bucket, errNilBucket
 				}
 			}
 		}
 	} else {
 		//gold plating at this point, easily handled elsewhere...
-		return bucket, err_empty_bucket_slice
+		return bucket, errEmptyBucketSlice
 	}
 	return bucket, nil
 }

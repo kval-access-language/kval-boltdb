@@ -58,7 +58,7 @@ func testnotimplementedfuncs(t *testing.T) {
 	} else {
 		//TODO: rethink testing the error string... can github.com/pkg/errors help?
 		teststr := fmt.Sprintf("%s", err)
-		if !strings.Contains(teststr, err_parse) {
+		if !strings.Contains(teststr, errParse) {
 			log.Printf("Error querying db: %v\n", err)
 		}
 	}

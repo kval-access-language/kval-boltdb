@@ -74,7 +74,7 @@ var delnonekeytwo = "DEL bucket one >>>> nonkey" //silent fail of non-existent k
 var bucket_nonekey = []string{"bucket one"}
 
 var bad_del_results = map[string]error{
-	delnonekey:       err_nil_bucket,
+	delnonekey:       errNilBucket,
 	delnonekeytwo:    nil, //we only get a silent fail, test may have little value, but it's here...
 	delnonebucket:    bolt.ErrBucketNotFound,
 	delnonebuckettwo: bolt.ErrBucketNotFound,
