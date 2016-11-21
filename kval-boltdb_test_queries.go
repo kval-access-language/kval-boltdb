@@ -168,10 +168,8 @@ var renameTests = map[string]string{
 var renLis1 = [2]string{"LIS ren1 >> renamekey >>>> key", "LIS ren1 >> renamekey >>>> newkey"}
 var renLis2 = [2]string{"LIS ren1 >> ren2", "LIS ren1 >> rnew"}
 
-//grab stats dynamically as well
-var errSliceOld = []string{"ren1", "ren2"}
-var errSliceNew = []string{"ren1", "rnew"}
-
+//grab stats for our rename functions to make sure the test works by using
+//mix of list queries and our statsdb capabilities, testing two code features
 var renOldList = "LIS ren1 >> ren2"
 var renNewList = "LIS ren1 >> rnew"
 
