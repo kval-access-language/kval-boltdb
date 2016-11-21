@@ -32,11 +32,12 @@ The language specification: https://github.com/kval-access-language/KVAL
 * Single function entry-point:
     * res, err := Query(INS B1 >> B2 >> B3 >>>> KEY :: VAL) &nbsp; &nbsp; //(will create three buckets, plus k/v in one-go)
     * res, err := Query(GET B1 >> B2 >> B3 >>>> KEY) &nbsp; &nbsp; &nbsp; //(will retrieve that entry in one-go)
-* Start using BoltDB immediately without writing partial wrappers for your code
+* Start using BoltDB immediately without writing boiler plate before you can code
 * KVAL-Parse enables handling of Base64 binary BLOBS
 * Regular Expression based searching for key names and values
 * [KVAL Language](https://github.com/kval-access-language/KVAL) specifies easy bulk or singleton DEL and RENAME capabilities
 * Language specification at highest abstraction, so other bindings for other DBs are hoped for (hint: [NOMS!](https://github.com/attic-labs/noms)) 
+* Start working with BoltDB immediately! 
 
 ###Usage
 
@@ -57,6 +58,17 @@ operation passed as expected:
     if err != nil {
        fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
     }
+
+###How to contribute
+
+I will be starting to use the code in my own work once the dust has settled from thie first tranche of work. As I do that,
+and before then, I need the following:
+
+* Comments on the KVAL specification
+* Code review
+* Code testers - Get using it and report your issues! 
+* Spread the word
+* Let me know how it goes here via Issue, or on Twitter via [@beet_keeper](https://twitter.com/beet_keeper)
 
 ###License
 
