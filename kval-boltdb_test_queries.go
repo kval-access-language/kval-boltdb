@@ -172,4 +172,7 @@ var renLis2 = [2]string{"LIS ren1 >> ren2", "LIS ren1 >> rnew"}
 var errSliceOld = []string{"ren1", "ren2"}
 var errSliceNew = []string{"ren1", "rnew"}
 
+var renOldList = "LIS ren1 >> ren2"
+var renNewList = "LIS ren1 >> rnew"
+
 //---------------------------------------------------------------------------//

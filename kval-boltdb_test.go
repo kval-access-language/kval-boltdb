@@ -316,7 +316,7 @@ func testren(t *testing.T) {
 
 	//run tests...
 	for k, v := range renameTests {
-		var oldcount, olddepth int
+		var oldstats Kvalresult
 
 		//setup state...
 		renamestate(t)
@@ -325,11 +325,10 @@ func testren(t *testing.T) {
 		switch k {
 		case r2:
 			//query how many keys are in our bucket before renaming...
-			bs, _ := getbucketstats(kb, errSliceOld)
-			oldcount = bs.KeyN
-			olddepth = bs.Depth
+			//allows us to doubly check LIS still works and statdb works...
+			oldstats, _ = Query(kb, renOldList)
 		}
-
+	
 		_, err := Query(kb, v)
 		if err != nil {
 			t.Errorf("Error with rename function: %v\n", err)
@@ -366,12 +365,13 @@ func testren(t *testing.T) {
 				}
 			}
 			//now query the count for our newly renamed bucket, and compare to the old count...
-			newcount, _ := getbucketstats(kb, errSliceNew)
-			if newcount.KeyN != oldcount {
-				t.Errorf("Bucket count following rename doesn't match: %d, old: %d", newcount.KeyN, oldcount)
+			//allows us to doubly check LIS still works and statdb works...
+			newstats, _ := Query(kb, renNewList)
+			if newstats.Stats.KeyN != oldstats.Stats.KeyN {
+				t.Errorf("Bucket count following rename doesn't match: %d, old: %d", newstats.Stats.KeyN, oldstats.Stats.KeyN)
 			}
-			if newcount.Depth != olddepth {
-				t.Errorf("Bucket count following rename doesn't match: %d, old: %d", newcount.Depth, olddepth)
+			if newstats.Stats.Depth != oldstats.Stats.Depth {
+				t.Errorf("Bucket count following rename doesn't match: %d, old: %d", newstats.Stats.Depth, oldstats.Stats.Depth)
 			}
 		}
 	}
