@@ -47,6 +47,10 @@ func Query(kb Kvalboltdb, query string) (Kvalresult, error) {
 	if err != nil {
 		return kr, err
 	}
+	kr, err = statdb(kb, kr)
+	if err != nil {
+		return kr, err
+	}
 	return kr, nil
 }
 
@@ -125,6 +129,7 @@ func queryhandler(kb Kvalboltdb) (Kvalresult, error) {
 		return kvalren(kb, kr), nil
 	default:
 		//function is parsed correctly but not recognised by binding
+		kr.opcode = opcodeUnknown
 		return kr, errors.Wrapf(errNotImplemented, "%v", kb.query.Function)
 	}
 	return kr, nil

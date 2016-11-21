@@ -32,10 +32,10 @@ type Kvalboltdb struct {
 // also be curious to the results they're getting from their various queries,
 // therefore checking this length is a good approach.
 type Kvalresult struct {
-	Result map[string]string // Result map to access various types of result post-query
-	Exists bool              // When using a LIS query this is set to true if we can find our data
-	Stat   bolt.BucketStats  // BoltDB bucket stats relevant to the operation performed by the user
-	opcode int               // Additional non-user metadata about the type of operation performed by the query
+	Result  map[string]string // Result map to access various types of result post-query
+	Exists  bool              // When using a LIS query this is set to true if we can find our data
+	Stats   bolt.BucketStats  // BoltDB bucket stats relevant to the operation performed by the user
+	opcode  int               // Additional non-user metadata about the type of operation performed by the query
 }
 
 // Kvalblob struct to allow users to work with Base64 encoded blobs
