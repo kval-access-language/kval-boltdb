@@ -30,8 +30,8 @@ The language specification: https://github.com/kval-access-language/KVAL
 ###Features 
 
 * Single function entry-point:
-    * res, err := Query(INS B1 >> B2 >> B3 >>>> KEY :: VAL) &nbsp; &nbsp; //(will create three buckets, plus k/v in one-go)
-    * res, err := Query(GET B1 >> B2 >> B3 >>>> KEY) &nbsp; &nbsp; &nbsp; //(will retrieve that entry in one-go)
+    * res, err := Query(kb, "INS B1 >> B2 >> B3 >>>> KEY :: VAL") &nbsp; &nbsp; //(will create three buckets, plus k/v in one-go)
+    * res, err := Query(kb, "GET B1 >> B2 >> B3 >>>> KEY") &nbsp; &nbsp; &nbsp; //(will retrieve that entry in one-go)
 * Start using BoltDB immediately without writing boiler plate before you can code
 * KVAL-Parse enables handling of Base64 binary BLOBS
 * Regular Expression based searching for key names and values
@@ -58,6 +58,37 @@ operation passed as expected:
     if err != nil {
        fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
     }
+
+###How easy is it? 
+
+Once you've a connection to a database, call Query as many times as you like to 
+work with your data. The most basic implementation, creating a DB, and inserting 
+data looks as follows:
+
+	package main
+
+	import (
+		"fmt"
+		"os"
+		kval "github.com/kval-access-language/kval-boltdb"
+	)
+
+	func main() {
+
+		kb, err := kval.Connect("newdb.bolt")
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error opening bolt database: %#v", err)
+			os.Exit(1)
+		}
+		defer kval.Disconnect(kb)
+
+		//Lets do a test insert...
+		res, err := kval.Query(kb, "INS test bucket one >> test bucket two >>>> key one :: value one")
+		if err != nil {
+			//work with your error
+		}
+		// else: start working with you res struct
+	}
 
 ###Demo
 
