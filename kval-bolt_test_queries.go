@@ -10,7 +10,7 @@ var make_tea = "TEA bucket one >> bucket two >>>> cup :: saucer"
 
 //test insert procedures
 var create_initial_state = []string{
-   "INS bucket one >> bucket two >> bucket three >>>> test1 :: value1",
+   "ins bucket one >> bucket two >> bucket three >>>> test1 :: value1",
    "INS bucket one >> bucket two >> bucket three >>>> test2 :: value2",
    "INS bucket one >> bucket two >> bucket three >>>> test3 :: value3",
    "INS bucket one >> bucket two >>>> test4 :: value4",
@@ -60,7 +60,7 @@ var ins_checks_all = [...]ins_check{i1, i2, i3}
 //good delete procedures - nil error expected... 
 var delkey = "DEL bucket one >> bucket two >> bucket three >>>> test1"           //delete key test1
 var nullvalue = "DEL bucket one >> bucket two >> bucket three >>>> test3 :: _"   //make value null without deleting key
-var delkeys = "DEL bucket one >> bucket two >> bucket three >>>> _"              //del all keys from a bucket
+var delkeys = "del bucket one >> bucket two >> bucket three >>>> _"              //del all keys from a bucket
 var delbucket = "DEL bucket one >> bucket two"                                   //delete bucket two
 
 var good_del_results = [...]string{delkey, nullvalue, delkeys, delbucket}
