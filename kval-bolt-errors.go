@@ -17,4 +17,3 @@ var err_stat = errors.New("Cannot stat database. Stats struct will remain empty.
 
 //Other non-error error strings...
 var err_parse = "Query parse failed"
-
