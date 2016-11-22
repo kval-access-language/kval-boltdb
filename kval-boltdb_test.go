@@ -433,14 +433,14 @@ func testren(t *testing.T) {
 
 func TestQuery(t *testing.T) {
 	defer teardown()
-	//testnotimplementedfuncs(t)
-	//testbigstring(t)
-	//testbase64(t)
-	//testPutBlob(t)
+	testnotimplementedfuncs(t)
+	testbigstring(t)
+	testbase64(t)
+	testPutBlob(t)
 	teststatsdb(t)
-	//testins(t)
-	//testlis(t)
-	//testdel(t)
-	//testget(t)
-	//testren(t)
+	testins(t)
+	testlis(t)
+	testdel(t)
+	testget(t)
+	testren(t)
 }
