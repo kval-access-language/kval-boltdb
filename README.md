@@ -19,6 +19,9 @@ are needed, or indeed exist.
 The most up-to-date specification for KVAL can be found here:
 https://github.com/kval-access-language/kval
 
+My first blog post describing my thoughts a little better can be found here: 
+http://exponentialdecay.co.uk/blog/key-value-access-language-kval-for-boltdb-and-golang/
+
 ###Key Value Access Language
 
 I have created a modest specification for a key value access langauge. 
