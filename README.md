@@ -22,7 +22,7 @@ https://github.com/kval-access-language/kval
 My first blog post describing my thoughts a little better can be found here: 
 http://exponentialdecay.co.uk/blog/key-value-access-language-kval-for-boltdb-and-golang/
 
-###Key Value Access Language
+### Key Value Access Language
 
 I have created a modest specification for a key value access langauge. 
 It allows for input and access of values to a key value store such as Golang's
@@ -30,7 +30,7 @@ It allows for input and access of values to a key value store such as Golang's
 
 The language specification: https://github.com/kval-access-language/KVAL 
 
-###Features 
+### Features 
 
 * Single function entry-point:
     * res, err := Query(kb, "INS B1 >> B2 >> B3 >>>> KEY :: VAL") &nbsp; &nbsp; //(will create three buckets, plus k/v in one-go)
@@ -42,7 +42,7 @@ The language specification: https://github.com/kval-access-language/KVAL
 * Language specification at highest abstraction, so other bindings for other DBs are hoped for (hint: [NOMS!](https://github.com/attic-labs/noms)) 
 * Start working with BoltDB immediately! 
 
-###Usage
+### Usage
 
 Use is simple. There is one function which accepts a string formatted to KVAL's
 specification:
@@ -62,7 +62,7 @@ operation passed as expected:
        fmt.Fprintf(os.Stderr, "Error querying db: %v", err)
     }
 
-###How easy is it? 
+### How easy is it? 
 
 Once you've a connection to a database, call Query as many times as you like to 
 work with your data. The most basic implementation, creating a DB, and inserting 
@@ -93,12 +93,12 @@ data looks as follows:
 		// else: start working with you res struct
 	}
 
-###Demo
+### Demo
 
 Have a look at some of the bits and pieces implemented as part of this binding 
 in the demo Go app here: https://github.com/kval-access-language/kval-boltdb-demo 
 
-###How to contribute
+### How to contribute
 
 I will be starting to use the code in my own work once the dust has settled from thie first tranche of work. As I do that,
 and before then, I need the following:
@@ -109,6 +109,6 @@ and before then, I need the following:
 * Spread the word
 * Let me know how it goes here via Issue, or on Twitter via [@beet_keeper](https://twitter.com/beet_keeper)
 
-###License
+### License
 
 **[GPL Version 3](http://choosealicense.com/licenses/gpl-3.0/)**: https://github.com/kval-access-language/KVAL-BoltDB/blob/master/LICENSE
