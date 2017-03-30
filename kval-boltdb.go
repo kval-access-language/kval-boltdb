@@ -16,7 +16,19 @@ func Connect(dbname string) (Kvalboltdb, error) {
 	var kb Kvalboltdb
 	db, err := bolt.Open(dbname, 0600, &bolt.Options{Timeout: 2 * time.Second})
 	kb.DB = db
+	kb.Fname = dbname
 	return kb, err
+}
+
+// Attach enables you to open the datbaase on your own terms and then connect
+// it to the KVAL binding to work on it separately. WARNING: if you do open
+// the database in ReadOnly mode, then expect undefined behaviour when you 
+// try to write something to the database. 
+func Attach(db *bolt.DB, fname string) Kvalboltdb {
+	var kb Kvalboltdb
+	kb.DB = db 
+	kb.Fname = fname
+	return kb
 }
 
 // Disconnect lets us disconnect from a BoltDB. It is recommended that this
