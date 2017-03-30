@@ -138,7 +138,13 @@ func queryhandler(kb Kvalboltdb) (Kvalresult, error) {
 //kvalget is used to handle specific GET cases inferred by the KVAL capabilities
 func kvalget(kb Kvalboltdb, kr Kvalresult) (Kvalresult, error) {
 	var err error
-	if kb.query.Key == "" {
+	if kb.query.Buckets[0] == "_" {
+		kr, err = getrootHandler(kb)
+		if err == nil {
+			kr.opcode = opcodeRoot
+		}
+		return kr, err
+	} else if kb.query.Key == "" {
 		//get all
 		kr, err = getallHandler(kb)
 	} else if kb.query.Regex {
@@ -203,6 +209,14 @@ func getHandler(kb Kvalboltdb) (Kvalresult, error) {
 	}
 	var kr Kvalresult
 	kr, err := getboltentry(kb)
+	if err != nil {
+		return kr, err
+	}
+	return kr, nil
+}
+
+func getrootHandler(kb Kvalboltdb) (Kvalresult, error) {
+	kr, err := getallfromrootbucket(kb)
 	if err != nil {
 		return kr, err
 	}

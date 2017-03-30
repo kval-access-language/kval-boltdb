@@ -148,6 +148,25 @@ func getboltvalueregex(kb Kvalboltdb) (Kvalresult, error) {
 }
 
 //Retrieve all values from a single bucket per KVAL syntax
+func getallfromrootbucket(kb Kvalboltdb) (Kvalresult, error) {
+	var kr = initKvalresult()
+	err := kb.DB.View(func(tx *bolt.Tx) error {
+		cursor := tx.Cursor()
+		k, v := cursor.First()
+		for k != nil {
+			if v == nil {
+				kr.Result[string(k)] = Nestedbucket
+			} else {
+				kr.Result[string(k)] = string(v)
+			}
+			k, v = cursor.Next()
+		}
+		return nil
+	})
+	return kr, err
+}
+
+//Retrieve all values from a single bucket per KVAL syntax
 func getallfrombucket(kb Kvalboltdb) (Kvalresult, error) {
 	var kq = kb.query
 	var kr = initKvalresult()

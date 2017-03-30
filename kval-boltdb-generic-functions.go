@@ -12,6 +12,7 @@ const (
 	opcodeNormal       int = iota // opcodeNormal refers to LIS, GET, INS, and certain REN/DEL functions
 	opcodeDelBucket               // delete functions that delete a bucket thus can't be handled as easily
 	opcodeRenameBucket            // rename functions that rename a bucket thus can't be handled as easily
+	opcodeRoot                    // we're working with Root bucket, e.g. can't stat Root/boltdb.Tx
 	opcodeUnknown                 // cannot stat for an unknown function
 )
 
@@ -45,6 +46,10 @@ func statdb(kb Kvalboltdb, kr Kvalresult) (Kvalresult, error) {
 	}
 
 	switch kr.opcode {
+	case opcodeRoot:
+		// cannot stat boltdb.Tx/Root bucket
+		kr.Stats = bolt.BucketStats{}
+		return kr, nil
 	case opcodeNormal:
 		kr.Stats, err = getbucketstats(kb, kbuckets)
 		if err != nil {

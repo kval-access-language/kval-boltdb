@@ -337,7 +337,7 @@ func testget(t *testing.T) {
 	for k, v := range getSoleResults {
 		res, err := Query(kb, k)
 		if err != nil {
-			t.Errorf("Invalid error for GET procedure (zero errors expected): %v\n", err)
+			t.Errorf("Invalid error for GET procedure (zero errors expected): %v %s\n", err, k)
 		}
 		if !reflect.DeepEqual(res.Result, v) {
 			t.Errorf("Unexpected result value for GET: %s, expected: %s\n", res.Result, v)
@@ -349,6 +349,21 @@ func testget(t *testing.T) {
 		res, err := Query(kb, k)
 		if err != nil {
 			t.Errorf("Unexpected error returned for GET regex: %v\n", err)
+		}
+		if !reflect.DeepEqual(res.Result, v) {
+			t.Errorf("Unexpected result value for GET: %s, expected: %s\n", res.Result, v)
+		}
+	}
+}
+
+// just test getroot
+func testgetroot(t *testing.T) {
+	createStateInserts()
+	//test regular gets
+	for k, v := range getRootResults {
+		res, err := Query(kb, k)
+		if err != nil {
+			t.Errorf("Invalid error for GET procedure (zero errors expected): %v %s\n", err, k)
 		}
 		if !reflect.DeepEqual(res.Result, v) {
 			t.Errorf("Unexpected result value for GET: %s, expected: %s\n", res.Result, v)
@@ -443,4 +458,5 @@ func TestQuery(t *testing.T) {
 	testdel(t)
 	testget(t)
 	testren(t)
+	testgetroot(t)
 }

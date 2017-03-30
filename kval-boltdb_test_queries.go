@@ -88,7 +88,7 @@ var getTest2 = "GET bucket one >> bucket two >> bucket three >>>> test2"
 var getBucketThree = "GET bucket one >> bucket two >> bucket three"
 var getBucketOne = "GET bucket one"
 var getCodeBucket = "GeT code bucket >>>> code example"
-var getPrimeBucket = "GET _"
+var getRoot = "GET _"
 
 var getSoleResults = map[string]map[string]string{
 	getTest1:       {"test1": "value1"},
@@ -96,11 +96,18 @@ var getSoleResults = map[string]map[string]string{
 	getBucketThree: {"test1": "value1", "test2": "value2", "test3": "value3"},
 	getBucketOne:   {"bucket two": Nestedbucket, "test6": "value6"},
 
+	// To clarify, the value is a string that represents a KVAL query, not a query proper
+	getCodeBucket: {"code example": "GET bucket one >> bucket two >>>> key1 :: key2"},
+
+	// We test this function twice because OCD...
+	getRoot: {"bucket one": Nestedbucket, "code bucket": Nestedbucket, "regex bucket": Nestedbucket},
+}
+
+//problems testing this, so place in own routine
+var getPrimeBucket = "GET _"
+var getRootResults = map[string]map[string]string{
 	//retrieve the top-level bucket of the database
 	getPrimeBucket: {"bucket one": Nestedbucket, "code bucket": Nestedbucket, "regex bucket": Nestedbucket},
-
-	// To clarify, the value is a string that represents a KVAL query, not a query proper
-	getCodeBucket:  {"code example": "GET bucket one >> bucket two >>>> key1 :: key2"},
 }
 
 //---------------------------------------------------------------------------//
