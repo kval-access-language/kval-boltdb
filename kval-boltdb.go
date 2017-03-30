@@ -22,11 +22,11 @@ func Connect(dbname string) (Kvalboltdb, error) {
 
 // Attach enables you to open the datbaase on your own terms and then connect
 // it to the KVAL binding to work on it separately. WARNING: if you do open
-// the database in ReadOnly mode, then expect undefined behaviour when you 
-// try to write something to the database. 
+// the database in ReadOnly mode, then expect undefined behaviour when you
+// try to write something to the database.
 func Attach(db *bolt.DB, fname string) Kvalboltdb {
 	var kb Kvalboltdb
-	kb.DB = db 
+	kb.DB = db
 	kb.Fname = fname
 	return kb
 }
